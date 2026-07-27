@@ -108,11 +108,6 @@ export const projects: Project[] = [
         alt: "Toy Gun still with characters moving through outdoor chaos.",
       },
       {
-        src: "/media/optimized/toy-gun-mingling.jpg",
-        alt: "Guests mingling at the Toy Gun screening.",
-        layout: "portrait",
-      },
-      {
         src: "/media/optimized/toy-gun-poster-event.jpg",
         alt: "Toy Gun poster displayed at the screening.",
         layout: "portrait",
