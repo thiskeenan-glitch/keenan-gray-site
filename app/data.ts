@@ -107,11 +107,6 @@ export const projects: Project[] = [
         src: "/media/optimized/toy-gun-chaos.jpg",
         alt: "Toy Gun still with characters moving through outdoor chaos.",
       },
-      {
-        src: "/media/optimized/toy-gun-poster-event.jpg",
-        alt: "Toy Gun poster displayed at the screening.",
-        layout: "portrait",
-      },
     ],
     recognition: ["HollyShorts", "RIIFF official competition"],
   },

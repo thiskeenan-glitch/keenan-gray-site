@@ -501,7 +501,9 @@ textarea {
 }
 
 .project-link--filmshow img {
-  object-position: center bottom;
+  background: var(--black);
+  object-fit: contain;
+  object-position: center center;
 }
 
 .project-link:hover img {
