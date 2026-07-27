@@ -977,81 +977,68 @@ dd {
   width: 100%;
 }
 
-.project-page--filmshow .project-gallery,
 .filmshow-page .filmshow-photos {
   align-items: start;
   gap: clamp(58px, 8vw, 132px) 24px;
   grid-template-columns: repeat(12, minmax(0, 1fr));
 }
 
-.project-page--filmshow .project-gallery figure,
 .filmshow-page .filmshow-photos figure {
   grid-column: span 5;
   margin: 0;
   --maze-x: 0;
 }
 
-.project-page--filmshow .project-gallery figure:nth-child(1),
 .filmshow-page .filmshow-photos figure:nth-child(1) {
   grid-column: 2 / span 7;
   --maze-x: -90px;
 }
 
-.project-page--filmshow .project-gallery figure:nth-child(2),
 .filmshow-page .filmshow-photos figure:nth-child(2) {
   grid-column: 8 / span 4;
   margin-top: -34px;
   --maze-x: 90px;
 }
 
-.project-page--filmshow .project-gallery figure:nth-child(3),
 .filmshow-page .filmshow-photos figure:nth-child(3) {
   grid-column: 1 / span 4;
   margin-top: 36px;
   --maze-x: -120px;
 }
 
-.project-page--filmshow .project-gallery figure:nth-child(4),
 .filmshow-page .filmshow-photos figure:nth-child(4) {
   grid-column: 6 / span 6;
   margin-top: -12px;
   --maze-x: 120px;
 }
 
-.project-page--filmshow .project-gallery figure:nth-child(5),
 .filmshow-page .filmshow-photos figure:nth-child(5) {
   grid-column: 3 / span 4;
   margin-top: 24px;
   --maze-x: -70px;
 }
 
-.project-page--filmshow .project-gallery figure:nth-child(6),
 .filmshow-page .filmshow-photos figure:nth-child(6) {
   grid-column: 8 / span 5;
   margin-top: -62px;
   --maze-x: 110px;
 }
 
-.project-page--filmshow .project-gallery figure:nth-child(7),
 .filmshow-page .filmshow-photos figure:nth-child(7) {
   grid-column: 2 / span 8;
   margin-top: 42px;
   --maze-x: -90px;
 }
 
-.project-page--filmshow .project-gallery figure.reveal-on-scroll,
 .filmshow-page .filmshow-photos figure.reveal-on-scroll {
   transform: translate3d(var(--maze-x), 52px, 0) scale(0.94);
 }
 
-.project-page--filmshow .project-gallery figure.reveal-on-scroll.is-revealed,
 .filmshow-page .filmshow-photos figure.reveal-on-scroll.is-revealed {
   transform: translate3d(0, 0, 0) scale(1);
 }
 
-.project-page--filmshow .project-gallery img,
 .filmshow-page .filmshow-photos img,
-.project-page--filmshow .project-gallery figure.project-gallery-item--portrait img,
 .filmshow-page .filmshow-photos .filmshow-photo--portrait img {
   aspect-ratio: auto;
   height: auto;
