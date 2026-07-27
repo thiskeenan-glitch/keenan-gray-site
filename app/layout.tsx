@@ -37,11 +37,6 @@ export const metadata: Metadata = {
     description: "Keenan Gray. Director and filmmaker in New York City.",
     images: ["/media/optimized/hero-donnie-runs.jpg"],
   },
-  icons: {
-    icon: [{ url: "/favicon.png", type: "image/png", sizes: "512x512" }],
-    shortcut: "/favicon.png",
-    apple: [{ url: "/favicon.png", type: "image/png", sizes: "512x512" }],
-  },
 };
 
 export default function RootLayout({
@@ -56,6 +51,11 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.png" type="image/png" sizes="512x512" />
+        <link rel="shortcut icon" href="/favicon.png" />
+        <link rel="apple-touch-icon" href="/favicon.png" sizes="512x512" />
+      </head>
       <body>
         <a className="skip-link" href="#main">
           Skip to content
