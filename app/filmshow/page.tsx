@@ -1,13 +1,53 @@
 import type { Metadata } from "next";
 import { FilmshowPhotoSequence } from "../components/FilmshowPhotoSequence";
+import { JsonLd } from "../components/JsonLd";
 import { getProject, site } from "../data";
+import { getImageDimensions } from "../media";
+import {
+  breadcrumbSchema,
+  filmshowEventSeriesSchema,
+  filmshowId,
+  filmshowOrganizationSchema,
+  webPageSchema,
+  withContext,
+} from "../seo";
+
+const filmshowDescription =
+  "Filmshow is a New York live show founded by Keenan Gray that combines short films from local filmmakers and live experimental theater.";
+const filmshowHero = "/media/optimized/filmshow-crowd.jpg";
+const filmshowHeroDimensions = getImageDimensions(filmshowHero);
+const filmshowLogoDimensions = getImageDimensions("/filmshow-logo.png");
 
 export const metadata: Metadata = {
-  title: "Filmshow",
-  description:
-    "Filmshow by Keenan Gray.",
+  title: "Filmshow | Short Films and Live Experimental Theater",
+  description: filmshowDescription,
   alternates: {
     canonical: "/filmshow",
+  },
+  keywords: [
+    "Filmshow",
+    "New York short films",
+    "live experimental theater",
+    "underground New York film scene",
+    "Keenan Gray Filmshow",
+  ],
+  openGraph: {
+    title: "Filmshow | Keenan Gray",
+    description: filmshowDescription,
+    url: `${site.url}/filmshow`,
+    images: [
+      {
+        url: filmshowHero,
+        ...filmshowHeroDimensions,
+        alt: "A packed Filmshow audience watching a film projected on a wall.",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Filmshow | Keenan Gray",
+    description: filmshowDescription,
+    images: [filmshowHero],
   },
 };
 
@@ -17,10 +57,30 @@ export default function FilmshowPage() {
 
   return (
     <main id="main" className="page-shell filmshow-page">
+      <JsonLd
+        data={withContext([
+          webPageSchema({
+            path: "/filmshow",
+            name: "Filmshow | Keenan Gray",
+            description: filmshowDescription,
+            primaryImage: filmshowHero,
+            mainEntityId: filmshowId,
+          }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Filmshow", path: "/filmshow" },
+          ]),
+          filmshowOrganizationSchema(),
+          filmshowEventSeriesSchema(),
+        ])}
+      />
       <section className="filmshow-hero">
         <img
-          src="/media/optimized/filmshow-crowd.jpg"
+          src={filmshowHero}
           alt="A packed Filmshow audience watching a film projected on a wall."
+          width={filmshowHeroDimensions?.width}
+          height={filmshowHeroDimensions?.height}
+          sizes="100vw"
           fetchPriority="high"
           decoding="async"
         />
@@ -30,6 +90,9 @@ export default function FilmshowPage() {
               className="filmshow-logo filmshow-logo--hero"
               src="/filmshow-logo.png"
               alt="Filmshow"
+              width={filmshowLogoDimensions?.width}
+              height={filmshowLogoDimensions?.height}
+              sizes="(max-width: 720px) 64vw, 360px"
               fetchPriority="high"
               decoding="async"
             />
@@ -42,9 +105,9 @@ export default function FilmshowPage() {
       </section>
       <section className="filmshow-blurb" aria-label="About Filmshow">
         <p>
-          Filmshow combines short films from local filmmakers and live
-          experimental theater to create a glimpse into the underground scene of
-          New York City.
+          Filmshow is a live show that combines short films from local
+          filmmakers and live experimental theater to create a glimpse into the
+          underground scene of New York City.
         </p>
       </section>
       {photos.length ? <FilmshowPhotoSequence photos={photos} /> : null}

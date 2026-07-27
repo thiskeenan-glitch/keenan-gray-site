@@ -1,9 +1,10 @@
 export const site = {
   url: "https://www.thiskeenan.com",
   email: "thiskeenan@gmail.com",
-  location: "New York City",
+  location: "Brooklyn, New York City",
   deck: "https://canva.link/keenangraydirectorsdeckk",
   filmshow: "https://www.filmshow.org/",
+  lastModified: "2026-07-27",
 };
 
 export const socialLinks = [
@@ -38,6 +39,12 @@ export type Project = {
   context: string;
   summary: string;
   description: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  keywords?: string[];
+  schemaType?: string | string[];
+  datePublished?: string;
+  dateModified?: string;
   image: string;
   alt: string;
   categories: ProjectCategory[];
@@ -66,9 +73,20 @@ export const projects: Project[] = [
     context: "Short film",
     summary: "A family celebrates a birthday while the world ends.",
     description:
-      "Toy Gun premiered in a warehouse with 130 people, built as a live event around the film.",
+      "Toy Gun is a 2026 comedic thriller short directed, written, and edited by Keenan Gray. It premiered in a New York warehouse with 130 people, built as a live event around the film.",
+    metaTitle: "Toy Gun Short Film | Keenan Gray Director",
+    metaDescription:
+      "Toy Gun is a 2026 comedic thriller short film directed, written, and edited by Brooklyn and New York filmmaker Keenan Gray.",
+    keywords: [
+      "Keenan Gray director",
+      "short film director",
+      "Brooklyn filmmaker",
+      "comedic thriller",
+    ],
+    schemaType: ["Movie", "CreativeWork"],
+    datePublished: "2026-01-01",
     image: "/media/optimized/toy-gun-thumb.jpg",
-    alt: "A red-lit still from Toy Gun.",
+    alt: "A red-lit Toy Gun short film still directed by Keenan Gray.",
     categories: ["Narrative"],
     featured: true,
     film: true,
@@ -120,11 +138,22 @@ export const projects: Project[] = [
     client: "FENTY x PUMA",
     context: "Commercial development with director Bennett Johnson",
     summary:
-      "Story, visual development, concepts, test shoots, and previs.",
+      "Cinematic commercial development for FENTY x PUMA.",
     description:
-      "Keenan collaborated closely with director Bennett Johnson on story and visual development, contributing to key concepts, test shoots, and previs that shaped the film's final tone and perspective.",
+      "Keenan Gray contributed story and visual development for FENTY x PUMA, shaping cinematic commercial concepts, test shoots, and previs with director Bennett Johnson.",
+    metaTitle: "FENTY x PUMA Commercial Development | Keenan Gray",
+    metaDescription:
+      "FENTY x PUMA commercial development by Keenan Gray, a New York filmmaker working on cinematic branded films, concepts, test shoots, and previs.",
+    keywords: [
+      "commercial director",
+      "branded films",
+      "cinematic commercials",
+      "Keenan Gray",
+    ],
+    schemaType: "CreativeWork",
+    datePublished: "2026-01-01",
     image: "/media/optimized/fenty-puma.jpg",
-    alt: "Thumbnail for FENTY x PUMA.",
+    alt: "Cinematic still from FENTY x PUMA commercial development by Keenan Gray.",
     categories: ["Commercial"],
     featured: true,
     commercial: true,
@@ -139,10 +168,22 @@ export const projects: Project[] = [
     role: "Director",
     client: "Jim Beam",
     context: "Commercial",
-    summary: "Jim Beam.",
-    description: "A Jim Beam commercial.",
+    summary: "Cinematic branded film for Jim Beam.",
+    description:
+      "A 2026 Jim Beam commercial directed by Keenan Gray, built around a moody cinematic world for the bourbon brand.",
+    metaTitle: "Jim Beam Commercial | Keenan Gray Director",
+    metaDescription:
+      "Jim Beam commercial directed by Keenan Gray, a Brooklyn and New York commercial director creating cinematic branded films.",
+    keywords: [
+      "Jim Beam commercial",
+      "commercial director",
+      "branded film director",
+      "New York director",
+    ],
+    schemaType: "CreativeWork",
+    datePublished: "2026-01-01",
     image: "/media/optimized/jim-beam-thumb.jpg",
-    alt: "Jim Beam commercial still with a man holding a bottle.",
+    alt: "Jim Beam commercial still directed by Keenan Gray with a man holding a bottle.",
     categories: ["Commercial"],
     commercial: true,
     embeds: [{ provider: "vimeo", id: "1199512466", title: "Jim Beam" }],
@@ -171,9 +212,20 @@ export const projects: Project[] = [
     context: "Independent short film",
     summary: "A deranged Uber ride. A reckless rescue mission.",
     description:
-      "A passenger ropes an Uber driver into a rescue mission. Shot by Saturday Night Live cinematographer Andy Kugler and colored by Primetime Emmy Award-winning colorist Elias Nousiopoulos.",
+      "Seedless is a 2025 comedy short directed, written, and edited by Brooklyn filmmaker Keenan Gray. A passenger ropes an Uber driver into a rescue mission. Shot by Saturday Night Live cinematographer Andy Kugler and colored by Primetime Emmy Award-winning colorist Elias Nousiopoulos.",
+    metaTitle: "Seedless Comedy Short | Keenan Gray Director",
+    metaDescription:
+      "Seedless is a 2025 comedy short directed, written, and edited by Brooklyn and New York filmmaker Keenan Gray.",
+    keywords: [
+      "Keenan Gray director",
+      "comedy short film",
+      "Brooklyn filmmaker",
+      "New York filmmaker",
+    ],
+    schemaType: ["Movie", "CreativeWork"],
+    datePublished: "2025-01-01",
     image: "/media/optimized/seedless-thumb.jpg",
-    alt: "A close-up still from Seedless.",
+    alt: "Close-up still from Seedless, a comedy short directed by Keenan Gray.",
     categories: ["Narrative"],
     featured: true,
     film: true,
@@ -209,7 +261,18 @@ export const projects: Project[] = [
     context: "Live short-film show",
     summary: "This is not a festival.",
     description:
-      "Filmshow is a live show that combines short films from local filmmakers and live experimental theater to create a glimpse into the underground scene of New York City.",
+      "Filmshow is a live show founded by Keenan Gray that combines short films from local filmmakers and live experimental theater to create a glimpse into the underground scene of New York City.",
+    metaTitle: "Filmshow | Keenan Gray Founder and Director",
+    metaDescription:
+      "Filmshow is Keenan Gray's New York live show combining short films from local filmmakers with live experimental theater.",
+    keywords: [
+      "Filmshow",
+      "New York short films",
+      "experimental theater",
+      "Keenan Gray",
+    ],
+    schemaType: "CreativeWork",
+    datePublished: "2026-01-01",
     image: "/media/optimized/filmshow-three-people.jpg",
     alt: "Three Filmshow performers on stage beside a ladder.",
     categories: ["Live / Cultural"],
@@ -254,9 +317,20 @@ export const projects: Project[] = [
     summary:
       "A documentary crew studies the life of a delusional circus artist.",
     description:
-      "A documentary crew takes an in-depth look into the lifestyle of a circus artist.",
+      "Diabolo Tamer is a 2025 mockumentary short directed, written, and edited by Keenan Gray, following a documentary crew studying the lifestyle of a delusional circus artist.",
+    metaTitle: "Diabolo Tamer Mockumentary | Keenan Gray Director",
+    metaDescription:
+      "Diabolo Tamer is a 2025 mockumentary short directed, written, and edited by New York filmmaker Keenan Gray.",
+    keywords: [
+      "mockumentary short",
+      "Keenan Gray director",
+      "circus film",
+      "New York filmmaker",
+    ],
+    schemaType: ["Movie", "CreativeWork"],
+    datePublished: "2025-01-01",
     image: "/media/optimized/diabolo-thumb.jpg",
-    alt: "A performer concentrating in a still from Diabolo Tamer.",
+    alt: "Still from Diabolo Tamer, a mockumentary short directed by Keenan Gray.",
     categories: ["Narrative"],
     featured: true,
     film: true,
@@ -282,9 +356,20 @@ export const projects: Project[] = [
     summary:
       "A fight at a skate park starts to fracture a once-impenetrable group of friends.",
     description:
-      "After a fight breaks out at their favorite skate park, a group of three friends starts to implode.",
+      "Sorta Kinda True is a 2024 comedy short directed, written, edited, and produced by Keenan Gray. After a fight breaks out at their favorite skate park, a group of friends starts to implode.",
+    metaTitle: "Sorta Kinda True Comedy Short | Keenan Gray",
+    metaDescription:
+      "Sorta Kinda True is a 2024 comedy short directed, written, edited, and produced by Brooklyn filmmaker Keenan Gray.",
+    keywords: [
+      "comedy short",
+      "Keenan Gray director",
+      "writer director editor",
+      "Brooklyn filmmaker",
+    ],
+    schemaType: ["Movie", "CreativeWork"],
+    datePublished: "2024-01-01",
     image: "/media/optimized/sorta-thumb.jpg",
-    alt: "A dark still from Sorta Kinda True.",
+    alt: "Dark close-up still from Sorta Kinda True, a comedy short by Keenan Gray.",
     categories: ["Narrative"],
     featured: true,
     film: true,
@@ -310,9 +395,19 @@ export const projects: Project[] = [
     context: "Early and personal work",
     summary: "Early films and personal work.",
     description:
-      "Keenan went to circus school. Graduates are supposed to make a demo reel of their skills, so he made a documentary about how bad he was.",
+      "The Archives collect early films, personal work, and circus-school experiments from Keenan Gray, tracing the Brooklyn director's path into narrative filmmaking and creative production.",
+    metaTitle: "The Archives | Early Films by Keenan Gray",
+    metaDescription:
+      "The Archives collect early films and personal work by Keenan Gray, showing the New York director's circus background and filmmaking experiments.",
+    keywords: [
+      "Keenan Gray filmmaker",
+      "personal films",
+      "early films",
+      "creative production",
+    ],
+    schemaType: "CreativeWork",
     image: "/media/optimized/archives-cat.jpg",
-    alt: "A cat-themed thumbnail from The Archives.",
+    alt: "Frame from The Archives, Keenan Gray's early and personal film work.",
     categories: ["Archive"],
     embeds: [
       { provider: "vimeo", id: "555914526", title: "The Climb" },

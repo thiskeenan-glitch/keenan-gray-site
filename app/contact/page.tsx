@@ -1,11 +1,33 @@
 import type { Metadata } from "next";
+import { JsonLd } from "../components/JsonLd";
 import { site, socialLinks } from "../data";
+import {
+  breadcrumbSchema,
+  personId,
+  webPageSchema,
+  withContext,
+} from "../seo";
+
+const contactDescription =
+  "Contact Keenan Gray for directing inquiries, commercials, branded films, narrative projects, Filmshow, and creative work in Brooklyn and New York.";
 
 export const metadata: Metadata = {
-  title: "Contact",
-  description: "Contact Keenan Gray.",
+  title: "Contact | Directing Inquiries",
+  description: contactDescription,
   alternates: {
     canonical: "/contact",
+  },
+  keywords: [
+    "contact Keenan Gray",
+    "director inquiries",
+    "commercial director Brooklyn",
+    "New York film director",
+    "branded film director",
+  ],
+  openGraph: {
+    title: "Contact | Keenan Gray",
+    description: contactDescription,
+    url: `${site.url}/contact`,
   },
 };
 
@@ -15,6 +37,21 @@ export default function ContactPage() {
 
   return (
     <main id="main" className="page-shell contact-page">
+      <JsonLd
+        data={withContext([
+          webPageSchema({
+            path: "/contact",
+            name: "Contact | Keenan Gray",
+            description: contactDescription,
+            type: "ContactPage",
+            mainEntityId: personId,
+          }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Contact", path: "/contact" },
+          ]),
+        ])}
+      />
       <section className="page-hero contact-hero">
         <p className="scarlet">Contact</p>
         <h1>Contact</h1>

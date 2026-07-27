@@ -14,8 +14,14 @@ const eslintConfig = defineConfig([
   globalIgnores([
     // Default ignores of eslint-config-next:
     ".next/**",
+    ".vercel/**",
+    ".wrangler/**",
+    ".dev-home/**",
     "out/**",
     "build/**",
+    "dist/**",
+    "node_modules/**",
+    ".pnpm-store/**",
     "next-env.d.ts",
   ]),
 ]);

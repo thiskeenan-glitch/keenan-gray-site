@@ -3,6 +3,7 @@
 import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
 import type { Project } from "../data";
+import { getImageDimensions } from "../media";
 
 type FilmshowPhoto = NonNullable<Project["gallery"]>[number];
 
@@ -95,6 +96,7 @@ export function FilmshowPhotoSequence({ photos }: { photos: FilmshowPhoto[] }) {
       <div className="filmshow-photos-stage">
         {photos.map((photo, index) => {
           const place = spiralSteps[index % spiralSteps.length];
+          const dimensions = getImageDimensions(photo.src);
           const distance = Math.abs(currentStep - index);
           const depth = index - currentStep;
           const opacity = reducedMotion
@@ -123,7 +125,15 @@ export function FilmshowPhotoSequence({ photos }: { photos: FilmshowPhoto[] }) {
                     }
               }
             >
-              <img src={photo.src} alt={photo.alt} loading="lazy" decoding="async" />
+              <img
+                src={photo.src}
+                alt={photo.alt}
+                width={dimensions?.width}
+                height={dimensions?.height}
+                sizes="(max-width: 920px) 90vw, 74vw"
+                loading="lazy"
+                decoding="async"
+              />
             </figure>
           );
         })}

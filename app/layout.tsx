@@ -1,31 +1,75 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { JsonLd } from "./components/JsonLd";
 import { MobileNav } from "./components/MobileNav";
 import { ScrollReveal } from "./components/ScrollReveal";
 import { site, socialLinks } from "./data";
+import { getImageDimensions } from "./media";
+import {
+  defaultOgImage,
+  filmshowOrganizationSchema,
+  personSchema,
+  siteDescription,
+  siteTitle,
+  websiteSchema,
+  withContext,
+} from "./seo";
 import "./globals.css";
+
+const defaultOgDimensions = getImageDimensions(defaultOgImage);
+const brandMarkDimensions = getImageDimensions("/bluebird-cowboy.png");
+const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
+const gaMeasurementId =
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ??
+  process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: "Keenan Gray | Film Director",
+    default: siteTitle,
     template: "%s | Keenan Gray",
   },
-  description:
-    "Keenan Gray. Director and filmmaker in New York City.",
-  alternates: {
-    canonical: "/",
+  description: siteDescription,
+  applicationName: "Keenan Gray",
+  category: "film portfolio",
+  creator: "Keenan Gray",
+  publisher: "Keenan Gray",
+  keywords: [
+    "Keenan Gray",
+    "film director",
+    "commercial director",
+    "Brooklyn director",
+    "New York filmmaker",
+    "narrative director",
+    "cinematic commercials",
+    "branded films",
+    "Filmshow",
+  ],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
+  verification: googleVerification
+    ? {
+        google: googleVerification,
+      }
+    : undefined,
   openGraph: {
-    title: "Keenan Gray | Film Director",
-    description: "Keenan Gray. Director and filmmaker in New York City.",
+    title: siteTitle,
+    description: siteDescription,
     url: site.url,
     siteName: "Keenan Gray",
     images: [
       {
-        url: "/media/optimized/hero-donnie-runs.jpg",
-        width: 1600,
-        height: 900,
+        url: defaultOgImage,
+        ...defaultOgDimensions,
         alt: "A cinematic still from Keenan Gray's film work.",
       },
     ],
@@ -34,9 +78,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Keenan Gray | Film Director",
-    description: "Keenan Gray. Director and filmmaker in New York City.",
-    images: ["/media/optimized/hero-donnie-runs.jpg"],
+    title: siteTitle,
+    description: siteDescription,
+    images: [defaultOgImage],
   },
 };
 
@@ -47,6 +91,7 @@ export default function RootLayout({
 }>) {
   const navItems = [
     { label: "Projects", href: "/work" },
+    { label: "Filmshow", href: "/filmshow" },
     { label: "Me", href: "/about" },
   ];
 
@@ -56,8 +101,33 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.png" type="image/png" sizes="512x512" />
         <link rel="shortcut icon" href="/favicon.png" />
         <link rel="apple-touch-icon" href="/favicon.png" sizes="512x512" />
+        {gaMeasurementId ? (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${gaMeasurementId}');
+                `,
+              }}
+            />
+          </>
+        ) : null}
       </head>
       <body>
+        <JsonLd
+          data={withContext([
+            personSchema(),
+            websiteSchema(),
+            filmshowOrganizationSchema(),
+          ])}
+        />
         <a className="skip-link" href="#main">
           Skip to content
         </a>
@@ -70,6 +140,8 @@ export default function RootLayout({
               className="brand-mark"
               src="/bluebird-cowboy.png"
               alt=""
+              width={brandMarkDimensions?.width}
+              height={brandMarkDimensions?.height}
               aria-hidden="true"
             />
           </Link>
@@ -90,6 +162,8 @@ export default function RootLayout({
               className="brand-mark"
               src="/bluebird-cowboy.png"
               alt=""
+              width={brandMarkDimensions?.width}
+              height={brandMarkDimensions?.height}
               aria-hidden="true"
             />
             <span>Keenan Gray</span>

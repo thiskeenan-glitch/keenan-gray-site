@@ -7,6 +7,7 @@ export function HeroVideo() {
       loop
       playsInline
       preload="auto"
+      poster="/media/optimized/toy-gun-thumb.jpg"
       aria-label="Toy Gun trailer background"
     >
       <source

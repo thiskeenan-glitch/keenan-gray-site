@@ -2,5 +2,17 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nitro",
   "installCommand": "pnpm install --frozen-lockfile",
-  "buildCommand": "NITRO_PRESET=vercel pnpm exec vite build"
+  "buildCommand": "NITRO_PRESET=vercel pnpm exec vite build",
+  "redirects": [
+    {
+      "source": "/film",
+      "destination": "/work",
+      "permanent": true
+    },
+    {
+      "source": "/commercial",
+      "destination": "/work",
+      "permanent": true
+    }
+  ]
 }

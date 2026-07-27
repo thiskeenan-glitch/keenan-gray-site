@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Project } from "../data";
+import { getImageDimensions } from "../media";
 
 type ProjectLinkProps = {
   project: Project;
@@ -12,6 +13,8 @@ export function ProjectLink({
   size = "large",
   priority = false,
 }: ProjectLinkProps) {
+  const dimensions = getImageDimensions(project.image);
+
   return (
     <Link
       className={`project-link project-link--${size} project-link--${project.slug}`}
@@ -21,6 +24,9 @@ export function ProjectLink({
         <img
           src={project.image}
           alt={project.alt}
+          width={dimensions?.width}
+          height={dimensions?.height}
+          sizes={size === "small" ? "(max-width: 920px) 100vw, 33vw" : "(max-width: 920px) 100vw, 50vw"}
           loading={priority ? "eager" : "lazy"}
           decoding="async"
           fetchPriority={priority ? "high" : "auto"}

@@ -1,7 +1,59 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { HeroVideo } from "./components/HeroVideo";
+import { JsonLd } from "./components/JsonLd";
 import { ProjectLink } from "./components/ProjectLink";
 import { projects, site } from "./data";
+import { getImageDimensions } from "./media";
+import {
+  breadcrumbSchema,
+  defaultOgImage,
+  projectItemListSchema,
+  siteDescription,
+  siteTitle,
+  webPageSchema,
+  withContext,
+} from "./seo";
+
+const headshotDimensions = getImageDimensions("/media/optimized/about-headshot.jpg");
+const ogDimensions = getImageDimensions(defaultOgImage);
+
+export const metadata: Metadata = {
+  title: {
+    absolute: siteTitle,
+  },
+  description: siteDescription,
+  alternates: {
+    canonical: "/",
+  },
+  keywords: [
+    "Keenan Gray",
+    "Brooklyn film director",
+    "New York filmmaker",
+    "commercial director",
+    "narrative director",
+    "branded films",
+    "Filmshow founder",
+  ],
+  openGraph: {
+    title: siteTitle,
+    description: siteDescription,
+    url: site.url,
+    images: [
+      {
+        url: defaultOgImage,
+        ...ogDimensions,
+        alt: "A cinematic still from Keenan Gray's film work.",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteTitle,
+    description: siteDescription,
+    images: [defaultOgImage],
+  },
+};
 
 export default function Home() {
   const selected = projects
@@ -10,6 +62,18 @@ export default function Home() {
 
   return (
     <main id="main">
+      <JsonLd
+        data={withContext([
+          webPageSchema({
+            path: "/",
+            name: siteTitle,
+            description: siteDescription,
+            primaryImage: defaultOgImage,
+          }),
+          breadcrumbSchema([{ name: "Home", path: "/" }]),
+          projectItemListSchema(selected),
+        ])}
+      />
       <section className="hero">
         <HeroVideo />
         <div className="hero-copy">
@@ -47,6 +111,9 @@ export default function Home() {
           <img
             src="/media/optimized/about-headshot.jpg"
             alt="Portrait of Keenan Gray."
+            width={headshotDimensions?.width}
+            height={headshotDimensions?.height}
+            sizes="(max-width: 720px) 58vw, 320px"
             loading="lazy"
             decoding="async"
           />
