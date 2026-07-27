@@ -323,32 +323,6 @@ textarea {
   will-change: transform;
 }
 
-.hero-audio-toggle {
-  background: rgba(5, 5, 4, 0.72);
-  border: 1px solid rgba(245, 241, 230, 0.42);
-  bottom: 44px;
-  color: var(--ink);
-  cursor: pointer;
-  font-family: var(--font-display-stack);
-  font-size: 12px;
-  font-weight: 900;
-  min-height: 44px;
-  padding: 0 18px;
-  position: absolute;
-  right: 28px;
-  text-transform: uppercase;
-  transition:
-    background 180ms ease,
-    border-color 180ms ease,
-    transform 180ms ease;
-  z-index: 2;
-}
-
-.hero-audio-toggle:hover {
-  border-color: var(--red);
-  transform: translateY(-1px);
-}
-
 .hero-copy {
   max-width: min(760px, 100%);
   display: grid;
@@ -1792,10 +1766,6 @@ dd {
     font-size: clamp(38px, 12.4vw, 48px);
     line-height: 1;
     max-width: min(100%, 360px);
-  }
-
-  .hero-audio-toggle {
-    display: none;
   }
 
   .page-hero h1,
