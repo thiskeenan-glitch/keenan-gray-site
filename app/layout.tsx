@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { MobileNav } from "./components/MobileNav";
 import { ScrollReveal } from "./components/ScrollReveal";
 import { site, socialLinks } from "./data";
 import "./globals.css";
@@ -45,8 +46,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const navItems = [
-    ["Projects", "/work"],
-    ["Me", "/about"],
+    { label: "Projects", href: "/work" },
+    { label: "Me", href: "/about" },
   ];
 
   return (
@@ -71,29 +72,13 @@ export default function RootLayout({
             <span>Keenan Gray</span>
           </Link>
           <nav className="desktop-nav" aria-label="Primary navigation">
-            {navItems.map(([label, href]) => (
-              <Link key={href} href={href}>
-                {label}
+            {navItems.map((item) => (
+              <Link key={item.href} href={item.href}>
+                {item.label}
               </Link>
             ))}
           </nav>
-          <details className="mobile-nav">
-            <summary aria-label="Open menu">Menu</summary>
-            <div className="mobile-nav-panel">
-              {navItems.map(([label, href]) => (
-                <Link key={href} href={href}>
-                  {label}
-                </Link>
-              ))}
-              <div className="mobile-socials">
-                {socialLinks.map((link) => (
-                  <a key={link.label} href={link.href} target="_blank" rel="noreferrer">
-                    {link.label}
-                  </a>
-                ))}
-              </div>
-            </div>
-          </details>
+          <MobileNav navItems={navItems} socialLinks={socialLinks} />
         </header>
         <ScrollReveal />
         {children}
