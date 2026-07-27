@@ -1,6 +1,8 @@
 import vinext from "vinext";
 import { defineConfig } from "vite";
 import { cloudflare } from "@cloudflare/vite-plugin";
+import tailwindcss from "@tailwindcss/vite";
+import { nitro } from "nitro/vite";
 import hostingConfig from "./.openai/hosting.json";
 import { sites } from "./build/sites-vite-plugin";
 
@@ -8,6 +10,8 @@ const SITE_CREATOR_PLACEHOLDER_DATABASE_ID =
   "00000000-0000-4000-8000-000000000000";
 
 const { d1, r2 } = hostingConfig;
+const isVercelBuild =
+  process.env.VERCEL === "1" || process.env.NITRO_PRESET === "vercel";
 
 const localBindingConfig = {
   main: "./worker/index.ts",
@@ -33,12 +37,17 @@ const localBindingConfig = {
 
 export default defineConfig({
   plugins: [
+    tailwindcss(),
     vinext(),
-    sites(),
-    cloudflare({
-      inspectorPort: false,
-      viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
-      config: localBindingConfig,
-    }),
+    ...(isVercelBuild
+      ? [nitro()]
+      : [
+          sites(),
+          cloudflare({
+            inspectorPort: false,
+            viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
+            config: localBindingConfig,
+          }),
+        ]),
   ],
 });
