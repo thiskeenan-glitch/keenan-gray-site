@@ -45,14 +45,29 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const project = getProject(slug);
   if (!project) notFound();
 
+  const isFilmshow = project.slug === "filmshow";
+  const isToyGun = project.slug === "toy-gun";
   const next = nextProject(project.slug);
+  const projectEmbeds = project.embeds ?? [];
+  const toyGunTrailer = isToyGun
+    ? projectEmbeds.find((embed) => embed.title.toLowerCase().includes("trailer")) ??
+      projectEmbeds[0]
+    : null;
+  const toyGunFullFilm = isToyGun
+    ? projectEmbeds.find((embed) => embed.title.toLowerCase().includes("full film")) ??
+      projectEmbeds.find((embed) => embed !== toyGunTrailer) ??
+      null
+    : null;
+  const gallery = isToyGun
+    ? project.gallery?.filter((image) => image.src !== "/media/optimized/toy-gun-staircase.jpg")
+    : project.gallery;
 
   return (
     <main id="main" className={`project-page project-page--${project.slug}`}>
       <section className="project-hero">
         <img src={project.image} alt={project.alt} fetchPriority="high" decoding="async" />
         <div>
-          <p className="scarlet">{project.eyebrow}</p>
+          <p className="scarlet project-eyebrow">{project.eyebrow}</p>
           <h1 className={project.logo ? "project-logo-title" : undefined}>
             {project.logo ? (
               <img src={project.logo} alt={project.logoAlt ?? project.title} />
@@ -61,6 +76,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             )}
           </h1>
           <dl className="project-meta">
+            {isFilmshow ? (
+              <div className="project-meta-category">
+                <dt>Category</dt>
+                <dd>{project.eyebrow}</dd>
+              </div>
+            ) : null}
             <div>
               <dt>Role</dt>
               <dd>{project.role}</dd>
@@ -102,7 +123,27 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </div>
       </section>
 
-      {project.embeds?.length ? (
+      {isToyGun && (toyGunTrailer || toyGunFullFilm) ? (
+        <section className="project-media project-media--toy-gun">
+          <p className="scarlet">Watch</p>
+          <div className="video-stack">
+            {toyGunTrailer ? (
+              <VideoEmbed key={`${toyGunTrailer.provider}-${toyGunTrailer.id}`} embed={toyGunTrailer} />
+            ) : null}
+            <figure className="project-inline-still">
+              <img
+                src="/media/optimized/toy-gun-staircase.jpg"
+                alt="Toy Gun still on a staircase."
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
+            {toyGunFullFilm ? (
+              <VideoEmbed key={`${toyGunFullFilm.provider}-${toyGunFullFilm.id}`} embed={toyGunFullFilm} />
+            ) : null}
+          </div>
+        </section>
+      ) : project.embeds?.length ? (
         <section className="project-media">
           <p className="scarlet">Watch</p>
           <div className="video-stack">
@@ -113,9 +154,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </section>
       ) : null}
 
-      {project.gallery?.length ? (
+      {gallery?.length ? (
         <section className="project-gallery">
-          {project.gallery.map((image) => (
+          {gallery.map((image) => (
             <figure
               key={image.src}
               className={image.layout ? `project-gallery-item--${image.layout}` : undefined}

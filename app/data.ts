@@ -87,8 +87,8 @@ export const projects: Project[] = [
       },
     ],
     embeds: [
+      { provider: "vimeo", id: "1184852787", title: "Toy Gun Trailer" },
       { provider: "vimeo", id: "1198839445", title: "Toy Gun full film" },
-      { provider: "vimeo", id: "1184852787", title: "Toy Gun" },
     ],
     gallery: [
       {
@@ -164,10 +164,6 @@ export const projects: Project[] = [
         src: "/media/optimized/jim-beam-logo-still.jpg",
         alt: "Black-and-white Jim Beam commercial still in an alley.",
       },
-      {
-        src: "/media/optimized/jim-beam-tootsie-wide.jpg",
-        alt: "Black-and-white Jim Beam still with two performers.",
-      },
     ],
   },
   {
@@ -218,9 +214,9 @@ export const projects: Project[] = [
     context: "Live short-film show",
     summary: "This is not a festival.",
     description:
-      "Filmshow combines short films from local filmmakers and live experimental theater to create a glimpse into the underground scene of New York City.",
-    image: "/media/optimized/filmshow-lots-of-people.jpg",
-    alt: "Audience seated for Filmshow in a warehouse screening space.",
+      "Filmshow is a live show that combines short films from local filmmakers and live experimental theater to create a glimpse into the underground scene of New York City.",
+    image: "/media/optimized/filmshow-three-people.jpg",
+    alt: "Three Filmshow performers on stage beside a ladder.",
     categories: ["Live / Cultural"],
     externalUrl: site.filmshow,
     externalLabel: "Visit Filmshow",
@@ -228,12 +224,14 @@ export const projects: Project[] = [
     logoAlt: "Filmshow",
     gallery: [
       {
-        src: "/media/optimized/filmshow-space-live.jpg",
-        alt: "The Filmshow space before an event.",
-      },
-      {
         src: "/media/optimized/filmshow-ladder.jpg",
         alt: "Filmshow performers on and around a ladder.",
+        layout: "portrait",
+      },
+      {
+        src: "/media/optimized/filmshow-crowd.jpg",
+        alt: "A packed Filmshow audience watching a film projected on a wall.",
+        layout: "portrait",
       },
       {
         src: "/media/optimized/filmshow-high-five.jpg",
@@ -241,20 +239,12 @@ export const projects: Project[] = [
         layout: "portrait",
       },
       {
-        src: "/media/optimized/filmshow-poster-vol-1.jpg",
-        alt: "Filmshow Vol. 1 poster.",
-      },
-      {
-        src: "/media/optimized/filmshow-three-people.jpg",
-        alt: "Three Filmshow performers on stage.",
-      },
-      {
         src: "/media/optimized/filmshow-lots-of-people.jpg",
         alt: "Audience watching Filmshow in a warehouse space.",
       },
       {
-        src: "/media/optimized/filmshow-crowd.jpg",
-        alt: "A packed Filmshow audience watching a film projected on a wall.",
+        src: "/media/optimized/filmshow-three-people.jpg",
+        alt: "Three Filmshow performers on stage.",
       },
     ],
   },

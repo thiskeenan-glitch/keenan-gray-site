@@ -13,7 +13,10 @@ export function ProjectLink({
   priority = false,
 }: ProjectLinkProps) {
   return (
-    <Link className={`project-link project-link--${size}`} href={`/work/${project.slug}`}>
+    <Link
+      className={`project-link project-link--${size} project-link--${project.slug}`}
+      href={`/work/${project.slug}`}
+    >
       <figure>
         <img
           src={project.image}
