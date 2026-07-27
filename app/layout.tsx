@@ -63,13 +63,15 @@ export default function RootLayout({
         </a>
         <header className="site-header" aria-label="Site header">
           <Link className="wordmark" href="/" aria-label="Keenan Gray home">
+            <span>Keenan Gray</span>
+          </Link>
+          <Link className="header-cowboy-link" href="/" aria-label="Keenan Gray home">
             <img
               className="brand-mark"
               src="/bluebird-cowboy.png"
               alt=""
               aria-hidden="true"
             />
-            <span>Keenan Gray</span>
           </Link>
           <nav className="desktop-nav" aria-label="Primary navigation">
             {navItems.map((item) => (

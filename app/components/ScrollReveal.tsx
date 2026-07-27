@@ -164,7 +164,7 @@ export function ScrollReveal() {
   }, [pathname]);
 
   useEffect(() => {
-    const mark = document.querySelector<HTMLElement>(".wordmark .brand-mark");
+    const mark = document.querySelector<HTMLElement>(".header-cowboy-link .brand-mark");
     if (!mark) {
       return;
     }
