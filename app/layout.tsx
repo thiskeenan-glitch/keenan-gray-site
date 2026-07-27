@@ -38,9 +38,9 @@ export const metadata: Metadata = {
     images: ["/media/optimized/hero-donnie-runs.jpg"],
   },
   icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.png",
-    apple: "/favicon.png",
+    icon: [{ url: "/favicon.png", type: "image/png", sizes: "512x512" }],
+    shortcut: [{ url: "/favicon.png", type: "image/png", sizes: "512x512" }],
+    apple: [{ url: "/favicon.png", type: "image/png", sizes: "512x512" }],
   },
 };
 
