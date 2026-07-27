@@ -67,11 +67,11 @@ export function HeroVideo() {
         muted
         loop
         playsInline
-        preload="metadata"
+        preload="auto"
         poster="/media/optimized/hero-donnie-runs-centered.jpg"
         aria-label="Toy Gun trailer background"
       >
-        <source src="/media/toy-gun-trailer-online.mov" type="video/quicktime" />
+        <source src="/media/optimized/toy-gun-trailer-home.mp4" type="video/mp4" />
       </video>
       <button
         className="hero-audio-toggle"
