@@ -14,19 +14,27 @@ export function ProjectLink({
   priority = false,
 }: ProjectLinkProps) {
   const dimensions = getImageDimensions(project.image);
+  const mp4 = "video/mp4";
   const videoThumbnailSources =
     project.slug === "toy-gun"
       ? [
           {
             src: "/media/optimized/toy-gun-trailer-mobile.mp4?v=20260727",
             media: "(max-width: 767px)",
+            type: mp4,
           },
-          { src: "/media/optimized/hero-desktop-muted.mp4?v=20260727" },
+          { src: "/media/optimized/hero-desktop-muted.mp4?v=20260727", type: mp4 },
         ]
       : project.slug === "fenty-puma"
-        ? [{ src: "/media/optimized/fenty-puma-thumb-video.mp4?v=20260728" }]
+        ? [{ src: "/media/optimized/fenty-puma-thumb-video.mp4?v=20260728", type: mp4 }]
+        : project.slug === "seedless"
+          ? [{ src: "/media/optimized/seedless-thumb-video.mp4?v=20260728", type: mp4 }]
+        : project.slug === "diabolo-tamer"
+          ? [{ src: "/media/optimized/diabolo-tamer-thumb-video.mp4?v=20260728", type: mp4 }]
         : project.slug === "sorta-kinda-true"
-          ? [{ src: "/media/optimized/sorta-kinda-true-thumb-video.mp4?v=20260728" }]
+          ? [{ src: "/media/optimized/sorta-kinda-true-thumb-video.mp4?v=20260728", type: mp4 }]
+          : project.slug === "filmshow"
+            ? [{ src: "/media/optimized/filmshow-thumb-video.mov?v=20260728" }]
           : null;
 
   return (
@@ -41,7 +49,7 @@ export function ProjectLink({
             muted
             loop
             playsInline
-            preload={priority ? "auto" : "metadata"}
+            preload="auto"
             poster={project.image}
             width={dimensions?.width}
             height={dimensions?.height}
@@ -51,7 +59,7 @@ export function ProjectLink({
               <source
                 key={source.src}
                 src={source.src}
-                type="video/mp4"
+                type={source.type}
                 media={source.media}
               />
             ))}

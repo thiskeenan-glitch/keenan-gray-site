@@ -56,9 +56,7 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  const selected = projects
-    .filter((project) => project.featured || project.slug === "filmshow")
-    .slice(0, 6);
+  const selected = projects;
 
   return (
     <main id="main">
@@ -120,11 +118,12 @@ export default function Home() {
         </Link>
         <div>
           <p>
-            Keenan Gray is a mountain-born, Brooklyn-based film director.
-          </p>
-          <p>
-            He combines 12 years as a circus performer and 4 years at Saturday
-            Night Live.
+            Keenan Gray is a mountain-born, Brooklyn-based film director whose
+            work combines the physicality of his twelve years as a circus
+            performer with the sharp comedic instincts he developed at{" "}
+            <em>Saturday Night Live</em>. He explores outlandish concepts with
+            emotional authenticity, directing loosely enough for performances to
+            feel natural and unscripted, then editing with surgical precision.
           </p>
           <a className="button personal-deck-link" href={site.deck} target="_blank" rel="noreferrer">
             Director&apos;s Deck

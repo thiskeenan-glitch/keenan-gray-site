@@ -10,7 +10,7 @@ import {
 } from "../seo";
 
 const aboutDescription =
-  "Keenan Gray is a mountain-born, Brooklyn-based film director with a circus background, 4 years at Saturday Night Live, and work across narrative films, commercials, and Filmshow.";
+  "Keenan Gray is a mountain-born, Brooklyn-based film director whose work combines the physicality of his twelve years as a circus performer with the sharp comedic instincts he developed at Saturday Night Live. He explores outlandish concepts with emotional authenticity, directing loosely enough for performances to feel natural and unscripted, then editing with surgical precision.";
 const headshot = "/media/optimized/about-headshot.jpg";
 const headshotDimensions = getImageDimensions(headshot);
 
@@ -83,11 +83,12 @@ export default function AboutPage() {
         />
         <div>
           <p>
-            Keenan Gray is a mountain-born, Brooklyn-based film director.
-          </p>
-          <p>
-            He combines 12 years as a circus performer and 4 years at Saturday
-            Night Live.
+            Keenan Gray is a mountain-born, Brooklyn-based film director whose
+            work combines the physicality of his twelve years as a circus
+            performer with the sharp comedic instincts he developed at{" "}
+            <em>Saturday Night Live</em>. He explores outlandish concepts with
+            emotional authenticity, directing loosely enough for performances to
+            feel natural and unscripted, then editing with surgical precision.
           </p>
         </div>
         <div className="about-links">
@@ -111,7 +112,8 @@ export default function AboutPage() {
           <p className="scarlet">Experience</p>
           <ul>
             <li>Oscar Qualifying&trade; HollyShorts Official Selection</li>
-            <li>4 years at Saturday Night Live</li>
+            <li>Saturday Night Live</li>
+            <li>Graduated from the National Circus School of Montreal</li>
             <li>Jack Daniel&apos;s campaign development</li>
             <li>Fenty and Puma campaign development</li>
             <li>Founder and director of Filmshow</li>
