@@ -123,7 +123,7 @@ export default function Home() {
             performer with the sharp comedic instincts he developed at{" "}
             <em>Saturday Night Live</em>. He explores outlandish concepts with
             emotional authenticity, directing loosely enough for performances to
-            feel natural and unscripted, then editing with surgical precision.
+            feel natural and unscripted, then editing like it&apos;s surgery.
           </p>
           <a className="button personal-deck-link" href={site.deck} target="_blank" rel="noreferrer">
             Director&apos;s Deck

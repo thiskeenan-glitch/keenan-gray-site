@@ -10,7 +10,7 @@ import {
 } from "../seo";
 
 const aboutDescription =
-  "Keenan Gray is a mountain-born, Brooklyn-based film director whose work combines the physicality of his twelve years as a circus performer with the sharp comedic instincts he developed at Saturday Night Live. He explores outlandish concepts with emotional authenticity, directing loosely enough for performances to feel natural and unscripted, then editing with surgical precision.";
+  "Keenan Gray is a mountain-born, Brooklyn-based film director whose work combines the physicality of his twelve years as a circus performer with the sharp comedic instincts he developed at Saturday Night Live. He explores outlandish concepts with emotional authenticity, directing loosely enough for performances to feel natural and unscripted, then editing like it's surgery.";
 const headshot = "/media/optimized/about-headshot.jpg";
 const headshotDimensions = getImageDimensions(headshot);
 
@@ -88,7 +88,7 @@ export default function AboutPage() {
             performer with the sharp comedic instincts he developed at{" "}
             <em>Saturday Night Live</em>. He explores outlandish concepts with
             emotional authenticity, directing loosely enough for performances to
-            feel natural and unscripted, then editing with surgical precision.
+            feel natural and unscripted, then editing like it&apos;s surgery.
           </p>
         </div>
         <div className="about-links">
