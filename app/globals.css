@@ -489,8 +489,10 @@ textarea {
   margin: 0;
 }
 
-.project-link img {
+.project-link img,
+.project-link video {
   aspect-ratio: 16 / 10;
+  display: block;
   filter: saturate(0.84) contrast(1.06);
   height: auto;
   object-fit: cover;
@@ -500,13 +502,15 @@ textarea {
     transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.project-link--filmshow img {
+.project-link--filmshow img,
+.project-link--filmshow video {
   background: var(--black);
   object-fit: contain;
   object-position: center center;
 }
 
-.project-link:hover img {
+.project-link:hover img,
+.project-link:hover video {
   filter: saturate(1.04) contrast(1.1);
   transform: translateY(-6px) scale(1.01);
 }
@@ -632,6 +636,7 @@ textarea {
 }
 
 .project-link img,
+.project-link video,
 .project-gallery img,
 .filmshow-band > img,
 .personal-statement img,
@@ -1800,6 +1805,7 @@ dd {
 
   .project-gallery img,
   .project-link img,
+  .project-link video,
   .filmshow-band > img {
     aspect-ratio: 4 / 3;
   }
