@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { FilmshowPhotoSequence } from "../components/FilmshowPhotoSequence";
 import { JsonLd } from "../components/JsonLd";
 import { getProject, site } from "../data";
 import { getImageDimensions } from "../media";
@@ -110,7 +109,31 @@ export default function FilmshowPage() {
           underground scene of New York City.
         </p>
       </section>
-      {photos.length ? <FilmshowPhotoSequence photos={photos} /> : null}
+      {photos.length ? (
+        <section className="project-gallery" aria-label="Filmshow photos">
+          {photos.map((photo) => (
+            <figure
+              key={photo.src}
+              className={photo.layout ? `project-gallery-item--${photo.layout}` : undefined}
+            >
+              <img
+                src={photo.src}
+                alt={photo.alt}
+                width={getImageDimensions(photo.src)?.width}
+                height={getImageDimensions(photo.src)?.height}
+                sizes={
+                  photo.layout === "portrait"
+                    ? "(max-width: 920px) 100vw, 44vw"
+                    : "(max-width: 920px) 100vw, 76vw"
+                }
+                loading="lazy"
+                decoding="async"
+              />
+              {photo.caption ? <figcaption>{photo.caption}</figcaption> : null}
+            </figure>
+          ))}
+        </section>
+      ) : null}
       <section className="filmshow-closing" aria-label="Filmshow statement">
         <p>This is not a film festival. It&apos;s a filmshow.</p>
       </section>
