@@ -1186,7 +1186,7 @@ dd {
 
 .filmshow-hero > div {
   display: grid;
-  gap: 22px;
+  gap: 30px;
   justify-items: center;
   max-width: 660px;
   min-width: 0;
@@ -1219,7 +1219,7 @@ dd {
   font-family: var(--font-copy-stack);
   font-size: clamp(18px, 1.45vw, 22px);
   font-weight: 400;
-  line-height: 1.55;
+  line-height: 1.72;
   margin: 0 auto;
   max-width: 680px;
   text-wrap: pretty;
@@ -1649,7 +1649,7 @@ dd {
   }
 
   .filmshow-hero > div {
-    gap: 18px;
+    gap: 24px;
   }
 
   .filmshow-blurb {
@@ -1760,7 +1760,7 @@ dd {
 
   .filmshow-blurb p {
     font-size: 18px;
-    line-height: 1.55;
+    line-height: 1.68;
   }
 
   .filmshow-closing {
