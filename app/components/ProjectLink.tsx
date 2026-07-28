@@ -19,14 +19,16 @@ export function ProjectLink({
     project.slug === "toy-gun"
       ? [
           {
-            src: "/media/optimized/toy-gun-trailer-mobile.mp4?v=20260727",
+            src: "/media/optimized/toy-gun-thumb-video-mobile.mp4?v=20260728",
             media: "(max-width: 767px)",
             type: mp4,
           },
-          { src: "/media/optimized/hero-desktop-muted.mp4?v=20260727", type: mp4 },
+          { src: "/media/optimized/toy-gun-thumb-video.mp4?v=20260728", type: mp4 },
         ]
       : project.slug === "fenty-puma"
         ? [{ src: "/media/optimized/fenty-puma-thumb-video.mp4?v=20260728", type: mp4 }]
+        : project.slug === "jim-beam"
+          ? [{ src: "/media/optimized/jim-beam-thumb-video.mp4?v=20260728", type: mp4 }]
         : project.slug === "seedless"
           ? [{ src: "/media/optimized/seedless-thumb-video.mp4?v=20260728", type: mp4 }]
         : project.slug === "diabolo-tamer"
@@ -34,7 +36,7 @@ export function ProjectLink({
         : project.slug === "sorta-kinda-true"
           ? [{ src: "/media/optimized/sorta-kinda-true-thumb-video.mp4?v=20260728", type: mp4 }]
           : project.slug === "filmshow"
-            ? [{ src: "/media/optimized/filmshow-thumb-video.mov?v=20260728" }]
+            ? [{ src: "/media/optimized/filmshow-thumb-video.mp4?v=20260728", type: mp4 }]
           : null;
 
   return (

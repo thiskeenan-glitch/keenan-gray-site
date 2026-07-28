@@ -476,7 +476,7 @@ textarea {
 .archive-grid .project-link,
 .archive-grid .project-link--wide,
 .archive-grid .project-link--small {
-  grid-column: span 6;
+  grid-column: 1 / -1;
 }
 
 .commercial-callout .project-link,
