@@ -18,11 +18,6 @@ export function ProjectLink({
   const videoThumbnailSources =
     project.slug === "toy-gun"
       ? [
-          {
-            src: "/media/optimized/toy-gun-thumb-video-mobile.mp4?v=20260728",
-            media: "(max-width: 767px)",
-            type: mp4,
-          },
           { src: "/media/optimized/toy-gun-thumb-video.mp4?v=20260728", type: mp4 },
         ]
       : project.slug === "fenty-puma"

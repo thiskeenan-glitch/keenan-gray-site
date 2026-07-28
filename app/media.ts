@@ -12,6 +12,7 @@ export const imageDimensions: Record<string, { width: number; height: number }> 
   "/media/optimized/diabolo-thumb.jpg": { width: 1800, height: 1172 },
   "/media/optimized/fenty-puma.jpg": { width: 1800, height: 1012 },
   "/media/optimized/filmshow-crowd.jpg": { width: 1490, height: 1987 },
+  "/media/optimized/filmshow-hero-tootsie.jpg": { width: 2200, height: 1257 },
   "/media/optimized/filmshow-high-five.jpg": { width: 1085, height: 1450 },
   "/media/optimized/filmshow-ladder.jpg": { width: 1086, height: 1448 },
   "/media/optimized/filmshow-lots-of-people.jpg": { width: 2200, height: 1650 },

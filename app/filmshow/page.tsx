@@ -13,7 +13,9 @@ import {
 
 const filmshowDescription =
   "Filmshow is a New York live show founded by Keenan Gray that combines short films from local filmmakers and live experimental theater.";
-const filmshowHero = "/media/optimized/filmshow-crowd.jpg";
+const filmshowHero = "/media/optimized/filmshow-hero-tootsie.jpg";
+const filmshowHeroAlt =
+  "Black-and-white Filmshow still of a performer under textured light.";
 const filmshowHeroDimensions = getImageDimensions(filmshowHero);
 const filmshowLogoDimensions = getImageDimensions("/filmshow-logo.png");
 
@@ -38,7 +40,7 @@ export const metadata: Metadata = {
       {
         url: filmshowHero,
         ...filmshowHeroDimensions,
-        alt: "A packed Filmshow audience watching a film projected on a wall.",
+        alt: filmshowHeroAlt,
       },
     ],
   },
@@ -76,7 +78,7 @@ export default function FilmshowPage() {
       <section className="filmshow-hero">
         <img
           src={filmshowHero}
-          alt="A packed Filmshow audience watching a film projected on a wall."
+          alt={filmshowHeroAlt}
           width={filmshowHeroDimensions?.width}
           height={filmshowHeroDimensions?.height}
           sizes="100vw"
@@ -111,27 +113,49 @@ export default function FilmshowPage() {
       </section>
       {photos.length ? (
         <section className="project-gallery" aria-label="Filmshow photos">
-          {photos.map((photo) => (
-            <figure
-              key={photo.src}
-              className={photo.layout ? `project-gallery-item--${photo.layout}` : undefined}
-            >
-              <img
-                src={photo.src}
-                alt={photo.alt}
-                width={getImageDimensions(photo.src)?.width}
-                height={getImageDimensions(photo.src)?.height}
-                sizes={
-                  photo.layout === "portrait"
-                    ? "(max-width: 920px) 100vw, 44vw"
-                    : "(max-width: 920px) 100vw, 76vw"
-                }
-                loading="lazy"
-                decoding="async"
-              />
-              {photo.caption ? <figcaption>{photo.caption}</figcaption> : null}
-            </figure>
-          ))}
+          {photos.map((photo, index) => {
+            const photoFigure = (
+              <figure
+                key={photo.src}
+                className={photo.layout ? `project-gallery-item--${photo.layout}` : undefined}
+              >
+                <img
+                  src={photo.src}
+                  alt={photo.alt}
+                  width={getImageDimensions(photo.src)?.width}
+                  height={getImageDimensions(photo.src)?.height}
+                  sizes={
+                    photo.layout === "portrait"
+                      ? "(max-width: 920px) 100vw, 44vw"
+                      : "(max-width: 920px) 100vw, 76vw"
+                  }
+                  loading="lazy"
+                  decoding="async"
+                />
+                {photo.caption ? <figcaption>{photo.caption}</figcaption> : null}
+              </figure>
+            );
+
+            if (index !== 0) {
+              return photoFigure;
+            }
+
+            return [
+              photoFigure,
+              <figure key="filmshow-gallery-video" className="project-gallery-item--video">
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  aria-label="Filmshow video preview"
+                >
+                  <source src="/media/optimized/filmshow-thumb-video.mp4?v=20260728" type="video/mp4" />
+                </video>
+              </figure>,
+            ];
+          })}
         </section>
       ) : null}
       <section className="filmshow-closing" aria-label="Filmshow statement">

@@ -605,11 +605,12 @@ textarea {
 .personal-statement p {
   color: var(--muted);
   font-family: var(--font-serif-stack);
-  font-size: 20px;
-  line-height: 1.55;
+  font-size: clamp(17px, 1.35vw, 20px);
+  font-weight: 300;
+  line-height: 1.42;
   margin-left: auto;
   margin-right: auto;
-  max-width: 620px;
+  max-width: 580px;
 }
 
 .personal-statement img {
@@ -1017,8 +1018,14 @@ dd {
   aspect-ratio: 3 / 4;
 }
 
-.project-gallery img {
+.project-gallery figure.project-gallery-item--video {
+  grid-column: span 12;
+}
+
+.project-gallery img,
+.project-gallery video {
   aspect-ratio: 16 / 10;
+  display: block;
   object-fit: cover;
   width: 100%;
 }
@@ -1808,6 +1815,11 @@ dd {
   .project-link video,
   .filmshow-band > img {
     aspect-ratio: 4 / 3;
+  }
+
+  .project-link--toy-gun img,
+  .project-link--toy-gun video {
+    aspect-ratio: 16 / 10;
   }
 
   .personal-statement img,
