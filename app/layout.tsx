@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { GoogleAnalytics } from "@next/third-parties/google";
 import Link from "next/link";
+import Script from "next/script";
 import { JsonLd } from "./components/JsonLd";
 import { MobileNav } from "./components/MobileNav";
 import { ScrollReveal } from "./components/ScrollReveal";
@@ -158,7 +158,27 @@ export default function RootLayout({
             ))}
           </div>
         </footer>
-        {gaMeasurementId ? <GoogleAnalytics gaId={gaMeasurementId} /> : null}
+        {gaMeasurementId ? (
+          <>
+            <Script
+              id="google-analytics-src"
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
+              strategy="afterInteractive"
+            />
+            <Script
+              id="google-analytics-init"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${gaMeasurementId}');
+`,
+              }}
+            />
+          </>
+        ) : null}
       </body>
     </html>
   );
