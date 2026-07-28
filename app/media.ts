@@ -1,5 +1,6 @@
 export const imageDimensions: Record<string, { width: number; height: number }> = {
   "/bluebird-cowboy.png": { width: 443, height: 752 },
+  "/favicon-cowboy.png": { width: 512, height: 512 },
   "/favicon.png": { width: 512, height: 512 },
   "/filmshow-logo.png": { width: 1000, height: 601 },
   "/media/optimized/about-headshot.jpg": { width: 1800, height: 1637 },

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import Link from "next/link";
 import { JsonLd } from "./components/JsonLd";
 import { MobileNav } from "./components/MobileNav";
@@ -18,10 +19,9 @@ import "./globals.css";
 
 const defaultOgDimensions = getImageDimensions(defaultOgImage);
 const brandMarkDimensions = getImageDimensions("/bluebird-cowboy.png");
+const faviconHref = "/favicon-cowboy.png?v=20260728";
 const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
-const gaMeasurementId =
-  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ??
-  process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
+const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -98,27 +98,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/favicon.png" type="image/png" sizes="512x512" />
-        <link rel="shortcut icon" href="/favicon.png" />
-        <link rel="apple-touch-icon" href="/favicon.png" sizes="512x512" />
-        {gaMeasurementId ? (
-          <>
-            <script
-              async
-              src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
-            />
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', '${gaMeasurementId}');
-                `,
-              }}
-            />
-          </>
-        ) : null}
+        <link rel="icon" href={faviconHref} type="image/png" sizes="512x512" />
+        <link rel="shortcut icon" href={faviconHref} />
+        <link rel="apple-touch-icon" href={faviconHref} sizes="512x512" />
       </head>
       <body>
         <JsonLd
@@ -176,6 +158,7 @@ export default function RootLayout({
             ))}
           </div>
         </footer>
+        {gaMeasurementId ? <GoogleAnalytics gaId={gaMeasurementId} /> : null}
       </body>
     </html>
   );
