@@ -313,6 +313,7 @@ textarea {
 
 .filmshow-hero > img {
   filter: brightness(1.24) contrast(1.05) saturate(1.04);
+  object-position: left center;
 }
 
 .hero > img,

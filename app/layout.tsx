@@ -90,7 +90,7 @@ export default function RootLayout({
 }>) {
   const navItems = [
     { label: "Projects", href: "/work" },
-    { label: "Filmshow", href: "/filmshow" },
+    { label: "Filmshow", href: "/work/filmshow" },
     { label: "Me", href: "/about" },
   ];
 

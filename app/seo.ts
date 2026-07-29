@@ -9,7 +9,7 @@ export const defaultOgImage = "/media/optimized/hero-donnie-runs.jpg";
 
 export const personId = `${site.url}/#keenan-gray`;
 export const websiteId = `${site.url}/#website`;
-export const filmshowId = `${site.url}/filmshow#filmshow`;
+export const filmshowId = `${site.url}/work/filmshow#filmshow`;
 
 type SchemaValue = Record<string, unknown>;
 
@@ -92,9 +92,9 @@ export function filmshowOrganizationSchema(): SchemaValue {
 export function filmshowEventSeriesSchema(): SchemaValue {
   return {
     "@type": "EventSeries",
-    "@id": `${site.url}/filmshow#event-series`,
+    "@id": `${site.url}/work/filmshow#event-series`,
     name: "Filmshow",
-    url: absoluteUrl("/filmshow"),
+    url: absoluteUrl("/work/filmshow"),
     description:
       "Filmshow is a live show that combines short films from local filmmakers and live experimental theater to create a glimpse into the underground scene of New York City.",
     organizer: { "@id": filmshowId },
