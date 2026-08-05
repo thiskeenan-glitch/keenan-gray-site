@@ -180,15 +180,29 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <h2 className="project-intro-title">{project.summary}</h2>
         <div>
           <p>{project.description}</p>
-          {project.externalUrl ? (
-            <a
-              className="button button-solid project-external-link"
-              href={project.externalUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {project.externalLabel ?? "Visit Project"}
-            </a>
+          {project.externalUrl || project.pressUrl ? (
+            <div className="project-action-row">
+              {project.externalUrl ? (
+                <a
+                  className="button button-solid project-external-link"
+                  href={project.externalUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {project.externalLabel ?? "Visit Project"}
+                </a>
+              ) : null}
+              {project.pressUrl ? (
+                <a
+                  className="button project-press-link"
+                  href={project.pressUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {project.pressLabel ?? "Read More"}
+                </a>
+              ) : null}
+            </div>
           ) : null}
         </div>
       </section>

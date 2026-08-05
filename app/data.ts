@@ -50,6 +50,8 @@ export type Project = {
   categories: ProjectCategory[];
   externalUrl?: string;
   externalLabel?: string;
+  pressUrl?: string;
+  pressLabel?: string;
   logo?: string;
   logoAlt?: string;
   featured?: boolean;
@@ -278,6 +280,8 @@ export const projects: Project[] = [
     categories: ["Live / Cultural"],
     externalUrl: site.filmshow,
     externalLabel: "Visit Filmshow",
+    pressUrl: "https://usanews.com/newsroom/filmshow-turns-short-films-into-a-night-out",
+    pressLabel: "Read the Article",
     logo: "/filmshow-logo.png",
     logoAlt: "Filmshow",
     gallery: [

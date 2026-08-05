@@ -976,6 +976,13 @@ dd {
   justify-self: center;
 }
 
+.project-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+}
+
 .project-media,
 .project-gallery,
 .next-project {
