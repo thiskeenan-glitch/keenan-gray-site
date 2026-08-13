@@ -72,6 +72,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   const isFilmshow = project.slug === "filmshow";
   const isToyGun = project.slug === "toy-gun";
+  const isArchives = project.slug === "the-archives";
   const next = nextProject(project.slug);
   const projectEmbeds = project.embeds ?? [];
   const heroDimensions = getImageDimensions(project.image);
@@ -231,12 +232,23 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </div>
         </section>
       ) : project.embeds?.length ? (
-        <section className="project-media">
+        <section className={isArchives ? "project-media project-media--archives" : "project-media"}>
           <p className="scarlet">Watch</p>
-          <div className="video-stack">
-            {project.embeds.map((embed) => (
-              <VideoEmbed key={`${embed.provider}-${embed.id}`} embed={embed} />
-            ))}
+          <div className={isArchives ? "archive-video-stack" : "video-stack"}>
+            {project.embeds.map((embed) =>
+              isArchives ? (
+                <article className="archive-video-card" key={`${embed.provider}-${embed.id}`}>
+                  {embed.blurb ? (
+                    <div className="archive-video-note">
+                      <p>{embed.blurb}</p>
+                    </div>
+                  ) : null}
+                  <VideoEmbed embed={embed} />
+                </article>
+              ) : (
+                <VideoEmbed key={`${embed.provider}-${embed.id}`} embed={embed} />
+              ),
+            )}
           </div>
         </section>
       ) : null}

@@ -26,6 +26,7 @@ export type VideoEmbed = {
   provider: "vimeo" | "youtube";
   id: string;
   title: string;
+  blurb?: string;
 };
 
 export type Project = {
@@ -414,10 +415,32 @@ export const projects: Project[] = [
     alt: "Frame from The Archives, Keenan Gray's early and personal film work.",
     categories: ["Archive"],
     embeds: [
-      { provider: "vimeo", id: "555914526", title: "The Climb" },
-      { provider: "vimeo", id: "546923327", title: "Miller High Life" },
-      { provider: "vimeo", id: "864849826", title: "You're a Cat" },
-      { provider: "vimeo", id: "530140070", title: "Bluebird" },
+      {
+        provider: "vimeo",
+        id: "555914526",
+        title: "The Climb",
+        blurb: "A short mockumentary about me and my time at circus school.",
+      },
+      {
+        provider: "vimeo",
+        id: "546923327",
+        title: "Miller High Life",
+        blurb:
+          "This film is a family favorite and became the template for the much later Jim Beam commercial.",
+      },
+      {
+        provider: "vimeo",
+        id: "864849826",
+        title: "You're a Cat",
+        blurb: "This film is about a guy who hosts a party and the first guest is a cat.",
+      },
+      {
+        provider: "vimeo",
+        id: "530140070",
+        title: "Bluebird",
+        blurb:
+          "Once I sat in the passenger seat on the drive from upstate New York to New York City with a new lens. This is what came out.",
+      },
     ],
   },
 ];
