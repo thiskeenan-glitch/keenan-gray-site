@@ -146,6 +146,10 @@ export const projects: Project[] = [
         alt: "Rhode Island International Film Festival official competition 2026.",
       },
       {
+        src: "/media/optimized/toy-gun-laurel-bushwick.png",
+        alt: "Bushwick Film Festival official selection 2026.",
+      },
+      {
         src: "/media/optimized/toy-gun-laurel-omeleto.png",
         alt: "Omeleto official selection 2026.",
       },
@@ -172,7 +176,7 @@ export const projects: Project[] = [
         alt: "Toy Gun still with characters moving through outdoor chaos.",
       },
     ],
-    recognition: ["HollyShorts", "RIIFF official competition"],
+    recognition: ["HollyShorts", "RIIFF official competition", "Bushwick Film Festival"],
   },
   {
     slug: "fenty-puma",

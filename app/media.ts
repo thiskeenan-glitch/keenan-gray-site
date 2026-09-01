@@ -43,6 +43,7 @@ export const imageDimensions: Record<string, { width: number; height: number }> 
   "/media/optimized/toy-gun-thumb.jpg": { width: 1800, height: 1079 },
   "/media/optimized/toy-gun-title.jpg": { width: 1800, height: 847 },
   "/media/optimized/toy-gun-laurel-hollyshorts.png": { width: 560, height: 237 },
+  "/media/optimized/toy-gun-laurel-bushwick.png": { width: 5625, height: 3750 },
   "/media/optimized/toy-gun-laurel-omeleto.png": { width: 560, height: 273 },
   "/media/optimized/toy-gun-laurel-riiff.png": { width: 560, height: 258 },
 };

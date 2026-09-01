@@ -324,6 +324,35 @@ textarea {
   will-change: transform;
 }
 
+.hero-laurels {
+  align-items: center;
+  display: flex;
+  gap: clamp(14px, 3vw, 34px);
+  justify-content: center;
+  left: 50%;
+  max-width: min(720px, calc(100% - 44px));
+  opacity: calc(var(--hero-copy-opacity) * 0.92);
+  pointer-events: none;
+  position: absolute;
+  top: clamp(118px, 17vh, 176px);
+  transform: translate3d(-50%, calc(var(--hero-copy-y) * 0.45), 0) scale(var(--hero-copy-scale));
+  transform-origin: center center;
+  width: 100%;
+  will-change: opacity, transform;
+  z-index: 1;
+}
+
+.hero-laurels img {
+  height: auto;
+  max-height: clamp(42px, 5vw, 74px);
+  object-fit: contain;
+  width: auto;
+}
+
+.hero-laurels img:nth-child(3) {
+  max-height: clamp(54px, 6vw, 86px);
+}
+
 .hero-copy {
   max-width: min(760px, 100%);
   display: grid;
@@ -1795,6 +1824,21 @@ dd {
     padding-right: 16px;
     padding-bottom: calc(136px + env(safe-area-inset-bottom));
     padding-top: 7rem;
+  }
+
+  .hero-laurels {
+    gap: 12px;
+    max-width: calc(100% - 28px);
+    top: 104px;
+  }
+
+  .hero-laurels img {
+    max-height: 34px;
+    max-width: 29%;
+  }
+
+  .hero-laurels img:nth-child(3) {
+    max-height: 42px;
   }
 
   .hero h1 {

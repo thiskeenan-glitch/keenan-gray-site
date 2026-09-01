@@ -17,6 +17,20 @@ import {
 
 const headshotDimensions = getImageDimensions("/media/optimized/about-headshot.jpg");
 const ogDimensions = getImageDimensions(defaultOgImage);
+const heroLaurels = [
+  {
+    src: "/media/optimized/toy-gun-laurel-hollyshorts.png",
+    alt: "HollyShorts Film Festival official selection 2026.",
+  },
+  {
+    src: "/media/optimized/toy-gun-laurel-riiff.png",
+    alt: "Flickers Rhode Island International Film Festival official competition 2026.",
+  },
+  {
+    src: "/media/optimized/toy-gun-laurel-bushwick.png",
+    alt: "Bushwick Film Festival official selection 2026.",
+  },
+];
 
 export const metadata: Metadata = {
   title: {
@@ -74,6 +88,23 @@ export default function Home() {
       />
       <section className="hero">
         <HeroVideo />
+        <div className="hero-laurels" aria-label="Toy Gun festival selections">
+          {heroLaurels.map((laurel) => {
+            const dimensions = getImageDimensions(laurel.src);
+
+            return (
+              <img
+                key={laurel.src}
+                src={laurel.src}
+                alt={laurel.alt}
+                width={dimensions?.width}
+                height={dimensions?.height}
+                loading="eager"
+                decoding="async"
+              />
+            );
+          })}
+        </div>
         <div className="hero-copy">
           <p className="hero-role">Film Director</p>
           <h1>Keenan Gray</h1>
