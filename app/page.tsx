@@ -88,26 +88,26 @@ export default function Home() {
       />
       <section className="hero">
         <HeroVideo />
-        <div className="hero-laurels" aria-label="Toy Gun festival selections">
-          {heroLaurels.map((laurel) => {
-            const dimensions = getImageDimensions(laurel.src);
-
-            return (
-              <img
-                key={laurel.src}
-                src={laurel.src}
-                alt={laurel.alt}
-                width={dimensions?.width}
-                height={dimensions?.height}
-                loading="eager"
-                decoding="async"
-              />
-            );
-          })}
-        </div>
         <div className="hero-copy">
           <p className="hero-role">Film Director</p>
           <h1>Keenan Gray</h1>
+          <div className="hero-laurels" aria-label="Toy Gun festival selections">
+            {heroLaurels.map((laurel) => {
+              const dimensions = getImageDimensions(laurel.src);
+
+              return (
+                <img
+                  key={laurel.src}
+                  src={laurel.src}
+                  alt={laurel.alt}
+                  width={dimensions?.width}
+                  height={dimensions?.height}
+                  loading="eager"
+                  decoding="async"
+                />
+              );
+            })}
+          </div>
         </div>
       </section>
 

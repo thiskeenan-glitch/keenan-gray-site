@@ -7,15 +7,10 @@ export function HeroVideo() {
       loop
       playsInline
       preload="auto"
-      poster="/media/optimized/toy-gun-thumb.jpg"
-      aria-label="Toy Gun trailer background"
+      poster="/media/optimized/jim-beam-thumb.jpg"
+      aria-label="Jim Beam video background"
     >
-      <source
-        src="/media/optimized/toy-gun-trailer-mobile.mp4?v=20260727"
-        type="video/mp4"
-        media="(max-width: 767px)"
-      />
-      <source src="/media/optimized/hero-desktop-muted.mp4?v=20260727" type="video/mp4" />
+      <source src="/media/optimized/jim-beam-thumb-video.mp4?v=20260901" type="video/mp4" />
     </video>
   );
 }

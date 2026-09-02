@@ -67,49 +67,6 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    slug: "jim-beam",
-    title: "Jim Beam",
-    eyebrow: "Commercial",
-    type: "Commercial",
-    year: "2026",
-    role: "Director",
-    client: "Jim Beam",
-    context: "Commercial",
-    summary: "Cinematic branded film for Jim Beam.",
-    description:
-      "A 2026 Jim Beam commercial directed by Keenan Gray, built around a moody cinematic world for the bourbon brand.",
-    metaTitle: "Jim Beam Commercial | Keenan Gray Director",
-    metaDescription:
-      "Jim Beam commercial directed by Keenan Gray, a Brooklyn and New York commercial director creating cinematic branded films.",
-    keywords: [
-      "Jim Beam commercial",
-      "commercial director",
-      "branded film director",
-      "New York director",
-    ],
-    schemaType: "CreativeWork",
-    datePublished: "2026-01-01",
-    image: "/media/optimized/jim-beam-thumb.jpg",
-    alt: "Jim Beam commercial still directed by Keenan Gray with a man holding a bottle.",
-    categories: ["Commercial"],
-    commercial: true,
-    embeds: [{ provider: "vimeo", id: "1199512466", title: "Jim Beam" }],
-    gallery: [
-      {
-        src: "/media/optimized/jim-beam-tootsie-close.jpg",
-        alt: "Black-and-white Jim Beam still of a man leaning forward.",
-      },
-      {
-        src: "/media/optimized/jim-beam-thumb.jpg",
-        alt: "Jim Beam commercial still with a man drinking from a bottle.",
-      },
-      {
-        src: "/media/optimized/jim-beam-logo-still.jpg",
-        alt: "Black-and-white Jim Beam commercial still in an alley.",
-      },
-    ],
-  },
-  {
     slug: "toy-gun",
     title: "Toy Gun",
     eyebrow: "Comedic Thriller",
@@ -177,6 +134,49 @@ export const projects: Project[] = [
       },
     ],
     recognition: ["HollyShorts", "RIIFF official competition", "Bushwick Film Festival"],
+  },
+  {
+    slug: "jim-beam",
+    title: "Jim Beam",
+    eyebrow: "Commercial",
+    type: "Commercial",
+    year: "2026",
+    role: "Director",
+    client: "Jim Beam",
+    context: "Commercial",
+    summary: "Cinematic branded film for Jim Beam.",
+    description:
+      "A 2026 Jim Beam commercial directed by Keenan Gray, built around a moody cinematic world for the bourbon brand.",
+    metaTitle: "Jim Beam Commercial | Keenan Gray Director",
+    metaDescription:
+      "Jim Beam commercial directed by Keenan Gray, a Brooklyn and New York commercial director creating cinematic branded films.",
+    keywords: [
+      "Jim Beam commercial",
+      "commercial director",
+      "branded film director",
+      "New York director",
+    ],
+    schemaType: "CreativeWork",
+    datePublished: "2026-01-01",
+    image: "/media/optimized/jim-beam-thumb.jpg",
+    alt: "Jim Beam commercial still directed by Keenan Gray with a man holding a bottle.",
+    categories: ["Commercial"],
+    commercial: true,
+    embeds: [{ provider: "vimeo", id: "1199512466", title: "Jim Beam" }],
+    gallery: [
+      {
+        src: "/media/optimized/jim-beam-tootsie-close.jpg",
+        alt: "Black-and-white Jim Beam still of a man leaning forward.",
+      },
+      {
+        src: "/media/optimized/jim-beam-thumb.jpg",
+        alt: "Jim Beam commercial still with a man drinking from a bottle.",
+      },
+      {
+        src: "/media/optimized/jim-beam-logo-still.jpg",
+        alt: "Black-and-white Jim Beam commercial still in an alley.",
+      },
+    ],
   },
   {
     slug: "fenty-puma",
