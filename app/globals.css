@@ -733,7 +733,7 @@ textarea {
 }
 
 .filmshow-logo.filmshow-logo--hero {
-  max-width: min(260px, 54vw);
+  max-width: min(182px, 38vw);
 }
 
 .contact-close {
@@ -893,7 +893,7 @@ textarea {
 .project-page--filmshow .project-logo-title img {
   flex: 0 0 auto;
   max-width: 100%;
-  width: min(300px, 46vw);
+  width: min(210px, 32vw);
 }
 
 .project-page--filmshow .project-meta {
@@ -1689,7 +1689,7 @@ dd {
   }
 
   .project-page--filmshow .project-logo-title img {
-    max-width: min(220px, 58vw);
+    max-width: min(154px, 41vw);
   }
 
   .project-page--filmshow .project-feature-video {
@@ -1941,7 +1941,7 @@ dd {
   }
 
   .filmshow-logo.filmshow-logo--hero {
-    max-width: min(210px, 64vw);
+    max-width: min(147px, 45vw);
   }
 
   .filmshow-kicker {
