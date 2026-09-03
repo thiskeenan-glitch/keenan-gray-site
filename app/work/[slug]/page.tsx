@@ -137,6 +137,20 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               project.title
             )}
           </h1>
+          {isFilmshow ? (
+            <video
+              className="project-feature-video"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              poster="/media/optimized/filmshow-trailer-poster.jpg"
+              aria-label="Filmshow trailer"
+            >
+              <source src="/media/optimized/filmshow-desktop-trailer.mp4?v=20260903b" type="video/mp4" />
+            </video>
+          ) : null}
           <dl className="project-meta">
             {isFilmshow ? (
               <div className="project-meta-category">

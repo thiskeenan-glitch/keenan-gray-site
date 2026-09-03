@@ -7,7 +7,7 @@ export function HeroVideo() {
       loop
       playsInline
       preload="auto"
-      poster="/media/optimized/jim-beam-thumb.jpg"
+      poster="/media/optimized/home-hero-poster.jpg"
       aria-label="Jim Beam video background"
     >
       <source src="/media/optimized/jim-beam-thumb-video.mp4?v=20260901" type="video/mp4" />

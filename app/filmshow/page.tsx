@@ -14,6 +14,9 @@ import {
 const filmshowDescription =
   "Filmshow is a New York live show founded by Keenan Gray that combines short films from local filmmakers and live experimental theater.";
 const filmshowHero = "/media/optimized/filmshow-hero-tootsie.jpg";
+const filmshowHeroVideo = "/media/optimized/filmshow-desktop-trailer.mp4";
+const filmshowHeroMobileVideo = "/media/optimized/filmshow-mobile-trailer.mp4";
+const filmshowTrailerPoster = "/media/optimized/filmshow-trailer-poster.jpg";
 const filmshowHeroAlt =
   "Black-and-white Filmshow still of a performer under textured light.";
 const filmshowHeroDimensions = getImageDimensions(filmshowHero);
@@ -76,15 +79,23 @@ export default function FilmshowPage() {
         ])}
       />
       <section className="filmshow-hero">
-        <img
-          src={filmshowHero}
-          alt={filmshowHeroAlt}
-          width={filmshowHeroDimensions?.width}
-          height={filmshowHeroDimensions?.height}
-          sizes="100vw"
-          fetchPriority="high"
-          decoding="async"
-        />
+        <video
+          className="filmshow-hero-video"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster={filmshowTrailerPoster}
+          aria-label="Filmshow trailer"
+        >
+          <source
+            src={`${filmshowHeroMobileVideo}?v=20260903b`}
+            type="video/mp4"
+            media="(max-width: 760px)"
+          />
+          <source src={`${filmshowHeroVideo}?v=20260903b`} type="video/mp4" />
+        </video>
         <div>
           <h1 className="logo-heading">
             <img

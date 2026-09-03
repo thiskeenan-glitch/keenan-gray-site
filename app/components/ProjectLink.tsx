@@ -28,13 +28,13 @@ export function ProjectLink({
           ? [{ src: "/media/optimized/seedless-thumb-video.mp4?v=20260728", type: mp4 }]
         : project.slug === "diabolo-tamer"
           ? [{ src: "/media/optimized/diabolo-tamer-thumb-video.mp4?v=20260728", type: mp4 }]
-        : project.slug === "sorta-kinda-true"
-          ? [{ src: "/media/optimized/sorta-kinda-true-thumb-video.mp4?v=20260728", type: mp4 }]
+          : project.slug === "sorta-kinda-true"
+            ? [{ src: "/media/optimized/sorta-kinda-true-thumb-video.mp4?v=20260728", type: mp4 }]
           : project.slug === "filmshow"
-            ? [{ src: "/media/optimized/filmshow-thumb-video.mp4?v=20260728", type: mp4 }]
+            ? [{ src: "/media/optimized/filmshow-desktop-trailer.mp4?v=20260903b", type: mp4 }]
             : project.slug === "the-archives"
               ? [{ src: "/media/optimized/archives-thumb-video.mp4?v=20260728", type: mp4 }]
-          : null;
+              : null;
 
   return (
     <Link
