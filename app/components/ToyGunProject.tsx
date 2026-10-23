@@ -8,16 +8,24 @@ import styles from "./ToyGunProject.module.css";
 export function ToyGunProject({ project }: { project: Project }) {
   const [trailer, film] = project.embeds ?? [];
   return (
-    <div className={shared.page}>
-      <section className={shared.hero} aria-labelledby="toy-gun-title">
-        <div className={shared.topline}><span>{project.eyebrow} / A short film</span><span>{project.year} · Keenan Gray</span></div>
-        <h1 id="toy-gun-title" className={shared.title}><span>TOY</span><span>GUN</span></h1>
-        {trailer ? <div className={`${shared.recap} ${styles.trailer}`}><VideoEmbed embed={trailer} /><p className={styles.caption}>01 / The trailer</p></div> : null}
-        <div className={shared.credits}><p><span>A film by</span>Keenan Gray</p><p><span>Role</span>{project.role}</p><p><span>Genre</span>{project.eyebrow}</p><a href="#full-film">Watch the film <span aria-hidden="true">↓</span></a></div>
+    <div className="project-page project-page--toy-gun">
+      <section className="project-hero" aria-labelledby="toy-gun-title">
+        <img src={project.image} alt={project.alt} {...getImageDimensions(project.image)} sizes="100vw" fetchPriority="high" decoding="async" />
+        <div>
+          <p className="scarlet project-eyebrow">{project.eyebrow}</p>
+          <h1 id="toy-gun-title">{project.title}</h1>
+          <dl className="project-meta">
+            <div><dt>Role</dt><dd>{project.role}</dd></div>
+            <div><dt>Year</dt><dd>{project.year}</dd></div>
+            <div><dt>Context</dt><dd>{project.context}</dd></div>
+          </dl>
+        </div>
       </section>
+      <div className={shared.page}>
       <section className={styles.laurels} aria-label="Toy Gun festival selections">
         {project.laurels?.map(laurel => <img key={laurel.src} src={laurel.src} alt={laurel.alt} {...getImageDimensions(laurel.src)} loading="lazy" />)}
       </section>
+      {trailer ? <section className={styles.trailerSection} aria-label="Toy Gun trailer"><div className={`${shared.recap} ${styles.trailer}`}><VideoEmbed embed={trailer} /><p className={styles.caption}>01 / The trailer</p></div></section> : null}
       <section className={shared.manifesto} aria-labelledby="toy-gun-story">
         <p className={shared.kicker}>02 / The story</p>
         <div className={shared.manifestoGrid}>
@@ -41,6 +49,7 @@ export function ToyGunProject({ project }: { project: Project }) {
       </section>
       <section className={shared.closing} aria-labelledby="toy-gun-premiere"><p className={shared.kicker}>Off the screen / The premiere</p><div className={styles.premiere}><h2 id="toy-gun-premiere">130 PEOPLE.<br />ONE ROOM.</h2><p>Toy Gun premiered in a New York warehouse with 130 people. A live event built around the film.</p></div><div><a className={shared.primaryLink} href="#full-film">Watch the film <span aria-hidden="true">↑</span></a><Link href="/work/filmshow">Explore Filmshow <span aria-hidden="true">↗</span></Link></div></section>
       <nav className={shared.bottomNav} aria-label="Project navigation"><Link href="/work">← All projects</Link><Link href="/work/jim-beam">Next / Jim Beam →</Link></nav>
+      </div>
     </div>
   );
 }

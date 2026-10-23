@@ -21,3 +21,6 @@
  .premiere { grid-template-columns: 1fr; gap: 0 !important; padding-bottom: 28px; }
  .premiere h2 { font-size: 14vw; }
 }
+
+.trailerSection { padding: 10px 3vw 60px; }
+@media(max-width:700px) { .trailerSection { padding: 0 5vw 40px; } }
