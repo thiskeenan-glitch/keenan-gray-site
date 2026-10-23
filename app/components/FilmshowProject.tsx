@@ -23,7 +23,7 @@ export function FilmshowProject() {
       </section>
 
       <section className={styles.room} aria-labelledby="filmshow-room">
-        <header className={styles.sectionHead}><div><p className={styles.kicker}>02 / From the latest show</p><h2 id="filmshow-room">IN THE ROOM.</h2></div><p>Volume 1<br />03 October 2026 · Brooklyn</p></header>
+        <header className={styles.sectionHead}><div><p className={styles.kicker}>02 / From the latest show</p><h2 id="filmshow-room">IN THE ROOM.</h2></div><p>Volume 1<br />03 October 2026 · Brooklyn<br />225 people came to V1.</p></header>
         <div className={styles.photos}>
           <figure className={styles.screen}><img src={`${root}/screen.jpg`} alt="Audience silhouettes watching a short film on Filmshow's enormous screen" width="1800" height="1199" loading="lazy" /><figcaption><span>01 / On screen</span><span>Short films, seen together.</span></figcaption></figure>
           <figure className={styles.performer}><img src={`${root}/performer.jpg`} alt="A performer with an accordion and camera, his face projected behind him at Volume 1" width="1800" height="1350" loading="lazy" /><figcaption>02 / Off screen</figcaption></figure>
