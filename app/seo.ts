@@ -238,7 +238,7 @@ export function videoObjectSchema(project: Project, embed: VideoEmbed): SchemaVa
   const embedUrl =
     embed.provider === "youtube"
       ? `https://www.youtube.com/embed/${embed.id}`
-      : `https://player.vimeo.com/video/${embed.id}`;
+      : `https://player.vimeo.com/video/${embed.id}${embed.hash ? `?h=${embed.hash}` : ""}`;
 
   return {
     "@type": "VideoObject",

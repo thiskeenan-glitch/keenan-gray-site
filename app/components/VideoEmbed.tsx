@@ -4,7 +4,7 @@ export function VideoEmbed({ embed }: { embed: VideoEmbedType }) {
   const src =
     embed.provider === "youtube"
       ? `https://www.youtube.com/embed/${embed.id}`
-      : `https://player.vimeo.com/video/${embed.id}`;
+      : `https://player.vimeo.com/video/${embed.id}${embed.hash ? `?h=${embed.hash}` : ""}`;
 
   return (
     <div className="video-shell">

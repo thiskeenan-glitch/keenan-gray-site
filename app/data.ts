@@ -25,6 +25,7 @@ export type ProjectCategory =
 export type VideoEmbed = {
   provider: "vimeo" | "youtube";
   id: string;
+  hash?: string;
   title: string;
   blurb?: string;
 };
@@ -113,7 +114,7 @@ export const projects: Project[] = [
     ],
     embeds: [
       { provider: "vimeo", id: "1184852787", title: "Toy Gun Trailer" },
-      { provider: "vimeo", id: "1198839445", title: "Toy Gun full film" },
+      { provider: "vimeo", id: "1198839445", hash: "dbd9f7db02", title: "Toy Gun full film" },
     ],
     gallery: [
       {
