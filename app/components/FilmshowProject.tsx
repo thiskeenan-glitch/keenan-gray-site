@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FilmshowRecap } from "./FilmshowRecap";
 import styles from "./FilmshowProject.module.css";
 
 const root = "/media/filmshow-v1";
@@ -9,12 +10,7 @@ export function FilmshowProject() {
       <section className={styles.hero} aria-labelledby="filmshow-title">
         <div className={styles.topline}><span>Independent films. Live performance.</span><span>Brooklyn, New York</span></div>
         <h1 id="filmshow-title" className={styles.title}><span>FILM</span><span>SHOW</span></h1>
-        <div className={styles.recap}>
-          <video controls autoPlay muted loop playsInline preload="metadata" poster={`${root}/shadows.jpg`} aria-label="Filmshow Volume 1 recap">
-            <source src="/media/optimized/filmshow-v1-recap.mp4" type="video/mp4" />
-          </video>
-          <span className={styles.recapTag}>Inside Volume 1 / Play it loud</span>
-        </div>
+        <FilmshowRecap />
         <div className={styles.credits}><p><span>A project by</span>Keenan Gray</p><p><span>Role</span>Founder / Director</p><p><span>Latest show</span>October 3, 2026</p><a href="https://www.filmshow.org/">Enter Filmshow <span aria-hidden="true">↗</span></a></div>
       </section>
 

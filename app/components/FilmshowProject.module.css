@@ -7,8 +7,8 @@
 .hero { padding: 30px 3vw 0; }
 .topline,.kicker,.recapTag,.credits span,.photos figcaption,.finalPhoto figcaption,.bottomNav { font-family: var(--font-sans-stack); text-transform: uppercase; font-size: 11px; font-weight: 650; letter-spacing: .12em; }
 .topline { display: flex; justify-content: space-between; gap: 20px; }
-.title { display: flex; justify-content: space-between; color: var(--fs-red); font-size: clamp(88px,20.8vw,360px); padding: 28px 0 25px; }
-.recap { position: relative; background: #050504; }
+.title { display: flex; justify-content: center; gap: .18em; color: var(--fs-red); font-size: clamp(72px,16.5vw,270px); padding: 28px 0 25px; }
+.recap { position: relative; width: 84%; max-width: 1440px; margin-inline: auto; background: #050504; }
 .recap video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
 .recapTag { position: absolute; top: 20px; left: 20px; color: #fff; background: #111b; padding: 10px 14px; pointer-events: none; }
 .credits { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 24px; padding: 27px 0 36px; font-size: 15px; align-items: end; }
@@ -65,8 +65,8 @@
  .hero { padding: 22px 5vw 0; }
  .topline { font-size: 9px; letter-spacing: .06em; }
  .topline span:last-child { text-align: right; max-width: 100px; }
- .title { font-size: 19vw; padding: 28px 0 22px; }
- .recap { margin-inline: -5vw; }
+ .title { font-size: 16vw; padding: 28px 0 22px; }
+ .recap { width: 100%; margin-inline: auto; }
  .recapTag { top: 10px; left: 10px; font-size: 8px; padding: 7px 9px; }
  .credits { grid-template-columns: 1fr 1fr; gap: 23px 12px; font-size: 13px; }
  .credits a { justify-self: start; }
@@ -104,3 +104,8 @@
  .bottomNav { font-size: 9px; padding: 25px 5vw; line-height: 1.5; }
 }
 @media(prefers-reduced-motion: reduce) { .page a { transition: none; } }
+
+.soundToggle { position: absolute; bottom: 16px; right: 16px; display: flex; align-items: center; gap: 9px; min-height: 44px; padding: 10px 15px; border: 1px solid #ffffff60; border-radius: 30px; background: #111c; color: white; font: 600 12px var(--font-sans-stack); cursor: pointer; }
+.soundToggle:hover { background: #111; }
+.soundToggle:focus-visible { outline: 3px solid white; outline-offset: 4px; }
+@media(max-width:700px) { .soundToggle { bottom: 10px; right: 10px; } }
