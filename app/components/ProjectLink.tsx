@@ -31,7 +31,7 @@ export function ProjectLink({
           : project.slug === "sorta-kinda-true"
             ? [{ src: "/media/optimized/sorta-kinda-true-thumb-video.mp4?v=20260728", type: mp4 }]
           : project.slug === "filmshow"
-            ? [{ src: "/media/optimized/filmshow-desktop-trailer.mp4?v=20260903b", type: mp4 }]
+            ? [{ src: "/media/optimized/filmshow-v1-recap.mp4", type: mp4 }]
             : project.slug === "the-archives"
               ? [{ src: "/media/optimized/archives-thumb-video.mp4?v=20260728", type: mp4 }]
               : null;
