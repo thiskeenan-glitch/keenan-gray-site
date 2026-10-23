@@ -243,9 +243,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             {toyGunFullFilm ? (
               <div className="video-stack-item">
                 <VideoEmbed key={`${toyGunFullFilm.provider}-${toyGunFullFilm.id}`} embed={toyGunFullFilm} />
-                <p className="video-password-note">
-                  password: <span>gunz</span>
-                </p>
               </div>
             ) : null}
           </div>
