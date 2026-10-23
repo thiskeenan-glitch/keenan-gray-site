@@ -146,9 +146,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               playsInline
               preload="metadata"
               poster="/media/optimized/filmshow-trailer-poster.jpg"
-              aria-label="Filmshow trailer"
+              aria-label="Filmshow V1 recap"
             >
-              <source src="/media/optimized/filmshow-desktop-trailer.mp4?v=20260903b" type="video/mp4" />
+              <source src="/media/optimized/filmshow-v1-recap.mp4" type="video/mp4" />
             </video>
           ) : null}
           <dl className="project-meta">
