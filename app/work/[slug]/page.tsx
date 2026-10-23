@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JsonLd } from "../../components/JsonLd";
 import { ProjectLink } from "../../components/ProjectLink";
+import { ToyGunProject } from "../../components/ToyGunProject";
 import { FilmshowProject } from "../../components/FilmshowProject";
 import { VideoEmbed } from "../../components/VideoEmbed";
 import { getProject, nextProject, projects, site } from "../../data";
@@ -109,6 +110,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const gallery = isToyGun
     ? project.gallery?.filter((image) => image.src !== "/media/optimized/toy-gun-staircase.jpg")
     : project.gallery;
+
+  if (isToyGun) {
+    return <main id="main"><JsonLd data={withContext(schemaGraph)} /><ToyGunProject project={project} /></main>;
+  }
 
   if (isFilmshow) {
     return <main id="main"><JsonLd data={withContext(schemaGraph)} /><FilmshowProject /></main>;
