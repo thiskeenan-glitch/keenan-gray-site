@@ -18,7 +18,7 @@ import "./globals.css";
 
 const defaultOgDimensions = getImageDimensions(defaultOgImage);
 const brandMarkDimensions = getImageDimensions("/bluebird-cowboy.png");
-const faviconHref = "/favicon-cowboy.png?v=20260728";
+const faviconHref = "/favicon-cowboy.ico?v=20261030";
 const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
 const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
@@ -97,9 +97,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href={faviconHref} type="image/png" sizes="512x512" />
+        <link rel="icon" href={faviconHref} type="image/x-icon" sizes="16x16 32x32 48x48 64x64" />
         <link rel="shortcut icon" href={faviconHref} />
-        <link rel="apple-touch-icon" href={faviconHref} sizes="512x512" />
         {gaMeasurementId ? (
           <>
             <script
