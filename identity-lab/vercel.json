@@ -17,6 +17,10 @@
     },
     {
       "src": "^/workspace/?$",
+      "dest": "/public/client.html"
+    },
+    {
+      "src": "^/workspace/expert/?$",
       "dest": "/public/workspace.html"
     },
     {
@@ -24,7 +28,7 @@
       "dest": "/api/audit.js"
     },
     {
-      "src": "^/(style\\.css|app\\.js)$",
+      "src": "^/(style\\.css|app\\.js|client\\.css|client\\.js)$",
       "dest": "/public/$1"
     },
     {
