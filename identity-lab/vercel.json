@@ -28,11 +28,15 @@
       "dest": "/public/contributors.html"
     },
     {
+      "src": "^/workspace/operations/?$",
+      "dest": "/public/operations.html"
+    },
+    {
       "src": "^/api/audit/?$",
       "dest": "/api/audit.js"
     },
     {
-      "src": "^/(style\\.css|app\\.js|client\\.css|client\\.js|contributor-engine\\.mjs|contributor-ui\\.mjs)$",
+      "src": "^/(style\\.css|app\\.js|client\\.css|client\\.js|contributor-engine\\.mjs|contributor-ui\\.mjs|identity-engine\\.mjs|operations\\.mjs|operations\\.css)$",
       "dest": "/public/$1"
     },
     {

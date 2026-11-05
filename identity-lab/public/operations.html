@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f6f7f3"><meta name="description" content="Identity Lab: a single permissions-aware correction queue for professional identity profiles.">
+<title>Correction Center | Identity Lab</title>
+<link rel="stylesheet" href="/operations.css"><script type="module" src="/operations.mjs"></script>
+</head><body>
+<header class="top"><div class="container header-inner"><a class="brand" href="/">✳ IDENTITY<span>LAB</span> <small>/ OPERATOR</small></a>
+<a class="nav" href="/workspace">CUSTOMER REPORT ↗</a></div></header>
+<main class="container">
+<section class="intro">
+<div><p class="kicker">IDENTITY LAB / OPERATIONS PILOT</p><h1>One place to fix<br><em>the public record.</em></h1><p class="subheading">Different sites have different rules. We organize the evidence, prepare the correct request, and only involve the customer when we have to.</p></div>
+<div class="intro-side"><span class="mini-label">WORKFLOW STATUS</span><strong>Drafting & review</strong><p>Registered-contributor submissions and account-owner changes are not connected to this system yet.</p><div class="chip">NO EXTERNAL CHANGES</div></div>
+</section>
+<div class="steps">
+<div><span class="step-icon">1</span><strong>Find a discrepancy</strong><small>Profile says one thing, evidence says another</small></div>
+<div><span class="step-icon">2</span><strong>Choose the right route</strong><small>Contributor, disclosed request, or owner</small></div>
+<div><span class="step-icon">3</span><strong>Track the outcome</strong><small>Keep the platform's real receipt</small></div>
+</div>
+<section class="content-layout">
+<div class="left">
+<div class="panel">
+<div class="section-top"><div><p class="kicker">01 / START HERE</p><h2>Add a correction</h2></div><span class="small-note">NO PASSWORDS</span></div>
+<p class="muted">Have a name and a page with wrong information? Tell us what should change. We'll determine who must make the change.</p>
+<form id="issue-form">
+<label for="subject">Person's professional name</label>
+<input id="subject" autocomplete="off" required maxlength="100" placeholder="e.g. Keenan Gray">
+<label for="platform">Where is the information wrong?</label>
+<select id="platform">
+<option value="imdb">IMDb</option><option value="tmdb">TMDb</option>
+<option value="wikipedia">Wikipedia</option><option value="wikidata">Wikidata</option>
+<option value="linkedin">LinkedIn personal profile</option><option value="website">Official website</option>
+</select>
+<div class="channel-hint" id="channel-hint" aria-live="polite"></div>
+<label for="profile">Link to the existing page</label><input id="profile" required type="url" placeholder="https://...">
+<label for="current">What's on the page now?</label><textarea id="current" maxlength="1000" rows="2" placeholder="The existing statement or title" required></textarea>
+<label for="desired">What should it say?</label><textarea id="desired" maxlength="1200" rows="2" placeholder="The specific factual correction" required></textarea>
+<label for="sources">Links that support the correction</label><textarea id="sources" rows="3" placeholder="One public source URL per line"></textarea>
+<label for="source-kind">What kind of sources are these?</label><select id="source-kind"><option value="independent">Independent reporting or publication</option><option value="industry">Industry records or professional databases</option><option value="first_party">Person's own website / company</option><option value="unclassified">Not yet classified</option></select>
+<p class="helper">Wikipedia and Wikidata cases require appropriate independent published sources. We never create new articles just to generate a Google panel.</p>
+<button type="submit" class="btn primary wide">PREPARE CORRECTION <span>↗</span></button>
+<div id="notice" role="status" aria-live="polite"></div>
+</form></div>
+<div class="panel subtle-panel">
+<p class="kicker">USE A REAL CASE</p><h3>Keenan Gray, filmmaker</h3><p class="muted">Load the already documented IMDb and TMDb discrepancies to see how this works without making changes.</p>
+<button class="btn light" id="load-keenan" type="button">LOAD KEENAN'S CASE ↗</button>
+</div>
+</div>
+<div class="right"><div class="panel results">
+<div class="section-top"><div><p class="kicker">02 / REPAIR QUEUE</p><h2>What happens next</h2></div><span class="total" id="total">0 tasks</span></div>
+<div class="count-row"><div><b id="count-us">0</b><small>We can prepare</small></div><div><b id="count-owner">0</b><small>Needs customer</small></div><div><b id="count-done">0</b><small>Recorded outcomes</small></div></div>
+<div id="queue" aria-live="polite"><p class="blank">No corrections yet. Add a discrepancy or load the first case study.</p></div>
+<div class="queue-actions"><button class="btn light" type="button" id="export" disabled>EXPORT CASE JSON ↓</button><button class="btn ghost" type="button" id="clear">CLEAR LOCAL RECORD</button></div></div>
+<div class="panel help-panel"><h3>We don't ask customers to figure this out.</h3><p>The eventual customer screen will say <strong>“We found a problem. We've prepared the fix.”</strong> If only they can edit it, they get one specific task. All platform policy details stay here for the operator.</p><a href="/workspace/expert">SEE THE FULL EVIDENCE WORKSPACE ↗</a></div>
+</div>
+</section>
+<p class="footnote">Prototype: all case data stays in this browser's local storage, without server accounts or shared persistence. A displayed status is an operator record, not independent verification or a Knowledge Panel guarantee. Don't enter passwords or private personal information.</p>
+</main>
+<footer><div class="container footer-inner"><span>IDENTITY<span style="font-weight:400">LAB</span></span><span>CASE STUDY / INTERNAL EXPERIMENT</span></div></footer>
+</body></html>

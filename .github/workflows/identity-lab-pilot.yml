@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - identity-lab-pilot
+      - identity-lab-platform-engine-v2
       - identity-lab-platform-adapters-v1
 
 permissions:
@@ -24,5 +25,7 @@ jobs:
           node --check identity-lab/app.js
           node --check identity-lab/public/contributor-engine.mjs
           node --check identity-lab/public/contributor-ui.mjs
+          node --check identity-lab/public/identity-engine.mjs
+          node --check identity-lab/public/operations.mjs
       - name: Run auditor smoke tests
-        run: node --test identity-lab/test-audit.mjs identity-lab/tests/contributor-engine.test.mjs
+        run: node --test identity-lab/test-audit.mjs identity-lab/tests/contributor-engine.test.mjs identity-lab/tests/identity-engine.test.mjs
