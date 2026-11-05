@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f4f0">
+  <meta name="description" content="Identity Lab maps the public connections between your website, professional credits, and the wider web. Read-only pilot.">
+  <title>Identity Lab — See how your online identity connects</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23202525'/%3E%3Ccircle cx='32' cy='32' r='16' fill='%23bbef67'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell top-inner">
+      <a href="/" class="brand" aria-label="Identity Lab home"><span class="brand-icon" aria-hidden="true"><span></span><span></span><span></span></span><span>IDENTITY<span class="brand-light">LAB</span></span></a>
+      <div class="nav-right"><span class="nav-status"><span class="status-dot"></span>RESEARCH PILOT</span><a class="top-link" href="#how">HOW IT WORKS <span aria-hidden="true">↗</span></a></div>
+    </div>
+  </header>
+  <main>
+    <section class="hero shell">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="eyebrow-rule"></span> YOUR ONLINE PRESENCE, DECODED</div>
+        <h1>Make your name<br><span class="hl">make sense.</span></h1>
+        <p class="hero-description">Your website, IMDb, and public profiles should tell one consistent story. Find what’s connected, what’s missing, and what needs a real person.</p>
+        <a class="hero-cta" href="#run">RUN YOUR AUDIT <span class="arrow-round" aria-hidden="true">↗</span></a>
+        <p class="hero-footnote"><span class="tiny-check">✓</span> Public pages only <span class="foot-sep">/</span> No passwords <span class="foot-sep">/</span> No edits</p>
+      </div>
+      <div class="diagram-card" aria-label="Illustrative identity connection diagram">
+        <div class="diagram-head"><span>FIG 01 — IDENTITY NETWORK</span><span>ILLUSTRATIVE</span></div>
+        <div class="diagram-stage">
+          <svg class="graph-lines" viewBox="0 0 530 360" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M262 173 L106 82 M262 173 L431 79 M262 173 L102 287 M262 173 L436 281 M106 82 L102 287 M431 79 L436 281" fill="none" stroke="#b7bdb8" stroke-width="1.2" stroke-dasharray="5 7"/><path d="M262 173 L431 79 M262 173 L102 287" fill="none" stroke="#6b815b" stroke-width="1.5"/></svg>
+          <div class="graph-node center-node"><span class="big-icon">K</span><strong>YOU</strong></div>
+          <div class="graph-node n-web"><span class="mini-icon">↗</span><strong>WEBSITE</strong><small>your home base</small></div>
+          <div class="graph-node n-imdb"><span class="mini-icon">▶</span><strong>IMDb</strong><small>professional credits</small></div>
+          <div class="graph-node n-media"><span class="mini-icon">◈</span><strong>PRESS</strong><small>third-party sources</small></div>
+          <div class="graph-node n-google"><span class="mini-icon">G</span><strong>GOOGLE</strong><small>independent systems</small></div>
+          <span class="graph-pip pip-a"></span><span class="graph-pip pip-b"></span><span class="graph-pip pip-c"></span>
+        </div>
+        <div class="diagram-bottom"><span>ONE PERSON. MANY SIGNALS.</span><span>↘</span></div>
+      </div>
+    </section>
+    <section class="audit-section" id="run">
+      <div class="shell">
+        <div class="section-intro"><span class="section-kicker">01 / THE AUDIT</span><h2>Find the gaps.<br><span>Keep the facts.</span></h2><p>We're starting with a controlled test against Keenan Gray’s professional website. The pilot will expand to other people after the scanner is hardened.</p></div>
+        <div class="audit-workspace">
+          <form id="audit-form" class="form-box" novalidate>
+            <div class="form-top"><span class="form-label-heading"><span class="form-index">01</span> ENTER YOUR DETAILS</span><span class="form-beta">PILOT MODE</span></div>
+            <div class="form-fields">
+              <label for="person-name">FULL NAME <input id="person-name" name="name" autocomplete="name" value="Keenan Gray" maxlength="100" required></label>
+              <label for="site-url">PERSONAL WEBSITE <input id="site-url" name="website" type="url" inputmode="url" value="https://www.thiskeenan.com" required></label>
+              <label for="imdb-url">IMDb PROFILE <span class="optional">OPTIONAL</span><input id="imdb-url" name="imdb" type="url" inputmode="url" value="https://www.imdb.com/name/nm16096261/"></label>
+            </div>
+            <details class="advanced"><summary>Have an AI analysis access code? <span>+</span></summary><label for="access-code">OPTIONAL ACCESS CODE<input id="access-code" name="accessCode" type="password" autocomplete="off" placeholder="Not required for standard audit"></label><p>AI-written notes activate only when the pilot server has a securely configured API key and access code. The standard evidence audit works without either.</p></details>
+            <button class="run-button" id="run-button" type="submit"><span id="button-label">START AUDIT</span><span class="run-arrow">↗</span></button>
+            <div class="form-bottom"><span><span class="safe-dot"></span> READ-ONLY WEBSITE SCAN</span><span>NO ACCOUNT ACCESS REQUIRED</span></div>
+            <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+          </form>
+          <div class="expect-box">
+            <div class="expect-heading"><span class="expect-kicker">WHAT YOU GET</span><span class="expect-mark">✳</span></div>
+            <div class="expect-item"><span>01</span><div><strong>Identity evidence</strong><p>What your public site actually says about you.</p></div></div>
+            <div class="expect-item"><span>02</span><div><strong>Connection check</strong><p>Website links, IMDb references, and schema consistency.</p></div></div>
+            <div class="expect-item"><span>03</span><div><strong>Action list</strong><p>Fixes the evidence supports, with sources attached.</p></div></div>
+            <div class="expect-item"><span>04</span><div><strong>Honest blind spots</strong><p>Tasks requiring an account, a human, or Google's decision.</p></div></div>
+            <div class="expect-note"><span>↗</span> WE REPORT WHAT WE CAN VERIFY, NOT A MADE-UP “PANEL SCORE.”</div>
+          </div>
+        </div>
+        <section id="results" class="results" aria-labelledby="results-heading" hidden>
+          <div class="results-heading"><div><span class="section-kicker">02 / YOUR REPORT</span><h2 id="results-heading">Your identity,<br><span>under the lens.</span></h2><p id="report-subtitle"></p></div><div class="report-actions"><button id="copy-report" class="outline-btn" type="button">COPY ACTIONS ↗</button><button id="download-report" class="outline-btn dark-btn" type="button">DOWNLOAD JSON ↓</button></div></div>
+          <div class="report-overview"><div class="overview-lead"><span>PUBLIC EVIDENCE CHECK</span><strong id="check-count">—</strong><small>TECHNICAL CHECKS</small></div><div class="overview-stat"><strong id="pass-count">—</strong><span>CONFIRMED</span></div><div class="overview-stat"><strong id="action-count">—</strong><span>NEEDS ATTENTION</span></div><div class="overview-stat"><strong id="manual-count">—</strong><span>MANUAL / UNKNOWN</span></div></div>
+          <div class="findings-layout">
+            <div class="findings-main"><div class="findings-top"><h3>Evidence findings</h3><span id="findings-total">— CHECKS</span></div><div id="findings-list" class="findings-list"></div></div>
+            <aside class="priority-panel"><span class="aside-eyebrow">YOUR ACTION PLAN</span><h3>Next moves<span class="green-point">.</span></h3><ol id="priority-list"></ol><div class="ai-note" id="ai-note" hidden><strong>AI NOTES</strong><p id="ai-text"></p></div><div class="honesty-note"><strong>What this isn't.</strong><p>Google decides whether a Knowledge Panel appears. This report does not confirm indexing, notability, independent coverage, or an existing panel.</p></div></aside>
+          </div>
+          <div class="report-footer"><span id="report-date"></span><span>NO CHANGES WERE MADE TO ANY ACCOUNT.</span></div>
+        </section>
+      </div>
+    </section>
+    <section id="how" class="how shell"><div class="how-title"><span class="section-kicker">03 / HOW IT WORKS</span><h2>An auditor first.<br><span>An agent later.</span></h2></div><div class="how-grid"><div class="how-item"><span>01 / OBSERVE</span><h3>Public signals</h3><p>Read your own public pages, schema, profile links and technical settings. No passwords.</p></div><div class="how-item"><span>02 / EXPLAIN</span><h3>Source-backed gaps</h3><p>Separate confirmed problems from things that require direct access or cannot be known.</p></div><div class="how-item"><span>03 / FIX (LATER)</span><h3>Permissioned repairs</h3><p>Future integrations will request limited authorization and approval before updating accounts.</p></div></div></section>
+  </main>
+  <footer class="footer"><div class="shell footer-inner"><span>IDENTITY<span class="brand-light">LAB</span> <span class="footer-small">/ EXPERIMENT 001</span></span><span>BUILT TO VERIFY, NOT PROMISE.</span></div></footer>
+</body>
+</html>
