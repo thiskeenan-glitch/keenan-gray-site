@@ -24,11 +24,15 @@
       "dest": "/public/workspace.html"
     },
     {
+      "src": "^/workspace/contributors/?$",
+      "dest": "/public/contributors.html"
+    },
+    {
       "src": "^/api/audit/?$",
       "dest": "/api/audit.js"
     },
     {
-      "src": "^/(style\\.css|app\\.js|client\\.css|client\\.js)$",
+      "src": "^/(style\\.css|app\\.js|client\\.css|client\\.js|contributor-engine\\.mjs|contributor-ui\\.mjs)$",
       "dest": "/public/$1"
     },
     {
