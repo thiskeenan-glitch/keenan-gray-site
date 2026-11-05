@@ -16,6 +16,10 @@
       "dest": "/public/index.html"
     },
     {
+      "src": "^/workspace/?$",
+      "dest": "/public/workspace.html"
+    },
+    {
       "src": "^/api/audit/?$",
       "dest": "/api/audit.js"
     },
