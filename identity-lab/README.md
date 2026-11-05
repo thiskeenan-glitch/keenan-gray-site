@@ -41,3 +41,5 @@ From the repository root, use `node --test identity-lab/test-audit.mjs` with Nod
 ## First public case
 
 See [FIRST_AUDIT.md](FIRST_AUDIT.md) for verified and unverified findings from thiskeenan.com on 2026-11-05.
+
+<!-- Deployment trigger: after linking Vercel project identity-lab-pilot to branch identity-lab-pilot on 2026-11-05. -->
