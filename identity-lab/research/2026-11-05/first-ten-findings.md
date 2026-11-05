@@ -65,3 +65,24 @@ Observed: November 5, 2026, US / New York, two Google queries per person using S
 - **Not a default low-cost workflow:** Commission new paid media, create promotional Wikipedia/Wikidata entries, or imply that indexing/search-console actions can force a panel.
 
 **Next decision:** A controlled 60–90 day pilot should test pre-existing evidence consolidation and legitimate directory corrections against comparable waiting-list subjects. This remains a hypothesis until there is reproducible, identity-verified panel appearance.
+
+## Founder and artist sample, November 5, 2026
+
+[GitHub run #42095945066](https://github.com/thiskeenan-glitch/keenan-gray-site/actions/runs/42095945066) completed successfully; the `identity-lab-founders-artists-sample` artifact contains 20 query-level observations.
+
+| Cohort | Possible person-matching Knowledge Graph panel in either query | No panel returned in both queries |
+|---|---:|---:|
+| Five emerging startup founders | 0 | 5 |
+| Five emerging visual artists | 1 | 4 |
+
+The one emerging artist with an apparent panel was **Seba Calfuqueo** (listed as `Plastician`); public results include museum, gallery, and specialist art-event references. The names and exact entity identity require manual confirmation.
+
+Other emerging cases had genuine third-party records but no returned panel: founders David Roberts, Paulina Xu, James Baek, Amie Leighton, Ryan Samadi; artists Abraham González Pacheco, Reika Takebayashi, Joanne Burke, and Aki Goto. These are *specific-query negatives*, not proof that no panel ever exists or that sources are inadequate.
+
+### Cross-category caution
+
+Five early-stage founders versus five award-recognized filmmakers are not a fair matched test. Differences may arise from career stage, search demand, data licenses for entertainment, institutional profiles, and query ambiguity. The data cannot establish the underlying ranking mechanism. Future matching should control for career age, coverage count, professional awards, and source type.
+
+### Preliminary, falsifiable business hypothesis
+
+For creators in domains like film and visual arts, *externally administered person profiles* (film-industry registries, museums, agencies, gallery/arts institutions) may be helpful entity signals. Verify with paired comparisons and experiments before claiming causation. This is more scalable than booking custom interviews for every customer; it is **not** a demonstrated panel-generation recipe.
