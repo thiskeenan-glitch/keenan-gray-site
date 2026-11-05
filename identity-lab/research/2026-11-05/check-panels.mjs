@@ -55,7 +55,7 @@ const key=process.env.SERPAPI_KEY;
 if (!key) { console.error("Set SERPAPI_KEY as a GitHub Actions repository secret, not in source code."); process.exit(2); }
 const here=dirname(fileURLToPath(import.meta.url));
 const people=parseCsv(readFileSync(join(here,"candidate-cohort-40.csv"),"utf8"));
-const limit=Math.max(1, Math.min(40, Number(arg("--limit","5"))||5));
+const limit=Math.max(1, Math.min(20, Number(arg("--limit","5"))||5));
 const offset=Math.max(0,Math.min(39,Number(arg("--offset","0"))||0));
 const selected=people.slice(offset,offset+limit);
 const results=[];
