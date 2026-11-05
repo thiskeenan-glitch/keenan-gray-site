@@ -1,0 +1,38 @@
+name: Identity Lab Panel Study
+on:
+  push:
+    branches:
+      - identity-lab-research
+    paths:
+      - 'identity-lab/research/2026-11-05/**'
+      - '.github/workflows/identity-lab-panel-study.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  sample:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout research branch
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run bounded sample
+        env:
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+        run: |
+          if [ -z "$SERPAPI_KEY" ]; then
+            echo "SERPAPI_KEY not configured. Skipping paid/API calls."
+            exit 0
+          fi
+          node identity-lab/research/2026-11-05/check-panels.mjs --limit 5
+      - name: Upload sample result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: identity-lab-panel-study
+          path: identity-lab/research/2026-11-05/results/
+          if-no-files-found: ignore
+          retention-days: 30
