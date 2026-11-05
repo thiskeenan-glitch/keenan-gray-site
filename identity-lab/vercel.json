@@ -12,16 +12,19 @@
   ],
   "routes": [
     {
-      "src": "/api/audit",
+      "src": "^/$",
+      "dest": "/public/index.html"
+    },
+    {
+      "src": "^/api/audit/?$",
       "dest": "/api/audit.js"
     },
     {
-      "src": "/(.*)",
+      "src": "^/(style\\.css|app\\.js)$",
       "dest": "/public/$1"
     },
     {
-      "src": "/",
-      "dest": "/public/index.html"
+      "handle": "filesystem"
     }
   ]
 }
