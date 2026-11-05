@@ -63,3 +63,7 @@ These observations motivate testing **person-focused independent sources, stable
 ## Product decision gate
 
 If the cohort reveals an inexpensive, legitimate, and repeatable evidence correction path, run three consented 60–90 day pilots with bounded human hours. If each customer needs bespoke editorial commissions and frequent approvals, do not promise a $650 nearly automatic panel product. Offer a smaller identity evidence/repair product or decline unready customers instead.
+
+## Initial API check
+
+On 2026-11-05, the repository owner configured the `SERPAPI_KEY` Actions secret and requested activation of the bounded five-person sample. The workflow is triggered by this documentation commit; the result must be verified in GitHub Actions before making panel claims.
