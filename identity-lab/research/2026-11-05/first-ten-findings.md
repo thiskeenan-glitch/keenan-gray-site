@@ -35,3 +35,33 @@ Observed: November 5, 2026, US / New York, two Google queries per person using S
 4. No new low-cost Knowledge Panel guarantee unless a consented intervention is actually associated with reproducible panel creation in multiple tests.
 
 **Action boundaries:** This research reads public information only. It does not create Wikipedia/Wikidata entries, solicit coverage, or change any client accounts.
+
+## Next five emerging filmmakers: November 5, 2026
+
+[GitHub Actions run #42094925243](https://github.com/thiskeenan-glitch/keenan-gray-site/actions/runs/42094925243), artifact `identity-lab-emerging-sample`, contains ten query observations for these five filmmakers:
+
+| Person | Name query | Name + role query | Key observation |
+|---|---|---|---|
+| Pippa Feldberg Collins | No panel returned | No panel returned | Film work and MUBI cast listing; few immediately visible person-focused public sources |
+| Alyssa Loh | Panel titled Alyssa Loh, type Filmmaker | Same titled panel | Personal site, Vimeo and a published Artforum author profile visible |
+| Adrian Moyse Dullin | Panel titled Adrian Moyse Dullin, type Film director | No panel returned | Unifrance professional person listing, agency profile, festival/program references |
+| Jeremy Max | Panel titled Jeremy Max, type Film director | No panel returned | IMDb/TMDb and film interviews; verify the returned panel is actually the same director |
+| Shruti Parekh | Panel titled Shruti Parekh, type Director | Same titled panel | IMDb/TMDb and other filmmaker references; verify person identity |
+
+**Across all 15 filmmakers checked:** 12 show at least one possible same-name Knowledge Graph block (five established and seven emerging); three (Keenan Gray, Rosella Tursi, and Pippa Feldberg Collins) show none in the two tested searches. These are *automated title and role matches*, not confirmed screenshot-backed Knowledge Panels and not an intervention success rate.
+
+### Working signals to audit (hypotheses, not established predictors)
+
+1. **Third-party person records vs project pages:** Peers with possible panels often have distinct person profiles on Unifrance, agency/film organizations, institutional directories or publications; those are not equivalent to film-listing credits alone.
+2. **Name-to-profession search clarity:** Keenan's name-plus-role query produced weak identity matching with unrelated video results in this location, despite an IMDb identity and official website. Compare Google query phrasing before assuming entity absence.
+3. **Namesake and identity mismatch:** Do not count actor/director homonyms or a same-name person in a different profession. A matching name is only the first filter.
+4. **Quality before quantity:** One authoritative, regularly maintained professional identity page may matter more than many low-quality syndicated pages; this is an hypothesis to test prospectively.
+
+### Low-login, low-cost intervention priorities for the Keenan case
+
+- **Priority A, no client accounts:** Build a machine-readable dossier of existing *verified* press, film festival credits and public institutional references, with exact matching name, role, titles, and URLs; find genuinely missing professional directories with a legitimate editorial/inclusion process, and submit only where permitted and supported.
+- **Priority B, authorized one-time website update:** If approved, improve conspicuous name + film director identification on About page, add links to *specific independent person references*, and validate existing Person schema. This is easy, but expected panel effect is unproven.
+- **Priority C, only as warranted:** Correct mismatched professional profile descriptions through their official suggestion/correction processes, asking for account approval only if needed.
+- **Not a default low-cost workflow:** Commission new paid media, create promotional Wikipedia/Wikidata entries, or imply that indexing/search-console actions can force a panel.
+
+**Next decision:** A controlled 60–90 day pilot should test pre-existing evidence consolidation and legitimate directory corrections against comparable waiting-list subjects. This remains a hypothesis until there is reproducible, identity-verified panel appearance.
