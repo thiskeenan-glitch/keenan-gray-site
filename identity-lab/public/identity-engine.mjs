@@ -101,7 +101,7 @@ export function makePacket(task,{serviceName="Identity Lab",clientName=""}={}){
  if(task.platform==="wikidata")lines.push("DISCLOSURE","Disclose paid contributions and verify the statement, entity, property and reference before suggesting an existing-item correction.");
  if(task.platform==="linkedin")lines.push("OWNER TASK","Open your LinkedIn profile, edit the relevant section yourself, and check the public result. Do not share your password.");
  lines.push("STATUS","DRAFT ONLY. No platform account was accessed and no edit was submitted.");
- return lines.join("\\n\\n");
+ return lines.join("\n\n");
 }
 const transitions={needs_evidence:["draft"],draft:["ready_for_review","customer_action"],ready_for_review:["submitted","draft","customer_action"],submitted:["accepted","rejected"],customer_action:["accepted","draft"],accepted:[],rejected:["draft"]};
 export function transition(task,target,{reviewed=false,approved=false,receipt="",verifiedUrl=""}={}){
