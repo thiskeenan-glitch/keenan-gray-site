@@ -26,12 +26,12 @@ jobs:
             echo "SERPAPI_KEY not configured. Skipping paid/API calls."
             exit 0
           fi
-          node identity-lab/research/2026-11-05/check-panels.mjs --offset 30 --limit 10
+          node identity-lab/research/2026-11-05/check-panels.mjs --offset 10 --limit 15
       - name: Upload sample result
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: identity-lab-founders-artists-sample
+          name: identity-lab-established-comparators
           path: identity-lab/research/2026-11-05/results/
           if-no-files-found: ignore
           retention-days: 30
