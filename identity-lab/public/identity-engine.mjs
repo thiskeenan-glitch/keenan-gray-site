@@ -16,7 +16,7 @@ function urlOf(raw){
  let url;
  try{url=new URL(txt(raw,1000));}catch{fail("Enter a valid HTTPS URL.");}
  if(url.protocol!=="https:"||url.username||url.password||url.port)fail("Use a public HTTPS URL with no credentials.");
- if(!url.hostname.includes(".")||/^(localhost|127\\.0\\.0\\.1|0\\.0\\.0\\.0)$/.test(url.hostname)||url.hostname.endsWith(".local"))fail("Use a public website URL.");
+ if(!url.hostname.includes(".")||/^(localhost|127\.0\.0\.1|0\.0\.0\.0)$/.test(url.hostname)||url.hostname.endsWith(".local"))fail("Use a public website URL.");
  return url;
 }
 export function validateProfile(platform,raw){
@@ -27,20 +27,20 @@ export function validateProfile(platform,raw){
  let id;
  switch(platform){
  case "imdb":
-  if(!hostname(u.hostname,"imdb.com")||!/^\\/name\\/nm[0-9]+\\/?$/.test(path))fail("Use an IMDb person profile URL.");
+  if(!hostname(u.hostname,"imdb.com")||!/^\/name\/nm[0-9]+\/?$/.test(path))fail("Use an IMDb person profile URL.");
   id=path.match(/nm[0-9]+/)[0];return {platform,id,url:"https://www.imdb.com/name/"+id+"/"};
  case "tmdb":
-  if(!hostname(u.hostname,"themoviedb.org")||!/^\\/person\\/[0-9]+(?:-[a-zA-Z0-9-]+)?\\/?$/.test(path))fail("Use an existing TMDb person profile URL.");
-  id=path.match(/\\/person\\/([0-9]+)/)[1];return {platform,id,url:"https://www.themoviedb.org/person/"+id};
+  if(!hostname(u.hostname,"themoviedb.org")||!/^\/person\/[0-9]+(?:-[a-zA-Z0-9-]+)?\/?$/.test(path))fail("Use an existing TMDb person profile URL.");
+  id=path.match(/\/person\/([0-9]+)/)[1];return {platform,id,url:"https://www.themoviedb.org/person/"+id};
  case "wikipedia":
   if(u.hostname!=="en.wikipedia.org"||!path.startsWith("/wiki/")||path.length<=6||/[<>|{}]/.test(path))fail("Use an existing English Wikipedia article URL.");
   id=path.slice(6);if(/^(Special:|User:|Talk:|Wikipedia:|Category:|Template:|Draft:)/i.test(id))fail("Use the existing article, not a namespace or draft.");
   return {platform,id,url:"https://en.wikipedia.org/wiki/"+encodeURIComponent(id).replace(/%2F/g,"/"),talkUrl:"https://en.wikipedia.org/wiki/Talk:"+encodeURIComponent(id)};
  case "wikidata":
-  if(!hostname(u.hostname,"wikidata.org")||!/^\\/wiki\\/Q[1-9][0-9]*\\/?$/i.test(path))fail("Use an existing Wikidata Q-item page.");
+  if(!hostname(u.hostname,"wikidata.org")||!/^\/wiki\/Q[1-9][0-9]*\/?$/i.test(path))fail("Use an existing Wikidata Q-item page.");
   id=path.match(/Q[1-9][0-9]*/i)[0].toUpperCase();return {platform,id,url:"https://www.wikidata.org/wiki/"+id};
  case "linkedin":
-  if(!hostname(u.hostname,"linkedin.com")||!/^\\/in\\/[a-zA-Z0-9%_.-]+\\/?$/.test(path))fail("Use a personal LinkedIn /in/ profile.");
+  if(!hostname(u.hostname,"linkedin.com")||!/^\/in\/[a-zA-Z0-9%_.-]+\/?$/.test(path))fail("Use a personal LinkedIn /in/ profile.");
   id=path.split("/")[2];return {platform,id,url:"https://www.linkedin.com/in/"+id+"/"};
  case "website":
   if(u.hostname.endsWith(".example")||u.hostname.endsWith(".test"))fail("Use a real owned website.");
@@ -124,7 +124,7 @@ export function transition(task,target,{reviewed=false,approved=false,receipt=""
  if(target==="accepted"){
   if(!approved)fail("A human must confirm the edit was accepted.");
   const v=urlOf(verifiedUrl);
-  if(!hostname(v.hostname,new URL(task.profile.url).hostname.replace(/^www\\./,"")))fail("Verification must link to the same platform.");
+  if(!hostname(v.hostname,new URL(task.profile.url).hostname.replace(/^www\./,"")))fail("Verification must link to the same platform.");
  }
  return {...task,status:target,reviewed:task.reviewed||reviewed,approved:task.approved||approved,
   submissionId:target==="submitted"?txt(receipt,180):task.submissionId,
