@@ -1,0 +1,10 @@
+{
+  "name": "identity-lab-pilot",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Identity footprint auditor pilot",
+  "engines": {
+    "node": ">=20"
+  }
+}
