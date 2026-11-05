@@ -33,6 +33,14 @@ function render(){
       try{await navigator.clipboard.writeText(buildPacket(task));notify("Correction packet copied.");}
       catch{notify("Clipboard unavailable. Download the case to retain details.",true);}
     };controls.append(packet);
+    if(task.status==="needs_source_review" && task.requirements.length){
+      const reviewed=el("button","CONFIRM SOURCE CHECK","btn secondary");reviewed.type="button";
+      reviewed.onclick=()=>{
+        if(!confirm("I have personally verified the person, linked source records, and exact relevant credited roles. This does not submit anything."))return;
+        task.requirements=[];assignStatus(i,"draft");
+      };
+      controls.append(reviewed);
+    }
     if(["draft","needs_source_review","needs_owner","rejected"].includes(task.status)){
       const prepare=el("button","REVIEW EVIDENCE","btn secondary");prepare.type="button";
       prepare.onclick=()=>assignStatus(i,"ready_for_review");controls.append(prepare);
