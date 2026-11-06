@@ -3,6 +3,7 @@
 // Arbitrary supplied websites are NOT fetched, to avoid server-side request forgery.
 import {parseIntake,cleanWikidataSearch,identifyWikidataAnchors,cleanSearchResults,reportFromSignals} from "../lib/identity-discovery.mjs";
 import {inspectPublicHomepage} from "../lib/safe-site-inspection.mjs";
+import {researchQueries,organizeWebResults,normalizeBraveResponse} from "../lib/web-research.mjs";
 const limit=12000;
 async function fetchJson(url,{headers={},timeout=4500}={}){
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeout);
@@ -31,14 +32,25 @@ async function wikidataCandidates(name,anchor){
   }
   return records;
 }
-async function searchCandidates(name,anchor){
-  const key=process.env.IDLAB_BRAVE_SEARCH_KEY;
-  if(!key)return {results:[],status:"not_configured"};
-  const query='"'+name.replace(/[\x00-\x1f"\\]/g," ")+'"'+(anchor?" "+anchor.host:"");
-  const params=new URLSearchParams({q:query,count:"10",safesearch:"moderate"});
-  const data=await fetchJson("https://api.search.brave.com/res/v1/web/search?"+params,{headers:{"X-Subscription-Token":key},timeout:5000});
-  return {results:cleanSearchResults(data,name),status:"ok"};
+async function searchCandidates(input,site){
+ const key=process.env.IDLAB_BRAVE_SEARCH_KEY;
+ if(!key)return {results:[],status:"not_configured",queryCount:0,rawCount:0,sourceCount:0,
+  message:"Indexed-web search is not connected to this pilot. This scan cannot discover your full professional footprint."};
+ const queries=researchQueries(input,site);
+ const completed=await Promise.allSettled(queries.map(async q=>{
+  const params=new URLSearchParams({q,count:"20",safesearch:"moderate",text_decorations:"false",result_filter:"web"});
+  const data=await fetchJson("https://api.search.brave.com/res/v1/web/search?"+params,{
+   headers:{"X-Subscription-Token":key},timeout:5700});
+  return {query:q,results:normalizeBraveResponse(data)};
+ }));
+ const successful=completed.filter(x=>x.status==="fulfilled").map(x=>x.value);
+ const research=organizeWebResults(successful,{name:input.name,link:input.link,site});
+ return {results:research.results,status:!successful.length?"error":successful.length<queries.length?"partial":"ok",
+  queryCount:successful.length,attemptedQueries:queries.length,rawCount:research.rawCount,
+  sourceCount:research.retainedCount,counts:research.counts,
+  message:successful.length?"Web results are public leads, not independently verified identity matches.":"The external search provider did not return results."};
 }
+
 const buckets=new Map();
 function permit(request){
   const forwarded=String(request.headers?.["x-forwarded-for"]||"").split(",")[0].trim();
@@ -62,11 +74,14 @@ export default async function handler(req,res){
     if(JSON.stringify(body).length>2800)throw new Error("Request is too large.");
     input=parseIntake(body);
   }catch(e){return res.status(400).json({error:e.message||"Invalid audit request."});}
-  const [wikidata,web,website]=await Promise.allSettled([wikidataCandidates(input.name,input.anchor),searchCandidates(input.name,input.anchor),input.anchor?.kind==="website"?inspectPublicHomepage(input.link):Promise.resolve(null)]);
+  const [wikidata,website]=await Promise.allSettled([wikidataCandidates(input.name,input.anchor),
+   input.anchor?.kind==="website"?inspectPublicHomepage(input.link):Promise.resolve(null)]);
   const records=wikidata.status==="fulfilled"?wikidata.value:[];
-  const search=web.status==="fulfilled"?web.value:{results:[],status:"error"};
   const site=website.status==="fulfilled"?website.value:{ok:false,url:input.link||null,error:"Website inspection failed before completion."};
+  const search=await searchCandidates(input,site).catch(()=>({results:[],status:"error",queryCount:0,sourceCount:0,message:"Web search temporarily unavailable."}));
   const report=reportFromSignals({input,site,wikidata:records,searchResults:search.results,searchStatus:search.status,wikidataStatus:wikidata.status==="fulfilled"?"ok":"error"});
+  report.webResearch={status:search.status,queryCount:search.queryCount||0,attemptedQueries:search.attemptedQueries||0,
+   sourceCount:search.sourceCount||0,counts:search.counts||{},message:search.message||"No coverage data available."};
   // Name-only matching and snippets cannot establish that a record belongs to the subject.
   return res.status(200).json(report);
 }
