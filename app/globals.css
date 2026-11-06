@@ -586,6 +586,7 @@ textarea {
 }
 
 .about-me-section h1 {
+  font-size: clamp(32px, 6vw, 58px);
   --me-jiggle-rotate: -2.6deg;
   --me-jiggle-scale: 1;
   --me-jiggle-x: -5px;
