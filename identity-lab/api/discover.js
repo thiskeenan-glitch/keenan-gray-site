@@ -33,17 +33,18 @@ async function wikidataCandidates(name,anchor){
 }
 async function openalexCandidates(name,records){
   // Identity graph depends on official identifiers; no speculative researcher searches.
-  const ids=[...new Set(records.flatMap(r=>r.identifiers?.openalex||[]))].slice(0,3);
+  const ids=[...new Set(records.flatMap(r=>r.identifiers?.openalex||[]))].slice(0,1);
   const apiKey=process.env.IDLAB_OPENALEX_API_KEY;
   if(!ids.length)return {results:[],status:"not_linked"};
-  if(!apiKey)return {results:[],status:"not_configured"};
+  // One fixed-ID no-key lookup per audit is permitted for the low-volume demo.
+  // Connect a dedicated free API key and durable rate limits before public scale.
   const responses=await Promise.allSettled(ids.map(id=>fetchJson(
     "https://api.openalex.org/authors/"+encodeURIComponent(id),
-    {headers:{"Authorization":"Bearer "+apiKey},timeout:4200}
+    {headers:apiKey?{"Authorization":"Bearer "+apiKey}:{},timeout:4200}
   )));
   const raw=responses.filter(x=>x.status==="fulfilled").map(x=>x.value);
   // OpenAlex single-entity responses have no "results" wrapper.
-  return {results:cleanOpenAlexAuthors({results:raw},name),status:raw.length?"ok":"error"};
+  return {results:cleanOpenAlexAuthors({results:raw},name),status:raw.length?(apiKey?"ok":"demo_keyless"):"error"};
 }
 async function searchCandidates(name,anchor){
   const key=process.env.IDLAB_BRAVE_SEARCH_KEY;
