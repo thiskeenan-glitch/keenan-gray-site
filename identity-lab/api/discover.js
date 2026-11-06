@@ -39,7 +39,7 @@ async function openalexCandidates(name,records){
   if(!apiKey)return {results:[],status:"not_configured"};
   const responses=await Promise.allSettled(ids.map(id=>fetchJson(
     "https://api.openalex.org/authors/"+encodeURIComponent(id),
-    {headers:{"api-key":apiKey},timeout:4200}
+    {headers:{"Authorization":"Bearer "+apiKey},timeout:4200}
   )));
   const raw=responses.filter(x=>x.status==="fulfilled").map(x=>x.value);
   // OpenAlex single-entity responses have no "results" wrapper.
