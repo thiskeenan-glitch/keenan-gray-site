@@ -9,6 +9,7 @@ on:
       - identity-lab-secure-accounts-v1
       - identity-lab-universal-audit-v1
       - identity-lab-audit-to-repair-v1
+      - identity-lab-identity-graph-v1
 
 permissions:
   contents: read
@@ -28,6 +29,7 @@ jobs:
           node --check identity-lab/api/audit.js
           node --check identity-lab/api/discover.js
           node --check identity-lab/lib/identity-discovery.mjs
+          node --check identity-lab/lib/cross-source.mjs
           node --check identity-lab/app.js
           node --check identity-lab/public/contributor-engine.mjs
           node --check identity-lab/public/contributor-ui.mjs
@@ -40,4 +42,4 @@ jobs:
           node --check identity-lab/public/account-model.mjs
           node --check identity-lab/api/identity-config.js
       - name: Run auditor smoke tests
-        run: node --test identity-lab/test-audit.mjs identity-lab/tests/contributor-engine.test.mjs identity-lab/tests/identity-engine.test.mjs identity-lab/tests/case-engine.test.mjs identity-lab/tests/account-model.test.mjs identity-lab/tests/discovery.test.mjs identity-lab/tests/repair-opportunities.test.mjs
+        run: node --test identity-lab/test-audit.mjs identity-lab/tests/contributor-engine.test.mjs identity-lab/tests/identity-engine.test.mjs identity-lab/tests/case-engine.test.mjs identity-lab/tests/account-model.test.mjs identity-lab/tests/discovery.test.mjs identity-lab/tests/repair-opportunities.test.mjs identity-lab/tests/cross-source.test.mjs
