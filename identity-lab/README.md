@@ -79,3 +79,21 @@ The homepage uses name plus an optional identity link, attempts a bounded read-o
 - Keep preview deployments isolated from production; test research quality, latency, provider costs, and ambiguity before inviting paying users.
 - To pick up newly configured server-side secrets, trigger a **new deployment** from this branch. Existing deployments do not automatically receive newly added variables.
 
+
+
+## Repair proof pilot (preview branch)
+
+**Goal:** Test whether an audit leads to a defensible, permissioned correction that can be independently checked on a public page. Do not count draft packets or submission receipts as successful fixes.
+
+- Open a discovered source from the report's Fix Center and choose **Prepare correction**. The same dialog now includes **Verify an actual change**.
+- Select a *specific field*, enter the *exact expected public value*, then click **Check the live public record** before any edit. The first successful public check is the baseline.
+- Follow the authorized platform workflow (account owner or permitted contributor) and retain the relevant submission receipt. Ulab does not submit edits automatically.
+- Check again after an actual update. Ulab shows **Public change observed since baseline** only when the original check did not see the value and a later check did.
+- Records are stored only in this browser under `identitylab.publicProof.v1`. They are not synced across devices or linked to a paying customer.
+- Automated direct verification is limited to page title, visible H1, Person JSON-LD name, Person `sameAs` links, and existing Wikidata official-website/IMDb/TMDb ID claims. Other sites still need source-specific human checks.
+- Public visibility is not the same as approval, attribution, Google indexing, or Knowledge Panel eligibility. No claims are made about those outcomes.
+- Checks fetch only public pages and fixed-host public Wikidata records. Supplied website URLs use the existing bounded, DNS-pinned SSRF-protected homepage inspector. The proof endpoint has a best-effort instance-local rate limit; **do not launch to unrestricted paid customers** until durable account, quota, logging, and storage protections exist.
+
+**Suggested first case:** The current personal About page uses the visible H1 `Me` rather than the filmmaker's name (see `FIRST_AUDIT.md`). Capture a new field-specific baseline at `https://www.thiskeenan.com/about` and request an authorized website edit; recheck the public About URL after deployment. One change is not three independent repair successes.
+
+**Pilot success criterion:** Three distinct evidence-backed corrections, each with permission/legitimate submission, baseline public observation, independently observed later value, and time spent recorded. If an external editorial request is rejected or never appears publicly, record that outcome rather than calling it a fix.
