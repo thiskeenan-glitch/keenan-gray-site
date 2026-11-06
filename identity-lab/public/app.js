@@ -34,6 +34,20 @@
   const actions=(report.results||[]).filter(x=>x.status==="action"&&x.recommendation).map(x=>({
    title:x.title,detail:x.detail,action:x.recommendation,url:x.url||report.subject.link,type:"site",platform:"website",
    route:"Website owner action",supported:!!report.site?.ok}));
+  if(report.subject?.linkType==="website"&&report.subject.link){
+   const siteHost=host(report.subject.link);
+   for(const candidate of report.candidates?.wikidata||[]){
+    if(report.review?.[candidate.url]?.decision!=="self_reported_match")continue;
+    if(!/^https:\/\/www[.]wikidata[.]org\/wiki\/Q[1-9][0-9]*$/.test(candidate.url||""))continue;
+    const sites=(candidate.officialWebsites||[]).filter(x=>typeof x==="string");
+    if(sites.some(x=>host(x)===siteHost))continue;
+    actions.unshift({
+     title:sites.length?"Review conflicting website on Wikidata":"Review missing website on Wikidata",
+     detail:sites.length?"Existing listed website(s): "+sites.join(", "):"The public knowledge lookup did not return an official website claim. This may be an incomplete lookup.",
+     action:"Confirm the public record belongs to you. Independently verify the website and existing claims, then prepare a cited, disclosed correction review. This is not a verified error.",
+     url:candidate.url,type:"knowledge",platform:"wikidata",route:"Sourced Wikidata review",supported:false});
+   }
+  }
   return actions;
  }
  function evidenceScore(data,found){
@@ -66,9 +80,9 @@
   const foot=$new("div","result-foot"),source=safeLink(item.url,"VIEW SOURCE ↗");if(source)foot.append(source);
   const decision=report.review?.[item.url]?.decision;
   const confirm=$new("button","confirm-button "+(decision==="self_reported_match"?"selected":""),decision==="self_reported_match"?"✓ MINE":"THIS IS ME");
-  confirm.type="button";confirm.addEventListener("click",()=>{report.review=report.review||{};report.review[item.url]={decision:"self_reported_match",basis:"customer_self_report_only",reviewedAt:new Date().toISOString()};showToast("Marked as your record. Independent verification may still be required.");renderTab();});
+  confirm.type="button";confirm.addEventListener("click",()=>{report.review=report.review||{};report.review[item.url]={decision:"self_reported_match",basis:"customer_self_report_only",reviewedAt:new Date().toISOString()};fixes=buildFixes();$("count-fixes").textContent=fixes.length;showToast("Marked as your record. Independent verification may still be required.");renderTab();});
   const reject=$new("button","reject-button "+(decision==="self_reported_not_match"?"selected":""),decision==="self_reported_not_match"?"✓ NOT MINE":"NOT ME");
-  reject.type="button";reject.addEventListener("click",()=>{report.review=report.review||{};report.review[item.url]={decision:"self_reported_not_match",basis:"customer_self_report_only",reviewedAt:new Date().toISOString()};renderTab();});
+  reject.type="button";reject.addEventListener("click",()=>{report.review=report.review||{};report.review[item.url]={decision:"self_reported_not_match",basis:"customer_self_report_only",reviewedAt:new Date().toISOString()};fixes=buildFixes();$("count-fixes").textContent=fixes.length;renderTab();});
   foot.append(confirm,reject);
   const edit=$new("button","mini-fix","PREPARE FIX ↗");edit.type="button";edit.addEventListener("click",()=>openCorrection(item));foot.append(edit);
   c.append(foot);return c;
@@ -79,7 +93,7 @@
  function fixCard(f){
   const c=$new("article","fix-card");c.append($new("span","fix-tag",f.supported?"WEBSITE ACTION":"REVIEW REQUIRED"),$new("h3","",f.title),$new("p","",f.action));
   const footer=$new("div","fix-card-foot"),source=safeLink(f.url,"SOURCE ↗");if(source)footer.append(source);
-  const button=$new("button","mini-fix","PREPARE CORRECTION ↗");button.type="button";button.addEventListener("click",()=>openCorrection({url:f.url,type:"site",platform:"website",title:f.title,description:f.detail}));
+  const button=$new("button","mini-fix","PREPARE CORRECTION ↗");button.type="button";button.addEventListener("click",()=>openCorrection({url:f.url,type:f.type,platform:f.platform,title:f.title,description:f.detail}));
   footer.append(button);c.append(footer);return c;
  }
  function activateTab(id){category=id;document.querySelectorAll("[data-tab]").forEach(b=>{const active=b.dataset.tab===id;b.classList.toggle("active",active);b.setAttribute("aria-selected",active?"true":"false");});renderTab();}
