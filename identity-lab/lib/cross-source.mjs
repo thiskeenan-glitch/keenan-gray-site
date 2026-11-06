@@ -73,7 +73,7 @@ export function cleanOpenAlexAuthors(data,name){
   const label=cut(candidate.display_name,110);
   const variants=Array.isArray(candidate.display_name_alternatives)?candidate.display_name_alternatives:[];
   if(cleanName(label)!==cleanName(name)&&!variants.some(v=>cleanName(v)===cleanName(name)))continue;
-  const orcids=unique([candidate.orcid,...(Array.isArray(candidate.observed_orcids)?candidate.observed_orcids:[])]
+  const orcids=unique([candidate.orcid,candidate.ids?.orcid,...(Array.isArray(candidate.observed_orcids)?candidate.observed_orcids:[]),...(Array.isArray(candidate.ids?.observed_orcids)?candidate.ids.observed_orcids:[])]
     .map(normalizeOrcidId).filter(Boolean)).slice(0,6);
   results.push({id,url:"https://openalex.org/"+id,label,orcid:orcids[0]||null,orcids,
     worksCount:Number.isFinite(candidate.works_count)?Math.max(0,Math.floor(candidate.works_count)):null,
