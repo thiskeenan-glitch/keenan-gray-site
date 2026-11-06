@@ -36,7 +36,7 @@
       "dest": "/api/audit.js"
     },
     {
-      "src": "^/(style\\.css|app\\.js|client\\.css|client\\.js|contributor-engine\\.mjs|contributor-ui\\.mjs|identity-engine\\.mjs|operations\\.mjs|operations\\.css)$",
+      "src": "^/(style\\.css|app\\.js|client\\.css|client\\.js|contributor-engine\\.mjs|contributor-ui\\.mjs|identity-engine\\.mjs|case-engine\\.mjs|operations\\.mjs|operations\\.css)$",
       "dest": "/public/$1"
     },
     {

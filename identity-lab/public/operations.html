@@ -16,6 +16,12 @@
 <div><span class="step-icon">2</span><strong>Choose the right route</strong><small>Contributor, disclosed request, or owner</small></div>
 <div><span class="step-icon">3</span><strong>Track the outcome</strong><small>Keep the platform's real receipt</small></div>
 </div>
+<section class="case-metrics" aria-label="Local case tracking overview">
+ <div><strong id="case-count">0</strong><span>Identity cases</span></div>
+ <div><strong id="observed-count">0</strong><span>Public observations (reported, not independently verified)</span></div>
+ <div><strong id="receipt-count">0</strong><span>Submission receipts recorded</span></div>
+ <div><strong id="work-minutes">0</strong><span>Human minutes logged</span></div>
+</section>
 <section class="content-layout">
 <div class="left">
 <div class="panel">
@@ -41,19 +47,19 @@
 <div id="notice" role="status" aria-live="polite"></div>
 </form></div>
 <div class="panel subtle-panel">
-<p class="kicker">USE A REAL CASE</p><h3>Keenan Gray, filmmaker</h3><p class="muted">Load the already documented IMDb and TMDb discrepancies to see how this works without making changes.</p>
+<p class="kicker">USE A REAL CASE</p><h3>Keenan Gray, filmmaker</h3><p class="muted">Load four separate IMDb and TMDb issues, including the IMDb receipt and historically reported public changes, without making any platform edits.</p>
 <button class="btn light" id="load-keenan" type="button">LOAD KEENAN'S CASE ↗</button>
 </div>
 </div>
 <div class="right"><div class="panel results">
 <div class="section-top"><div><p class="kicker">02 / REPAIR QUEUE</p><h2>What happens next</h2></div><span class="total" id="total">0 tasks</span></div>
-<div class="count-row"><div><b id="count-us">0</b><small>We can prepare</small></div><div><b id="count-owner">0</b><small>Needs customer</small></div><div><b id="count-done">0</b><small>Recorded outcomes</small></div></div>
+<div class="count-row"><div><b id="count-us">0</b><small>We can prepare</small></div><div><b id="count-owner">0</b><small>Needs customer</small></div><div><b id="count-done">0</b><small>Reported public changes</small></div></div>
 <div id="queue" aria-live="polite"><p class="blank">No corrections yet. Add a discrepancy or load the first case study.</p></div>
 <div class="queue-actions"><button class="btn light" type="button" id="export" disabled>EXPORT CASE JSON ↓</button><button class="btn ghost" type="button" id="clear">CLEAR LOCAL RECORD</button></div></div>
 <div class="panel help-panel"><h3>We don't ask customers to figure this out.</h3><p>The eventual customer screen will say <strong>“We found a problem. We've prepared the fix.”</strong> If only they can edit it, they get one specific task. All platform policy details stay here for the operator.</p><a href="/workspace/expert">SEE THE FULL EVIDENCE WORKSPACE ↗</a></div>
 </div>
 </section>
-<p class="footnote">Prototype: all case data stays in this browser's local storage, without server accounts or shared persistence. A displayed status is an operator record, not independent verification or a Knowledge Panel guarantee. Don't enter passwords or private personal information.</p>
+<p class="footnote">Prototype: case history and human work logs stay in this browser only, not a shared database. A submission receipt does not prove an edit was approved, and a historical report is not a fresh public check. No automated external edits, authentication, or Knowledge Panel guarantee. Don't enter passwords or private personal information.</p>
 </main>
 <footer><div class="container footer-inner"><span>IDENTITY<span style="font-weight:400">LAB</span></span><span>CASE STUDY / INTERNAL EXPERIMENT</span></div></footer>
 </body></html>
