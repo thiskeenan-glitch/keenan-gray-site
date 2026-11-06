@@ -7,6 +7,6 @@ export default function handler(req,res){
   const publishableKey=String(process.env.IDLAB_SUPABASE_PUBLISHABLE_KEY||"").trim();
   let hostValid=false;
   try{const u=new URL(url);hostValid=u.protocol==="https:"&&/^[a-z0-9-]+\.supabase\.co$/.test(u.hostname)&&u.pathname==="/";}catch{}
-  const enabled=hostValid&&publishableKey.startsWith("sb_publishable_")&&publishableKey.length>20;
+  const enabled=process.env.IDLAB_ACCOUNTS_ENABLED==="true"&&hostValid&&publishableKey.startsWith("sb_publishable_")&&publishableKey.length>20;
   return res.status(200).json(enabled?{enabled:true,url,publishableKey}:{enabled:false});
 }
