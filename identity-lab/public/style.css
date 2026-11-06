@@ -268,3 +268,14 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid #a48a
  .footer-inner{gap:12px;padding-top:24px;padding-bottom:28px;align-items:flex-start}
 }
 @media(prefers-reduced-motion:reduce){.hero-cta:hover{transform:none}}
+
+
+/* Evidence snapshot and one-click prepared correction */
+.evidence-overview{margin:20px 0;padding:23px 25px;background:#1b2435;border:1px solid #45516b;border-radius:13px;display:grid;gap:8px}
+.evidence-overview strong{font-size:11px;color:#b69fff;letter-spacing:.1em}
+.evidence-overview p{font-size:13px;color:#d1cfe0;margin:0;line-height:1.5;overflow-wrap:anywhere}
+.evidence-overview a{color:#b9a2ff;font-size:11px;font-weight:750;text-decoration:underline;text-underline-offset:3px}
+.snippet-preview{white-space:pre-wrap;overflow-wrap:anywhere;font-size:11px;line-height:1.5;color:#d9c9ff;border:1px solid #4f426e;background:#0c1120;padding:13px;border-radius:7px;margin:13px 0}
+.copy-snippet{border:1px solid #aa8cff;background:#6f4dd1;color:#fff;font-size:10px;font-weight:780;letter-spacing:.06em;padding:11px 13px;border-radius:6px}
+.copy-snippet:hover{background:#8f65ff}
+.fix-button{min-width:188px}
