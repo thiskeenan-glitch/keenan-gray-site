@@ -111,7 +111,7 @@
    if(!["verified_public","not_visible"].includes(proof.status))throw new Error("Source returned an unknown verification state.");
    const store=readStore(),record=store[key]&&Array.isArray(store[key]?.checks)?store[key]:{subject:context.subject,platform:body.platform,url:body.url,field:body.field,expected:body.expected,checks:[]};
    record.checks.push({url:proof.url,observed:proof.observed,status:proof.status,checkedAt:proof.checkedAt});
-   record.checks=record.checks.slice(-12);
+   if(record.checks.length>12)record.checks=[record.checks[0],...record.checks.slice(-11)];
    store[key]=record;
    // Keep local results bounded, while protecting the active case.
    const keys=Object.keys(store);
