@@ -2,8 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import handler from "../api/identity-config.js";
 import {validPublicConfig,cleanCaseFields,cleanNote,statusLabel} from "../public/account-model.mjs";
-const settings=()=>({url:process.env.IDLAB_SUPABASE_URL,key:process.env.IDLAB_SUPABASE_PUBLISHABLE_KEY});
-function restore(values){if(values.url===undefined)delete process.env.IDLAB_SUPABASE_URL;else process.env.IDLAB_SUPABASE_URL=values.url;if(values.key===undefined)delete process.env.IDLAB_SUPABASE_PUBLISHABLE_KEY;else process.env.IDLAB_SUPABASE_PUBLISHABLE_KEY=values.key;}
+const settings=()=>({url:process.env.IDLAB_SUPABASE_URL,key:process.env.IDLAB_SUPABASE_PUBLISHABLE_KEY,flag:process.env.IDLAB_ACCOUNTS_ENABLED});
+function restore(values){if(values.url===undefined)delete process.env.IDLAB_SUPABASE_URL;else process.env.IDLAB_SUPABASE_URL=values.url;if(values.key===undefined)delete process.env.IDLAB_SUPABASE_PUBLISHABLE_KEY;else process.env.IDLAB_SUPABASE_PUBLISHABLE_KEY=values.key;if(values.flag===undefined)delete process.env.IDLAB_ACCOUNTS_ENABLED;else process.env.IDLAB_ACCOUNTS_ENABLED=values.flag;}
 async function request(method="GET"){
  const result={setHeader(){return this;},status(code){this.code=code;return this;},json(data){this.body=data;return this;}};
  await handler({method},result);return result;
@@ -19,11 +19,14 @@ test("public config defaults to disabled and never exposes secrets",async()=>{
 });
 test("invalid project URL cannot enable authentication",async()=>{
  const initial=settings();try{
+  process.env.IDLAB_ACCOUNTS_ENABLED="true";
   process.env.IDLAB_SUPABASE_URL="https://evil.example";
   process.env.IDLAB_SUPABASE_PUBLISHABLE_KEY="sb_publishable_123456789abcdefghij";
   assert.deepEqual((await request()).body,{enabled:false});
   process.env.IDLAB_SUPABASE_URL="https://project.supabase.co";
   assert.equal((await request()).body.enabled,true);
+  process.env.IDLAB_ACCOUNTS_ENABLED="false";
+  assert.deepEqual((await request()).body,{enabled:false});
  }finally{restore(initial);}
 });
 test("refuse config other than GET",async()=>{
