@@ -115,14 +115,14 @@ export function extractSite(html,pageUrl){
     }catch{}
     if(links.length>60)break;
   }
-  const heading=textOnly((html.match(/<h1\\b[^>]*>([\\s\\S]*?)<\\/h1>/i)||[])[1]);
-  const title=textOnly((html.match(/<title\\b[^>]*>([\\s\\S]*?)<\\/title>/i)||[])[1]);
-  const siteMetadata=[...html.matchAll(/<meta\\b([^>]*?)>/gi)];
+  const heading=textOnly((html.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i)||[])[1]);
+  const title=textOnly((html.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i)||[])[1]);
+  const siteMetadata=[...html.matchAll(/<meta\b([^>]*?)>/gi)];
   const descriptionTag=siteMetadata.find(m=>parseAttr(m[1],"name").toLowerCase()==="description");
   const description=descriptionTag?decode(parseAttr(descriptionTag[1],"content")):"";
-  // Look only for an explicit "Based/Located" label. Do not infer residence from unrelated names.
-  const readable=textOnly(html.replace(/<script\\b[^>]*>[\\s\\S]*?<\\/script\\s*>/gi," ").replace(/<style\\b[^>]*>[\\s\\S]*?<\\/style\\s*>/gi," ")).slice(0,16000);
-  const based=readable.match(/\\b(?:Based|Located|Location)\\s+(?:in\\s+)?([A-Z][A-Za-z.-]+(?:\\s+[A-Z][A-Za-z.-]+){0,2},\\s*[A-Z]{2})\\b/);
+  // Extract location only when the first-party site explicitly labels it.
+  const readable=textOnly(html.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi," ").replace(/<style\b[^>]*>[\s\S]*?<\/style\s*>/gi," ")).slice(0,16000);
+  const based=readable.match(/\b(?:Based|Located|Location)\s+(?:in\s+)?([A-Z][A-Za-z.-]+(?:\s+[A-Z][A-Za-z.-]+){0,2},\s*[A-Z]{2})\b/);
   const location=based?based[1]:"";
   let noindex=false;
   for(const m of html.matchAll(/<meta\b([^>]*?)>/gi)){
