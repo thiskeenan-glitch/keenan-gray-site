@@ -32,7 +32,9 @@ create table if not exists public.idlab_cases (
 create index if not exists idlab_cases_owner_created_idx on public.idlab_cases(owner_id,created_at desc);
 alter table public.idlab_cases enable row level security;
 revoke all on public.idlab_cases from public, anon, authenticated;
-grant select,insert on public.idlab_cases to authenticated;
+grant select on public.idlab_cases to authenticated;
+-- Customers may provide only intake fields; server owns IDs, ownership, status and timestamps.
+grant insert (subject, website_url, summary) on public.idlab_cases to authenticated;
 grant update (status,updated_at) on public.idlab_cases to authenticated;
 drop policy if exists "idlab_cases_self_or_operator_read" on public.idlab_cases;
 create policy "idlab_cases_self_or_operator_read" on public.idlab_cases for select to authenticated
@@ -59,7 +61,9 @@ create table if not exists public.idlab_case_events (
 create index if not exists idlab_case_events_case_time_idx on public.idlab_case_events(case_id,created_at desc);
 alter table public.idlab_case_events enable row level security;
 revoke all on public.idlab_case_events from public, anon, authenticated;
-grant select,insert on public.idlab_case_events to authenticated;
+grant select on public.idlab_case_events to authenticated;
+-- Customers may add only notes: no event kind, receipt, URL or timestamp spoofing.
+grant insert (case_id, note) on public.idlab_case_events to authenticated;
 drop policy if exists "idlab_events_self_or_operator_read" on public.idlab_case_events;
 create policy "idlab_events_self_or_operator_read" on public.idlab_case_events for select to authenticated
   using (exists(select 1 from public.idlab_cases c where c.id=case_id and
@@ -68,11 +72,6 @@ drop policy if exists "idlab_events_customer_note_only" on public.idlab_case_eve
 create policy "idlab_events_customer_note_only" on public.idlab_case_events for insert to authenticated
   with check (kind='customer_note' and receipt is null and public_url is null
     and exists(select 1 from public.idlab_cases c where c.id=case_id and c.owner_id=(select auth.uid())));
-drop policy if exists "idlab_events_operator_insert" on public.idlab_case_events;
-create policy "idlab_events_operator_insert" on public.idlab_case_events for insert to authenticated
-  with check (kind<>'customer_note' and
-    exists(select 1 from idlab_private.operators m where m.user_id=(select auth.uid())) and
-    exists(select 1 from public.idlab_cases c where c.id=case_id));
 
 -- No deletion/update granted to customers, so recorded history cannot be silently rewritten.
 -- Explicitly appoint an operator after their account exists:
