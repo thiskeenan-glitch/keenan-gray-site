@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {draftOpportunities} from "../lib/repair-opportunities.mjs";
+import {draftOpportunities} from "../public/repair-opportunities.mjs";
 import {makeTask,makePacket} from "../public/identity-engine.mjs";
 import {identifyWikidataAnchors,cleanWikidataSearch} from "../lib/identity-discovery.mjs";
 const site="https://example.org/about";
