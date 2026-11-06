@@ -41,7 +41,7 @@ test("ORCID checksum rejects fabricated values",()=>{
 });
 test("OpenAlex results only accepted with exact name, no fuzzy false identity",()=>{
  const candidates=cleanOpenAlexAuthors({results:[
-  {id:"https://openalex.org/"+openalexId,display_name:person,orcid:"https://orcid.org/"+orcid,works_count:12},
+  {id:"https://openalex.org/"+openalexId,display_name:person,ids:{orcid:"https://orcid.org/"+orcid,observed_orcids:[]},works_count:12},
   {id:"https://openalex.org/A5012345678",display_name:"Different Person",orcid:"https://orcid.org/"+orcid}
  ]},person);
  assert.equal(candidates.length,1);
