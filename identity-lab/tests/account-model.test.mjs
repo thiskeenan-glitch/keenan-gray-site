@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import {readFileSync} from "node:fs";
 import handler from "../api/identity-config.js";
 import {validPublicConfig,cleanCaseFields,cleanNote,statusLabel} from "../public/account-model.mjs";
 const settings=()=>({url:process.env.IDLAB_SUPABASE_URL,key:process.env.IDLAB_SUPABASE_PUBLISHABLE_KEY,flag:process.env.IDLAB_ACCOUNTS_ENABLED});
@@ -50,4 +51,16 @@ test("notes reject empties and excessive content",()=>{
  assert.throws(()=>cleanNote("x"));
  assert.throws(()=>cleanNote("a".repeat(3001)));
  assert.equal(statusLabel("submitted"),"Submission recorded");
+});
+
+test("isolated database SQL defaults to private owner-scoped access",()=>{
+ const sql=readFileSync(new URL("../supabase/identity_lab_schema.sql",import.meta.url),"utf8");
+ assert.match(sql,/alter table public\.idlab_cases enable row level security/i);
+ assert.match(sql,/alter table public\.idlab_case_events enable row level security/i);
+ assert.match(sql,/grant insert \(subject, website_url, summary\) on public\.idlab_cases to authenticated/i);
+ assert.match(sql,/grant insert \(case_id, note\) on public\.idlab_case_events to authenticated/i);
+ assert.match(sql,/owner_id\s*=\s*\(select auth\.uid\(\)\)/i);
+ assert.match(sql,/kind='customer_note' and receipt is null and public_url is null/i);
+ assert.doesNotMatch(sql,/grant select,insert on public\.idlab_case_events to authenticated/i);
+ assert.doesNotMatch(sql,/grant insert on public\.idlab_cases to anon/i);
 });
