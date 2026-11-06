@@ -5,6 +5,7 @@ on:
       - identity-lab-pilot
       - identity-lab-platform-engine-v2
       - identity-lab-platform-adapters-v1
+      - identity-lab-case-engine-v1
 
 permissions:
   contents: read
@@ -27,5 +28,6 @@ jobs:
           node --check identity-lab/public/contributor-ui.mjs
           node --check identity-lab/public/identity-engine.mjs
           node --check identity-lab/public/operations.mjs
+          node --check identity-lab/public/case-engine.mjs
       - name: Run auditor smoke tests
-        run: node --test identity-lab/test-audit.mjs identity-lab/tests/contributor-engine.test.mjs identity-lab/tests/identity-engine.test.mjs
+        run: node --test identity-lab/test-audit.mjs identity-lab/tests/contributor-engine.test.mjs identity-lab/tests/identity-engine.test.mjs identity-lab/tests/case-engine.test.mjs
