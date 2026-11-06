@@ -48,3 +48,13 @@ See [FIRST_AUDIT.md](FIRST_AUDIT.md) for verified and unverified findings from t
 ## Customer accounts (disabled until dedicated database)
 
 A private client workspace is implemented at `/account`. It stays disabled unless `IDLAB_SUPABASE_URL`, `IDLAB_SUPABASE_PUBLISHABLE_KEY`, and the explicit `IDLAB_ACCOUNTS_ENABLED=true` flag are configured on the **Identity Lab Vercel project**. Do **not** reuse Filmshow's Supabase database. Read [ACCOUNT_SETUP.md](ACCOUNT_SETUP.md) and review `supabase/identity_lab_schema.sql` before activating. The old browser-only operator queue does not automatically sync with accounts. No external platform submissions are performed by this feature.
+
+## Universal audit v0.2
+
+- Primary input: **professional name**, with **one optional public identity link** (a website, LinkedIn, IMDb, or any other real HTTPS profile); neither IMDb nor a website is required.
+- POST `/api/discover`: fixed-host public Wikidata query; exact-name candidates are explicitly **unverified**. A directly linked Wikidata external identifier can strengthen an association but not guarantee identity ownership.
+- Optional wider search via the server-only `IDLAB_BRAVE_SEARCH_KEY` environment variable; it uses an approved search API and keeps web result snippets labeled as unverified candidates. The key is **not configured** by default.
+- No public arbitrary website crawling in this first version; direct server-side fetching of untrusted domains is intentionally disabled pending DNS-rebinding/SSRF hardened infrastructure. The user-provided link is used as an identity anchor, not blindly fetched.
+- The previous controlled website auditor `/api/audit` remains available separately for its original limited pilot. The main page now uses `/api/discover`.
+- There is no automatic third-party correction, editing, article placement, Knowledge Panel promise, or real panel check. The correction engine remains separate and permission-gated.
+- In-memory per-instance rate limiting is best effort only; implement durable rate limits and bot protection before external scale.
