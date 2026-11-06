@@ -6,6 +6,10 @@
       "use": "@vercel/node"
     },
     {
+      "src": "api/discover.js",
+      "use": "@vercel/node"
+    },
+    {
       "src": "api/identity-config.js",
       "use": "@vercel/node"
     },
@@ -42,6 +46,10 @@
     {
       "src": "^/api/audit/?$",
       "dest": "/api/audit.js"
+    },
+    {
+      "src": "^/api/discover/?$",
+      "dest": "/api/discover.js"
     },
     {
       "src": "^/api/identity-config/?$",
