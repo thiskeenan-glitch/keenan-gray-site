@@ -78,6 +78,15 @@
           </div>
           <div class="report-overview" aria-label="Report summary"><div class="overview-lead"><span>PUBLIC SOURCE REVIEW</span><strong id="check-count">—</strong><small>CHECKS IN THIS REPORT</small></div><div class="overview-stat"><strong id="pass-count">—</strong><span>OBSERVED</span></div><div class="overview-stat"><strong id="action-count">—</strong><span>NEEDS ATTENTION</span></div><div class="overview-stat"><strong id="manual-count">—</strong><span>REVIEW / UNKNOWN</span></div></div>
           <div class="report-callout"><div><span class="report-callout-mark">✳</span><div><strong>Ready to make your public record clearer?</strong><p>We'll organize possible corrections and show which steps require you.</p></div></div><button type="button" id="fix-button" class="fix-button">Fix it <span aria-hidden="true">↗</span></button></div>
+          <section id="fix-plan" class="fix-plan" hidden aria-labelledby="fix-plan-heading">
+            <div class="fix-plan-heading"><div><span class="section-kicker">03 / YOUR FIX PLAN</span><h2 id="fix-plan-heading">Let's get this <span>sorted.</span></h2><p>These are suggested next steps, not completed changes. Ulab won't change a third-party record without the required evidence and authorization.</p></div><span class="fix-status">FREE PILOT · NO PAYMENT</span></div>
+            <div class="fix-plan-grid">
+              <div class="fix-plan-card"><span class="fix-column-label">ULAB PREPARES</span><h3>Suggested corrections</h3><div id="fix-prepared" class="fix-prepared" aria-live="polite"></div></div>
+              <div class="fix-plan-card fix-plan-manual"><span class="fix-column-label">YOUR PART</span><h3>What needs you</h3><div id="fix-manual" class="fix-manual"></div></div>
+            </div>
+            <section id="repair-review" class="repair-review" hidden><div class="fix-column-label">EVIDENCE-GATED DRAFTS</div><h3>Platform correction reviews</h3><p>These suggestions need independent supporting evidence and your approval. Adding a draft does not submit an edit.</p><div id="repair-list"></div><a class="repair-center-link" href="/workspace/operations">Open correction center ↗</a></section>
+            <div class="fix-plan-foot"><p id="fix-note">Nothing has been submitted or changed on any third-party site.</p><button id="copy-fix-plan" class="outline-btn" type="button">Copy my action plan ↗</button></div>
+          </section>
           <div class="findings-layout">
             <div class="findings-main">
               <div class="findings-top"><h3>Evidence findings</h3><span id="findings-total">— CHECKS</span></div>
@@ -88,15 +97,6 @@
             </div>
             <aside class="priority-panel"><span class="aside-eyebrow">WHAT MATTERS FIRST</span><h3>Next steps<span class="green-point">.</span></h3><ol id="priority-list"></ol><div class="ai-note" id="ai-note" hidden><strong>ADDITIONAL NOTES</strong><p id="ai-text"></p></div><div class="honesty-note"><strong>What we can't promise</strong><p>Google decides whether a Knowledge Panel appears. This report cannot prove indexing, eligibility, or an existing panel.</p></div></aside>
           </div>
-          <section id="fix-plan" class="fix-plan" hidden aria-labelledby="fix-plan-heading">
-            <div class="fix-plan-heading"><div><span class="section-kicker">03 / YOUR FIX PLAN</span><h2 id="fix-plan-heading">Let's get this <span>sorted.</span></h2><p>These are suggested next steps, not completed changes. Ulab won't change a third-party record without the required evidence and authorization.</p></div><span class="fix-status">FREE PILOT · NO PAYMENT</span></div>
-            <div class="fix-plan-grid">
-              <div class="fix-plan-card"><span class="fix-column-label">ULAB PREPARES</span><h3>Suggested corrections</h3><div id="fix-prepared" class="fix-prepared" aria-live="polite"></div></div>
-              <div class="fix-plan-card fix-plan-manual"><span class="fix-column-label">YOUR PART</span><h3>What needs you</h3><div id="fix-manual" class="fix-manual"></div></div>
-            </div>
-            <section id="repair-review" class="repair-review" hidden><div class="fix-column-label">EVIDENCE-GATED DRAFTS</div><h3>Platform correction reviews</h3><p>These suggestions need independent supporting evidence and your approval. Adding a draft does not submit an edit.</p><div id="repair-list"></div><a class="repair-center-link" href="/workspace/operations">Open correction center ↗</a></section>
-            <div class="fix-plan-foot"><p id="fix-note">Nothing has been submitted or changed on any third-party site.</p><button id="copy-fix-plan" class="outline-btn" type="button">Copy my action plan ↗</button></div>
-          </section>
           <div class="report-footer"><span id="report-date"></span><span>PRELIMINARY REPORT · NOT AN IDENTITY VERIFICATION</span></div>
         </section>
       </div>
