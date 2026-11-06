@@ -18,6 +18,48 @@
   const a=link(item.url,"SEE SOURCE ↗");if(a)body.append(a);
   outer.append(mark,body);return outer;
  }
+ async function addDraft(opportunity,button){
+   button.disabled=true;
+   try{
+     const {makeTask}=await import("/identity-engine.mjs");
+     const task=makeTask({
+       subject:opportunity.subject,platform:opportunity.platform,profileUrl:opportunity.profileUrl,
+       current:opportunity.current,desired:opportunity.desired,evidence:opportunity.evidence
+     });
+     // The source labels do not imply independent corroboration. Wikimedia tasks remain gated.
+     if(task.status!=="needs_evidence")throw new Error("This suggestion must require independent evidence before review.");
+     const key="identitylab.operations.v2";
+     const saved=JSON.parse(localStorage.getItem(key)||"[]");
+     if(!Array.isArray(saved)||saved.length>=100)throw new Error("The local correction queue is full or invalid.");
+     if(saved.some(t=>t.originReviewId===opportunity.id&&t.subject===opportunity.subject)){
+       button.textContent="ALREADY IN CORRECTION CENTER";return;
+     }
+     saved.unshift({...task,originReviewId:opportunity.id,originBasis:opportunity.basis,
+       sourceFinding:"Customer self-reported identity match; independent evidence not established; no edit submitted."});
+     localStorage.setItem(key,JSON.stringify(saved));
+     button.textContent="REVIEW DRAFT ADDED ✓";
+   }catch(e){button.disabled=false;button.textContent="UNABLE TO ADD: "+String(e.message||e).slice(0,100);}
+ }
+ async function drawOpportunities(){
+   const panel=$("repair-review"),holder=$("repair-list");
+   if(!panel||!current)return;
+   holder.replaceChildren();panel.hidden=true;
+   try{
+     const {draftOpportunities}=await import("/repair-opportunities.mjs");
+     const selected=draftOpportunities(current,{reviews:current.review||{}});
+     if(!selected.length)return;
+     panel.hidden=false;
+     for(const item of selected){
+       const card=elt("article","repair-card");
+       const headline=elt("h4","",item.discrepancyType==="possibly_missing_official_site"?"POSSIBLE MISSING OFFICIAL WEBSITE":"POSSIBLE OUTDATED WEBSITE RECORD");
+       card.append(headline,elt("p","",item.current),elt("p","",item.caveat));
+       const view=link(item.profileUrl,"SEE PUBLIC WIKIDATA RECORD ↗");if(view)card.append(view);
+       const button=elt("button","repair-add","ADD REVIEW DRAFT TO CORRECTION CENTER");
+       button.type="button";button.addEventListener("click",()=>addDraft(item,button));
+       card.append(button);holder.append(card);
+     }
+   }catch(e){console.warn("Repair review unavailable",e);}
+ }
  function drawCandidate(item,source){
   const card=elt("article","candidate-card"),meta=elt("span","candidate-meta",source+" / "+(item.status==="cross_linked"?"IDENTIFIER CONNECTION":"UNVERIFIED CANDIDATE"));
   const title=elt("h4","",item.label||item.title||"Public record");
@@ -33,6 +75,7 @@
     current.review=current.review||{};
     current.review[item.url]={decision:value,reviewedAt:new Date().toISOString(),basis:"customer_self_report_only"};
     decision.textContent=value==="self_reported_match"?"Customer identified this as their record. Independent verification still required.":"Customer marked as a different person.";
+    drawOpportunities();
    });
    choices.append(button);
   }
@@ -58,6 +101,7 @@
   for(const item of wikidata)candidates.append(drawCandidate(item,"WIKIDATA"));
   for(const item of web)candidates.append(drawCandidate(item,"WEB SEARCH"));
   if(!wikidata.length&&!web.length)candidates.append(elt("p","candidate-intro","No public matches could be confidently proposed from the available sources. This is not evidence that none exist."));
+  drawOpportunities();
   const list=$("priority-list");list.replaceChildren();
   for(const item of report.priority||[]){
    const li=elt("li"),inner=elt("div");

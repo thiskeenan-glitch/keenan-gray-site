@@ -65,7 +65,8 @@ export function identifyWikidataAnchors(candidates,entities,link){
     }else if(!["linkedin.com","www.linkedin.com"].includes(u.hostname)){
       match=values("P856").some(x=>{try{return new URL(x).hostname.replace(/^www\./,"")===u.hostname.replace(/^www\./,"");}catch{return false;}});
     }
-    return {...c,match:match?"identifier_linked":"name_only",status:match?"cross_linked":"unverified"};
+    const officialWebsites=values("P856").filter(value=>{try{const u=new URL(value);return u.protocol==="https:"&&!u.username&&!u.password&&!u.port;}catch{return false;}}).slice(0,5);
+    return {...c,match:match?"identifier_linked":"name_only",status:match?"cross_linked":"unverified",officialWebsites};
   });
 }
 export function cleanSearchResults(data,name){

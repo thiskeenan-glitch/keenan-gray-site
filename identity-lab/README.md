@@ -58,3 +58,11 @@ A private client workspace is implemented at `/account`. It stays disabled unles
 - The previous controlled website auditor `/api/audit` remains available separately for its original limited pilot. The main page now uses `/api/discover`.
 - There is no automatic third-party correction, editing, article placement, Knowledge Panel promise, or real panel check. The correction engine remains separate and permission-gated.
 - In-memory per-instance rate limiting is best effort only; implement durable rate limits and bot protection before external scale.
+
+
+## Audit → correction review (v0.3)
+- A public Wikidata official-website (P856) claim is inspected for an exact-name candidate. Missing P856 is a **possible gap**, not proof of an error.
+- The customer must explicitly mark the Wikidata item as theirs and supply a website link before a mismatch review appears.
+- The mismatch is a review suggestion, not a verified correction. Same-host websites do not trigger suggestions.
+- The customer can add an **evidence-gated Wikidata task** to the browser-only correction queue. Its state remains **needs_evidence** until an independent citation is added and reviewed. No third-party submission or login takes place.
+- This browser-local queue is not yet synchronized with the Supabase customer database.

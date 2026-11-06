@@ -21,11 +21,11 @@ async function wikidataCandidates(name,anchor){
   const agent="IdentityLabDiscovery/0.2 (public professional identity audits; contact via website)";
   const data=await fetchJson(base+"?"+q,{headers:{"User-Agent":agent},timeout:5000});
   let records=cleanWikidataSearch(data,name);
-  if(records.length&&anchor){
+  if(records.length){
     try{
       const params=new URLSearchParams({action:"wbgetentities",ids:records.map(x=>x.id).join("|"),props:"claims",format:"json"});
       const info=await fetchJson(base+"?"+params,{headers:{"User-Agent":agent},timeout:4500});
-      records=identifyWikidataAnchors(records,info.entities,anchor.u);
+      records=identifyWikidataAnchors(records,info.entities,anchor?.u||null);
     }catch{/* preserve tentative name candidates if identifier lookups fail */}
   }
   return records;
