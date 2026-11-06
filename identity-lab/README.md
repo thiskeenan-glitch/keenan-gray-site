@@ -66,3 +66,16 @@ A private client workspace is implemented at `/account`. It stays disabled unles
 - The mismatch is a review suggestion, not a verified correction. Same-host websites do not trigger suggestions.
 - The customer can add an **evidence-gated Wikidata task** to the browser-only correction queue. Its state remains **needs_evidence** until an independent citation is added and reviewed. No third-party submission or login takes place.
 - This browser-local queue is not yet synchronized with the Supabase customer database.
+
+## Ulab broad-web research preview (November 6, 2026)
+
+The client-facing Ulab redesign and public research engine live on `ulab-ux-redesign-v1`.
+The homepage uses name plus an optional identity link, attempts a bounded read-only inspection of supplied public websites, and displays preliminary findings with a correction review workflow.
+
+- Broad-web discovery uses the **server-side** `IDLAB_BRAVE_SEARCH_KEY` Vercel secret and several targeted Brave Search API queries per report.
+- Candidate results are deduplicated and ranked using publicly observed links, contextual overlap, and matching names. Search snippets and namesake matches are **not** verified facts.
+- When web search is not connected or errors, the UI explicitly says so. Website SEO inspections do not replace broad professional-profile research.
+- The Fix it panel prepares suggested tasks and evidence-gated drafts, not automatic edits to external sites. Identity review, evidence, and platform authorization are still required.
+- Keep preview deployments isolated from production; test research quality, latency, provider costs, and ambiguity before inviting paying users.
+- To pick up newly configured server-side secrets, trigger a **new deployment** from this branch. Existing deployments do not automatically receive newly added variables.
+
