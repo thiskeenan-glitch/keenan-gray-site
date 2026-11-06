@@ -36,6 +36,10 @@
       "dest": "/public/index.html"
     },
     {
+      "src": "^/pilot/?$",
+      "dest": "/public/pilot.html"
+    },
+    {
       "src": "^/account/?$",
       "dest": "/public/account.html"
     },
@@ -80,7 +84,7 @@
       "dest": "/api/execute-repair.js"
     },
     {
-      "src": "^/(style\\.css|app\\.js|proof-ui\\.js|repair-ui\\.js|client\\.css|client\\.js|contributor-engine\\.mjs|contributor-ui\\.mjs|identity-engine\\.mjs|case-engine\\.mjs|operations\\.mjs|operations\\.css|account\\.css|account\\.mjs|account-model\\.mjs|repair-opportunities\\\\.mjs)$",
+      "src": "^/(style\\.css|app\\.js|proof-ui\\.js|pilot\\.css|pilot-ui\\.js|pilot-engine\\.mjs|repair-ui\\.js|client\\.css|client\\.js|contributor-engine\\.mjs|contributor-ui\\.mjs|identity-engine\\.mjs|case-engine\\.mjs|operations\\.mjs|operations\\.css|account\\.css|account\\.mjs|account-model\\.mjs|repair-opportunities\\\\.mjs)$",
       "dest": "/public/$1"
     },
     {
