@@ -6,7 +6,7 @@ const node=(tag,text,cls)=>{const x=document.createElement(tag);if(text!==undefi
 let tasks=[],flashTimer;
 function announce(message,error=false){const el=$("notice");el.textContent=message;el.style.color=error?"#ae4b35":"#4e7c53";clearTimeout(flashTimer);flashTimer=setTimeout(()=>{el.textContent="";},9000);}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(tasks));}catch{announce("Local storage unavailable. Export the JSON to retain your work.",true);}}
-function label(task){return task.status==="needs_evidence"?"NEEDS EVIDENCE":task.status==="customer_action"?"CUSTOMER STEP":task.status==="ready_for_review"?"READY FOR REVIEW":task.status==="submitted"?"SUBMISSION RECORDED":task.status==="accepted"?"VERIFIED BY OPERATOR":task.status==="rejected"?"REJECTED":"DRAFT READY";}
+function label(task){return task.status==="needs_evidence"?"NEEDS EVIDENCE":task.status==="customer_action"?"CUSTOMER STEP":task.status==="ready_for_review"?"READY FOR REVIEW":task.status==="submitted"?"SUBMISSION RECORDED":task.status==="accepted"?"LEGACY ACCEPTANCE RECORDED":task.status==="rejected"?"REJECTED":"DRAFT READY";}
 function route(task){return CHANNELS[task.channel]||"Manual review";}
 function record(task){tasks.unshift(withHistory(task));save();render();}
 function setTask(index,target,options){
@@ -88,7 +88,7 @@ function render(){
   card.append(node("p",stateNote+" · "+(state.receipt?"SUBMISSION RECEIPT RECORDED":"NO SUBMISSION RECEIPT")+" · "+state.humanMinutes+" HUMAN MINUTES","task-explanation"));
   const shift=node("div",null,"change");
   shift.append(node("span","CURRENT","change-label"),node("p",task.current),node("span","CORRECT","change-label"),node("p",task.desired,"correct"));card.append(shift);
-  card.append(node("p",nextAction(task),"task-explanation"));
+  card.append(node("p",task.status==="accepted"?"Legacy acceptance marker; the case history does not establish independently verified public visibility.":nextAction(task),"task-explanation"));
   const details=node("details");details.append(node("summary","Sources and permissions"));
   const body=node("div",null,"details-content");body.append(node("p",RULES[task.platform].policy));
   const link=node("a","View original profile ↗","source-link");link.href=task.profile.url;link.rel="noopener";link.target="_blank";body.append(link);
