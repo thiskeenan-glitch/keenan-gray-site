@@ -3,7 +3,7 @@
 // Arbitrary supplied websites are NOT fetched, to avoid server-side request forgery.
 import {parseIntake,cleanWikidataSearch,identifyWikidataAnchors,cleanSearchResults,reportFromSignals} from "../lib/identity-discovery.mjs";
 import {inspectPublicHomepage} from "../lib/safe-site-inspection.mjs";
-import {researchQueries,organizeWebResults,normalizeBraveResponse} from "../lib/web-research.mjs";
+import {researchQueries,organizeWebResults,normalizeBraveResponse,visibilityQueries,sampledVisibility} from "../lib/web-research.mjs";
 const limit=12000;
 async function fetchJson(url,{headers={},timeout=4500}={}){
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeout);
@@ -35,18 +35,27 @@ async function wikidataCandidates(name,anchor){
 async function searchCandidates(input,site){
  const key=process.env.IDLAB_BRAVE_SEARCH_KEY;
  if(!key)return {results:[],status:"not_configured",queryCount:0,rawCount:0,sourceCount:0,
-  message:"Indexed-web search is not connected to this pilot. This scan cannot discover your full professional footprint."};
- const queries=researchQueries(input,site);
+  message:"Indexed-web search is not connected to this pilot. This scan cannot discover your full professional footprint.",findability:{score:null,checked:0,appeared:0,rows:[],source:"Brave Search API",notGoogle:true}};
+ const discovery=researchQueries(input,site);
+ const visibility=visibilityQueries(input,site);
+ const queries=[...new Set([...discovery,...visibility.map(x=>x.query)])].slice(0,8);
  const completed=await Promise.allSettled(queries.map(async q=>{
   const params=new URLSearchParams({q,count:"20",safesearch:"moderate",text_decorations:"false",result_filter:"web"});
   const data=await fetchJson("https://api.search.brave.com/res/v1/web/search?"+params,{
    headers:{"X-Subscription-Token":key},timeout:5700});
   return {query:q,results:normalizeBraveResponse(data)};
  }));
- const successful=completed.filter(x=>x.status==="fulfilled").map(x=>x.value);
+ const all=queries.map((q,i)=>completed[i].status==="fulfilled"?completed[i].value:{query:q,results:[],status:"error"});
+ const successful=all.filter((x,i)=>completed[i].status==="fulfilled");
+ const visibilityRows=visibility.map(probe=>{
+  const index=queries.indexOf(probe.query);
+  const entry=all[index];
+  return {...probe,results:entry?.results||[],status:index>=0&&completed[index].status==="fulfilled"?"ok":"error"};
+ });
  const research=organizeWebResults(successful,{name:input.name,link:input.link,site});
+ const findability=sampledVisibility(visibilityRows,{name:input.name,link:input.link});
  return {results:research.results,status:!successful.length?"error":successful.length<queries.length?"partial":"ok",
-  queryCount:successful.length,attemptedQueries:queries.length,rawCount:research.rawCount,
+  queryCount:successful.length,attemptedQueries:queries.length,findability,rawCount:research.rawCount,
   sourceCount:research.retainedCount,counts:research.counts,
   message:successful.length?"Web results are public leads, not independently verified identity matches.":"The external search provider did not return results."};
 }
@@ -81,7 +90,7 @@ export default async function handler(req,res){
   const search=await searchCandidates(input,site).catch(()=>({results:[],status:"error",queryCount:0,sourceCount:0,message:"Web search temporarily unavailable."}));
   const report=reportFromSignals({input,site,wikidata:records,searchResults:search.results,searchStatus:search.status,wikidataStatus:wikidata.status==="fulfilled"?"ok":"error"});
   report.webResearch={status:search.status,queryCount:search.queryCount||0,attemptedQueries:search.attemptedQueries||0,
-   sourceCount:search.sourceCount||0,counts:search.counts||{},message:search.message||"No coverage data available."};
+   sourceCount:search.sourceCount||0,counts:search.counts||{},findability:search.findability||{score:null,checked:0,appeared:0,rows:[],source:"Brave Search API",notGoogle:true},message:search.message||"No coverage data available."};
   // Name-only matching and snippets cannot establish that a record belongs to the subject.
   return res.status(200).json(report);
 }
