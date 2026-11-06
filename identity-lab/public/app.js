@@ -61,10 +61,12 @@
    }catch(e){console.warn("Repair review unavailable",e);}
  }
  function drawCandidate(item,source){
-  const card=elt("article","candidate-card"),meta=elt("span","candidate-meta",source+" / "+(item.status==="cross_linked"?"IDENTIFIER CONNECTION":"UNVERIFIED CANDIDATE"));
+  const evidenceKind=item.connection==="anchor"?"SUPPLIED WEBSITE":item.connection==="linked"?"LINKED FROM WEBSITE":item.connection==="strong_candidate"?"STRONGER LEAD":item.status==="cross_linked"?"IDENTIFIER CONNECTION":"UNVERIFIED CANDIDATE";
+  const card=elt("article","candidate-card"),meta=elt("span","candidate-meta",source+" / "+evidenceKind);
   const title=elt("h4","",item.label||item.title||"Public record");
   card.append(meta,title);
   if(item.description)card.append(elt("p","",item.description));
+  if(Array.isArray(item.reasons)&&item.reasons.length)card.append(elt("p","candidate-reasons","WHY SHOWN: "+item.reasons.join(" · ")));
   const a=link(item.url,"REVIEW PUBLIC SOURCE ↗");if(a)card.append(a);
   const choices=elt("div","candidate-choices");
   const decision=elt("span","candidate-decision","");
@@ -110,6 +112,17 @@
   $("findings-list").replaceChildren(...report.results.map(drawFinding));
   const candidates=$("candidate-list");candidates.replaceChildren();
   const wikidata=report.candidates?.wikidata||[],web=report.candidates?.web||[];
+  const research=report.webResearch||{};
+  const coverage=elt("div","research-coverage");
+  const state=research.status==="ok"?"WEB SEARCH CONNECTED":research.status==="partial"?"PARTIAL WEB SEARCH":research.status==="not_configured"?"WEB SEARCH NOT CONNECTED":"WEB SEARCH UNAVAILABLE";
+  coverage.append(elt("strong","",state));
+  coverage.append(elt("p","",research.message||"Coverage is limited. Not all websites were searched."));
+  if(research.status==="ok"||research.status==="partial")coverage.append(elt("p","","Search queries completed: "+(research.queryCount||0)+" · Public leads found: "+web.length+" · All leads require identity review."));
+  candidates.append(coverage);
+  if(web.length){
+   const lead=elt("p","candidate-intro","PUBLIC WEB FINDINGS · "+web.length+" result(s), sorted by evidence connection. None should be treated as verified facts without inspecting the original source.");
+   candidates.append(lead);
+  }
   for(const item of wikidata)candidates.append(drawCandidate(item,"WIKIDATA"));
   for(const item of web)candidates.append(drawCandidate(item,"WEB SEARCH"));
   if(!wikidata.length&&!web.length)candidates.append(elt("p","candidate-intro","No public matches could be confidently proposed from the available sources. This is not evidence that none exist."));
@@ -139,7 +152,7 @@
    const body=await response.json();
    if(!response.ok)throw new Error(body.error||"The scan failed.");
    render(body);
-   message.textContent="Preliminary audit complete. "+(body.candidates?.wikidata?.length||0)+" exact-name knowledge candidates and "+(body.candidates?.web?.length||0)+" web candidates. Review before claiming any match.";
+   message.textContent="Audit complete. "+(body.candidates?.web?.length||0)+" public-web leads found; research status: "+(body.webResearch?.status||"unknown")+". Review identity matches before any corrections.";
   }catch(e){message.classList.add("error");message.textContent=e.name==="AbortError"?"Discovery timed out. Try again.":String(e.message||"Audit failed.");}
   finally{clearTimeout(timer);submit.disabled=false;$("button-label").textContent="Get my identity report";}
  });
