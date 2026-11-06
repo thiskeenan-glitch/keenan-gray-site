@@ -66,3 +66,10 @@ A private client workspace is implemented at `/account`. It stays disabled unles
 - The mismatch is a review suggestion, not a verified correction. Same-host websites do not trigger suggestions.
 - The customer can add an **evidence-gated Wikidata task** to the browser-only correction queue. Its state remains **needs_evidence** until an independent citation is added and reviewed. No third-party submission or login takes place.
 - This browser-local queue is not yet synchronized with the Supabase customer database.
+
+## Linked identity graph (v0.4)
+- Wikidata exact-name candidates can expose **published source claims** for official website (P856), IMDb person (P345), TMDb person (P4985), ORCID (P496) and OpenAlex (P10283). These linked URLs are not automatically fetched and **must not** be misrepresented as verified external profiles.
+- Optional OpenAlex **direct author lookups** are supported only for IDs that Wikidata explicitly lists, and only when `IDLAB_OPENALEX_API_KEY` is configured server-side (not currently configured). OpenAlex free-key usage is budgeted; see https://help.openalex.org/api/authentication/.
+- ORCID checksum validation and exact OpenAlex author-name matching reduce false matches. Shared identifiers still require human verification because scholarly records can be misassigned/merged.
+- The cross-source comparison engine flags potential missing/different ORCID claims and missing OpenAlex IDs for **review only**. The customer must identify the candidate as theirs; any correction draft still starts in `needs_evidence` and requires independent sources and approval. No external edits.
+- The pilot's broad web search, general website crawler and customer-account sync are still unconfigured. The product is not yet suitable for unattended, paid large-scale corrections.
