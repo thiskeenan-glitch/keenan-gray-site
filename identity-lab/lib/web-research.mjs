@@ -83,3 +83,45 @@ export function normalizeBraveResponse(data){
   .map(x=>({url:x?.url,title:x?.title,description:x?.description}))
   .filter(x=>typeof x.url==="string"&&typeof x.title==="string");
 }
+
+/**
+ * A small, reproducible sample of queries, NOT measurements of Google rankings.
+ * A hit must contain the full professional name or match the supplied site exactly.
+ */
+export function visibilityQueries(input,site=null){
+ const name=text(input.name,100).replace(/["\\\n\r]/g," ");
+ const title=text(site?.parsed?.title||"",180),heading=text(site?.parsed?.heading||"",180);
+ const context=(heading+" "+title).toLowerCase().replace(name.toLowerCase()," ").replace(/[|—–]/g," ");
+ const roles=words(context).filter(x=>!new Set(["home","homepage","website","portfolio","official","and","the","new","york","based","welcome"]).has(x)).slice(0,2);
+ const profession=roles.join(" ");
+ const location=text(site?.parsed?.location||"",80);
+ const host=hostname(input.link||"");
+ const out=[{id:"name",label:"Full name",query:'"'+name+'"',intent:"branded"}];
+ if(profession)out.push({id:"profession",label:"Name + profession",query:'"'+name+'" '+profession,intent:"context"});
+ if(location)out.push({id:"location",label:"Name + location",query:'"'+name+'" '+location,intent:"context"});
+ if(profession&&location)out.push({id:"discovery",label:"Profession + location",query:profession+" "+location,intent:"unbranded"});
+ else if(host)out.push({id:"site",label:"Name + website",query:'"'+name+'" "'+host+'"',intent:"context"});
+ return out.slice(0,4);
+}
+export function sampledVisibility(probes,{name,link=null}={}){
+ const official=hostname(link||"");
+ const n=norm(name);
+ const rows=[];
+ for(const probe of probes||[]){
+  const list=Array.isArray(probe.results)?probe.results:[];
+  const found=list.map((x,i)=>{
+   const h=hostname(x.url),sameSite=!!official&&h===official;
+   const identityMatch=exact(x.title,n)||exact(x.description,n)||sameSite;
+   return identityMatch?{position:i+1,url:x.url,title:text(x.title,120),sameSite}:null;
+  }).find(Boolean);
+  rows.push({id:probe.id,label:probe.label,query:probe.query,intent:probe.intent,
+   checked:probe.status==="ok",found:!!found&&probe.status==="ok",
+   position:probe.status==="ok"?found?.position??null:null,
+   example:probe.status==="ok"?found?.url??null:null,
+   note:"Sampled Brave Search results, not Google ranking or all search impressions."});
+ }
+ const checked=rows.filter(x=>x.checked).length,appeared=rows.filter(x=>x.checked&&x.found).length;
+ // No global 0-100 "reputation" score. This is a clearly labeled sampled query hit-rate.
+ const score=checked?Math.round(appeared/checked*100):null;
+ return {score,checked,appeared,rows,source:"Brave Search API",method:"Top 20 results checked per sampled query, exact-name mentions or supplied-site match.",notGoogle:true};
+}
