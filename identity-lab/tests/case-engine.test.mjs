@@ -39,7 +39,7 @@ test("TMDb can show a public biography without an Identity Lab submission",()=>{
 test("public observations require a specific text claim and an exact record",()=>{
  const t=task();
  assert.throws(()=>recordPublicObservation(t,{url:"https://www.imdb.com/name/nm999999/",statement:"Toy Gun (2026) in biography"}),/same person/i);
- assert.throws(()=>recordPublicObservation(t,{url:"https://www.imdb.com/name/nm16096261/bio/",statement:"yes"}),/specific/i);
+ assert.throws(()=>recordPublicObservation(t,{url:"https://www.imdb.com/name/nm16096261/bio/",statement:"yes"}),/exact/i);
  assert.throws(()=>recordPublicObservation(t,{url:"https://evil.example/name/nm16096261/",statement:"Toy Gun (2026) in biography"}),/same platform/i);
  const updated=recordPublicObservation(t,{url:"https://www.imdb.com/name/nm16096261/bio/",statement:"Toy Gun (2026) is visible in the biography."});
  assert.equal(summarizeTask(updated).publicState,"operator_observed");
