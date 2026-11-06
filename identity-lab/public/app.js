@@ -50,6 +50,70 @@
   }
   return actions;
  }
+
+ function personaFromSources(data){
+  const name=data.subject?.name||"Unknown person";
+  const site=data.site?.parsed;
+  if(!site)return {summary:"Public references found for "+name+". Confirm the likely matches before treating them as the same person.",evidence:"Name-only and external search leads; no inspected personal website."};
+  const n=name.toLowerCase();
+  function occupation(value){
+   const words=String(value||"").replace(/[—–|]/g," ").replace(/\s+/g," ").trim();
+   const index=words.toLowerCase().indexOf(n);
+   let role=index>=0?words.slice(index+name.length):words;
+   role=role.replace(/^[,.\s:-]+/,"").replace(/\s*(?:official website|homepage|portfolio)\s*$/i,"").trim();
+   if(!role||role.length>65||/^home|website|welcome/i.test(role))return "";
+   return role.charAt(0).toLowerCase()+role.slice(1).replace(/[.!]+$/,"");
+  }
+  const role=occupation(site.heading)||occupation(site.title);
+  const loc=String(site.location||"").trim();
+  const summary=role?name+" is "+(/^[aeiou]/i.test(role)?"an ":"a ")+role+(loc?" based in "+loc:"")+".":loc?name+" is based in "+loc+".":name+" has a public professional website that Ulab inspected.";
+  const evidence="Based on the submitted website, not independently verified. Website: "+(data.site?.url||"");
+  return {summary,evidence};
+ }
+ function searchPanel(findability){
+  const panel=$new("section","search-probes");
+  const head=$new("div","section-divide");head.append($new("h3","","How you appear in searches"),$new("span","",(findability.checked||0)+" SAMPLED QUERIES"));panel.append(head);
+  if(!findability.checked){panel.append(infoCard("Visibility not measured","Broad-web search probes were unavailable. We cannot responsibly calculate a findability score.","NOT ENOUGH DATA"));return panel;}
+  const intro=$new("p","probe-intro","These are sampled Brave Search results, not Google search rankings. Results only count when the name or supplied official website appears.");
+  panel.append(intro);
+  for(const row of findability.rows||[]){
+   const card=$new("div","probe-row"),left=$new("div","probe-description");
+   left.append($new("strong","",row.label),$new("small","",row.query));
+   const status=$new("div","probe-status");
+   const label=row.checked?(row.found?"VISIBLE IN SAMPLE":"NOT SEEN IN SAMPLE"):"NOT CHECKED";
+   status.append($new("span",row.found?"probe-positive":"probe-missing",label));
+   if(row.checked&&row.found&&row.position!==null)status.append($new("small","","Example at #"+row.position+" in Brave sample"));
+   const a=row.example?safeLink(row.example,"SOURCE ↗"):null;if(a)status.append(a);
+   card.append(left,status);panel.append(card);
+  }
+  return panel;
+ }
+ function improvementPanel(data,found){
+  const panel=$new("section","improvements");
+  const head=$new("div","section-divide");head.append($new("h3","","Improve your findability"),$new("span","","PRIORITIZED GUIDANCE"));panel.append(head);
+  const tasks=[];
+  const site=data.site?.parsed,siteUrl=data.subject?.link;
+  if(!site){
+   tasks.push({title:"Start with an identifiable public homepage",detail:"A website that clearly states the person's name and profession helps tie together public records. Add one to a new scan for deeper evidence.",kind:"IDENTITY FOUNDATION"});
+  }else{
+   const person=site.people?.some(p=>String(p.name||"").toLowerCase()===String(data.subject.name||"").toLowerCase());
+   if(!person)tasks.push({title:"Publish accurate Person identity markup",detail:"Your inspected homepage did not expose matching Person structured data. Review a factual Person schema and valid sameAs links on the site you control.",kind:"WEBSITE CONNECTION"});
+   if(!(site.sameAs||[]).length)tasks.push({title:"Connect your real professional profiles",detail:"Your homepage did not publish Person.sameAs links. Add only profiles that really belong to you, then review whether their own details agree.",kind:"PROFILE CONSISTENCY"});
+  }
+  const panelStatus=data.webResearch?.findability||{};
+  if((panelStatus.rows||[]).some(r=>r.id==="discovery"&&r.checked&&!r.found)){
+   tasks.push({title:"Broaden discovery beyond your name",detail:"Your profession-and-location sample did not surface an attributable result. Accurate, independently published credits or interviews may help people discover you through topic searches.",kind:"DISCOVERABILITY"});
+  }
+  if(!(data.candidates?.wikidata||[]).length){
+   tasks.push({title:"Connect established public identity records",detail:"No exact-name Wikidata item was confirmed in this scan. Review existing eligible records and professional identifiers. Do not create promotional or unsupported claims.",kind:"PUBLIC RECORDS"});
+  }
+  if(!tasks.length)tasks.push({title:"Verify source accuracy before requesting edits",detail:"Open your most relevant public records, confirm authorship and credits, and correct specific disagreements with source evidence.",kind:"NEXT STEP"});
+  for(const t of tasks.slice(0,3)){
+   const c=$new("article","improvement-row");c.append($new("span","insight-kicker",t.kind),$new("strong","",t.title),$new("p","",t.detail));panel.append(c);
+  }
+  const button=$new("button","mini-fix improvement-cta","OPEN FIX CENTER ↗");button.type="button";button.addEventListener("click",()=>activateTab("fixes"));panel.append(button);
+  return panel;
+ }
  function evidenceScore(data,found){
   // Observed, capped connection evidence, not a prediction of notability or Google panels.
   // No website anchor or linked sources means we do not have enough data to score.
@@ -110,6 +174,7 @@
     infoCard("Knowledge Panel: not verified","An identity score does not determine whether Google will show a panel. Independent coverage, verified records, and Google's own systems matter.","GOOGLE STATUS")
    );
    holder.append(intro);
+   holder.append(searchPanel(research.findability||{}),improvementPanel(report,items));
    const rec=$new("div","section-divide");rec.append($new("h3","","Your strongest leads"),$new("span","",items.length+" records"));holder.append(rec);
    const selected=items.filter(x=>report.review?.[x.url]?.decision!=="self_reported_not_match").slice(0,6);
    if(!selected.length)holder.append(infoCard("No suitable matches surfaced","Try adding a public identity link, or search again. This doesn't mean the person has no online footprint.","NO RESULTS"));
@@ -137,12 +202,17 @@
  }
  function renderReport(data){
   report=data;report.review=report.review||{};items=buildItems(data);fixes=buildFixes();const score=evidenceScore(data,items);
-  $("report-subtitle").textContent=data.subject.name+" · "+(data.subject.link||"Name-only research");
+  const persona=personaFromSources(data);
+  $("report-title").replaceChildren(document.createTextNode(data.subject.name+".")); 
+  $("report-persona").textContent=persona.summary;
+  $("report-persona").title=persona.evidence;
+  $("report-subtitle").textContent="SOURCE: "+(data.site?.url||data.subject.link||"Name-only public research")+" · "+(data.webResearch?.source||"Broad-web research");
   $("report-date").textContent=new Date(data.generatedAt).toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}).toUpperCase();
-  $("connection-score").textContent=score.value===null?"—":score.value;
-  $("score-title").textContent=score.value===null?"Insufficient evidence":"Observed evidence / 100";
-  $("score-explanation").textContent=score.explanation;
-  $("score-gauge").style.setProperty("--score",score.value===null?"0%":score.value+"%");
+  const visibility=data.webResearch?.findability||{};
+  $("connection-score").textContent=visibility.score===null||visibility.score===undefined?"—":visibility.score;
+  $("score-title").textContent=visibility.checked?"Visible in "+visibility.appeared+"/"+visibility.checked+" tested searches":"Insufficient search data";
+  $("score-explanation").textContent=visibility.checked?"Sample hit rate from "+visibility.checked+" Brave Search queries. This is not a Google ranking or Knowledge Panel likelihood.":"No search visibility measurements were completed.";
+  $("score-gauge").style.setProperty("--score",visibility.score===null||visibility.score===undefined?"0%":visibility.score+"%");
   $("profile-count").textContent=items.filter(x=>x.type==="profiles").length;
   $("coverage-count").textContent=items.filter(x=>x.type==="coverage").length;
   $("knowledge-count").textContent=items.filter(x=>x.type==="knowledge").length;
