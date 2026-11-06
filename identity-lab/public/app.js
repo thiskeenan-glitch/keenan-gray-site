@@ -51,7 +51,8 @@
      panel.hidden=false;
      for(const item of selected){
        const card=elt("article","repair-card");
-       const headline=elt("h4","",item.discrepancyType==="possibly_missing_official_site"?"POSSIBLE MISSING OFFICIAL WEBSITE":"POSSIBLE OUTDATED WEBSITE RECORD");
+       const names={possibly_missing_official_site:"POSSIBLE MISSING OFFICIAL WEBSITE",possible_official_site_conflict:"POSSIBLE OUTDATED WEBSITE RECORD",possible_missing_orcid:"POSSIBLE MISSING ORCID",possible_orcid_conflict:"CONFLICTING ORCID CLAIMS",possible_missing_openalex_id:"POSSIBLE MISSING OPENALEX ID"};
+       const headline=elt("h4","",names[item.discrepancyType]||"CROSS-SOURCE REVIEW NEEDED");
        card.append(headline,elt("p","",item.current),elt("p","",item.caveat));
        const view=link(item.profileUrl,"SEE PUBLIC WIKIDATA RECORD ↗");if(view)card.append(view);
        const button=elt("button","repair-add","ADD REVIEW DRAFT TO CORRECTION CENTER");
@@ -59,6 +60,36 @@
        card.append(button);holder.append(card);
      }
    }catch(e){console.warn("Repair review unavailable",e);}
+ }
+ function drawGraph(report){
+  const panel=$("identity-graph-view"),linked=$("linked-records-list"),conflicts=$("cross-source-comparisons");
+  if(!panel)return;
+  linked.replaceChildren();conflicts.replaceChildren();panel.hidden=true;
+  const graph=report.identityGraph;
+  if(!graph||!Array.isArray(graph.edges)||!graph.edges.length)return;
+  panel.hidden=false;
+  const seen=new Set();
+  for(const edge of graph.edges.slice(0,40)){
+   const node=(graph.nodes||[]).find(x=>x.key===edge.to);
+   if(!node||seen.has(node.key))continue;
+   seen.add(node.key);
+   const card=elt("div","graph-record");
+   card.append(elt("strong","",node.platform+" · "+node.label));
+   card.append(elt("p","","Linked by a published Wikidata identifier. The destination profile has not necessarily been fetched or checked."));
+   const a=link(node.url,"VIEW CLAIMED PROFILE ↗");if(a)card.append(a);
+   linked.append(card);
+  }
+  if(graph.comparisons?.length){
+   const h=elt("h4","","Cross-source differences requiring review");
+   conflicts.append(h);
+   for(const item of graph.comparisons.slice(0,10)){
+    const box=elt("div","graph-comparison");
+    box.append(elt("strong","",item.kind.replaceAll("_"," ").toUpperCase()));
+    box.append(elt("p","",item.detail));
+    const a=link(item.otherUrl,"OPEN SOURCE ↗");if(a)box.append(a);
+    conflicts.append(box);
+   }
+  }
  }
  function drawCandidate(item,source){
   const card=elt("article","candidate-card"),meta=elt("span","candidate-meta",source+" / "+(item.status==="cross_linked"?"IDENTIFIER CONNECTION":"UNVERIFIED CANDIDATE"));
@@ -97,10 +128,12 @@
   $("report-date").textContent="SCAN GENERATED "+new Date(report.generatedAt).toLocaleString(undefined,{dateStyle:"medium",timeStyle:"short"}).toUpperCase();
   $("findings-list").replaceChildren(...report.results.map(drawFinding));
   const candidates=$("candidate-list");candidates.replaceChildren();
-  const wikidata=report.candidates?.wikidata||[],web=report.candidates?.web||[];
+  const wikidata=report.candidates?.wikidata||[],web=report.candidates?.web||[],openalex=report.candidates?.openalex||[];
   for(const item of wikidata)candidates.append(drawCandidate(item,"WIKIDATA"));
+  for(const item of openalex)candidates.append(drawCandidate(item,"OPENALEX"));
   for(const item of web)candidates.append(drawCandidate(item,"WEB SEARCH"));
-  if(!wikidata.length&&!web.length)candidates.append(elt("p","candidate-intro","No public matches could be confidently proposed from the available sources. This is not evidence that none exist."));
+  if(!wikidata.length&&!web.length&&!openalex.length)candidates.append(elt("p","candidate-intro","No public matches could be confidently proposed from the available sources. This is not evidence that none exist."));
+  drawGraph(report);
   drawOpportunities();
   const list=$("priority-list");list.replaceChildren();
   for(const item of report.priority||[]){

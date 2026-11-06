@@ -29,3 +29,16 @@
 .repair-card a,.repair-center-link{display:inline-block;font-weight:800;font-size:10px;margin:9px 0;color:#416b48;text-decoration:underline;text-underline-offset:3px}
 .repair-add{display:block;margin-top:12px;background:#26372b;color:#fff;padding:11px 12px;border:0;border-radius:4px;font-size:10px;font-weight:800;max-width:100%}
 .repair-add:disabled{opacity:.7}
+
+/* Graph: source claims are explicitly not proof of identical identities. */
+.identity-graph-view{padding:20px 0;border-top:1px solid var(--line);margin-top:20px}
+.identity-graph-view h3{font-size:20px;margin:0 0 10px;letter-spacing:-.035em}
+.identity-graph-view>p{font-size:12px;color:#66756b;line-height:1.6;margin:0 0 14px}
+#linked-records-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.graph-record,.graph-comparison{padding:13px;border:1px solid #d3dfd0;background:#f9fcf7;border-radius:5px}
+.graph-record strong,.graph-comparison strong{font-size:12px;color:#31523c}
+.graph-record p,.graph-comparison p{font-size:11px;line-height:1.55;color:#6e7d70}
+.graph-record a,.graph-comparison a{font-size:10px;font-weight:850;color:#46724b;text-decoration:underline;text-underline-offset:2px}
+#cross-source-comparisons h4{font-size:15px;margin:18px 0 8px}
+.graph-comparison{margin-bottom:9px;background:#fff8eb;border-color:#e6d7b7}
+@media(max-width:650px){#linked-records-list{grid-template-columns:1fr}}

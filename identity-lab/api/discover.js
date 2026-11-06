@@ -1,7 +1,8 @@
 // Identity Lab general public-identity discovery. Read only, no external edits.
 // The pilot fetches fixed-source Wikidata and (optionally) a licensed search API.
 // Arbitrary supplied websites are NOT fetched, to avoid server-side request forgery.
-import {parseIntake,cleanWikidataSearch,identifyWikidataAnchors,cleanSearchResults,reportFromSignals} from "../lib/identity-discovery.mjs";
+import {parseIntake,cleanWikidataSearch,cleanSearchResults,reportFromSignals} from "../lib/identity-discovery.mjs";
+import {enrichWikidataCandidates,cleanOpenAlexAuthors,buildIdentityGraph} from "../lib/cross-source.mjs";
 const limit=12000;
 async function fetchJson(url,{headers={},timeout=4500}={}){
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeout);
@@ -25,10 +26,25 @@ async function wikidataCandidates(name,anchor){
     try{
       const params=new URLSearchParams({action:"wbgetentities",ids:records.map(x=>x.id).join("|"),props:"claims",format:"json"});
       const info=await fetchJson(base+"?"+params,{headers:{"User-Agent":agent},timeout:4500});
-      records=identifyWikidataAnchors(records,info.entities,anchor?.u||null);
+      records=enrichWikidataCandidates(records,info.entities,anchor?.u||null);
     }catch{/* preserve tentative name candidates if identifier lookups fail */}
   }
   return records;
+}
+async function openalexCandidates(name,records){
+  // Identity graph depends on official identifiers; no speculative researcher searches.
+  const ids=[...new Set(records.flatMap(r=>r.identifiers?.openalex||[]))].slice(0,1);
+  const apiKey=process.env.IDLAB_OPENALEX_API_KEY;
+  if(!ids.length)return {results:[],status:"not_linked"};
+  // One fixed-ID no-key lookup per audit is permitted for the low-volume demo.
+  // Connect a dedicated free API key and durable rate limits before public scale.
+  const responses=await Promise.allSettled(ids.map(id=>fetchJson(
+    "https://api.openalex.org/authors/"+encodeURIComponent(id),
+    {headers:apiKey?{"Authorization":"Bearer "+apiKey}:{},timeout:4200}
+  )));
+  const raw=responses.filter(x=>x.status==="fulfilled").map(x=>x.value);
+  // OpenAlex single-entity responses have no "results" wrapper.
+  return {results:cleanOpenAlexAuthors({results:raw},name),status:raw.length?(apiKey?"ok":"demo_keyless"):"error"};
 }
 async function searchCandidates(name,anchor){
   const key=process.env.IDLAB_BRAVE_SEARCH_KEY;
@@ -64,7 +80,13 @@ export default async function handler(req,res){
   const [wikidata,web]=await Promise.allSettled([wikidataCandidates(input.name,input.anchor),searchCandidates(input.name,input.anchor)]);
   const records=wikidata.status==="fulfilled"?wikidata.value:[];
   const search=web.status==="fulfilled"?web.value:{results:[],status:"error"};
+  const scholarly=await openalexCandidates(input.name,records).catch(()=>({results:[],status:"error"}));
+  const graph=buildIdentityGraph(records,scholarly.results,input.anchor);
   const report=reportFromSignals({input,wikidata:records,searchResults:search.results,searchStatus:search.status,wikidataStatus:wikidata.status==="fulfilled"?"ok":"error"});
+  report.identityGraph=graph;
+  report.candidates.openalex=scholarly.results;
+  report.coverage.openalex=scholarly.status;
+  report.version="0.4.0";
   // Name-only matching and snippets cannot establish that a record belongs to the subject.
   return res.status(200).json(report);
 }
