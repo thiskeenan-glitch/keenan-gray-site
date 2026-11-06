@@ -14,6 +14,18 @@
       "use": "@vercel/node"
     },
     {
+      "src": "api/verify-repair.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/repair-plans.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/execute-repair.js",
+      "use": "@vercel/node"
+    },
+    {
       "src": "public/**",
       "use": "@vercel/static"
     }
@@ -54,6 +66,18 @@
     {
       "src": "^/api/identity-config/?$",
       "dest": "/api/identity-config.js"
+    },
+    {
+      "src": "^/api/verify-repair/?$",
+      "dest": "/api/verify-repair.js"
+    },
+    {
+      "src": "^/api/repair-plans/?$",
+      "dest": "/api/repair-plans.js"
+    },
+    {
+      "src": "^/api/execute-repair/?$",
+      "dest": "/api/execute-repair.js"
     },
     {
       "src": "^/(style\\.css|app\\.js|client\\.css|client\\.js|contributor-engine\\.mjs|contributor-ui\\.mjs|identity-engine\\.mjs|case-engine\\.mjs|operations\\.mjs|operations\\.css|account\\.css|account\\.mjs|account-model\\.mjs|repair-opportunities\\\\.mjs)$",
