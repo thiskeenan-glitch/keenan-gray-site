@@ -91,3 +91,30 @@
 @media(max-width:1000px){.signal-bar{grid-template-columns:2fr repeat(3,.75fr)}.status-cell{grid-column:1/-1;border-top:1px solid #353b4d}.report-main{grid-template-columns:185px minmax(0,1fr)}.tab-body{padding:29px 25px}.insight-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:720px){.masthead{height:64px;padding:0 18px}.mast-version{display:none}.live-indicator{font-size:8px}.screen{min-height:calc(100dvh - 64px)}.home-screen{padding:60px 18px 75px}.home-screen h1{font-size:clamp(48px,12vw,75px)}.hero-subtitle{font-size:14px}.identity-form{padding:21px}.form-header{font-size:9px}.home-footnotes{gap:7px;font-size:9px}.home-footnotes i{width:11px}.home-bottom{bottom:13px;width:calc(100% - 36px);flex-direction:column;align-items:center;gap:7px;font-size:8px}.scan-visual{width:230px;height:230px}.report-screen{padding:18px 12px 50px}.report-toolbar-right>span{display:none}.report-heading{padding:29px 4px 22px;flex-direction:column;align-items:start}.report-heading h1{font-size:43px}.fix-cta{width:100%}.signal-bar{grid-template-columns:repeat(3,1fr)}.signal-score{grid-column:1/-1}.signal-cell{padding:15px 5px}.signal-cell>strong{font-size:24px}.status-cell{grid-column:1/-1}.report-main{display:block}.report-tabs{display:flex;flex-direction:row;gap:4px;overflow-x:auto;padding:9px;border-right:0;border-bottom:1px solid #303748;scrollbar-width:thin}.tab{flex:none;font-size:11px;white-space:nowrap;padding:10px}.tab-body{padding:24px 17px}.tab-heading{flex-direction:column;gap:9px}.insight-grid{grid-template-columns:1fr}.result-card,.fix-card{padding:16px}.report-bottom{flex-direction:column;font-size:8px}.dialog-header{padding:20px 18px 12px}.dialog-context{margin:0 18px 18px}#correction-form,.packet-output{padding-left:18px;padding-right:18px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+
+/* Public proof checks: field-level before/after, not third-party submission UI. */
+.proof-panel{padding:24px 29px 30px;background:#151b29;border-top:1px solid #3c4359}
+.proof-panel[hidden],.proof-unsupported[hidden],.proof-form[hidden]{display:none!important}
+.proof-head{display:flex;justify-content:space-between;gap:15px;align-items:center}
+.proof-head h3{font:600 25px "Space Grotesk",sans-serif;letter-spacing:-.045em;margin:6px 0}
+.proof-beta{font-size:9px;letter-spacing:.09em;color:#bca5ff;border:1px solid #55466b;border-radius:30px;padding:7px 9px;font-weight:800}
+.proof-description,.proof-unsupported,.proof-empty,.proof-footnote{color:#a9afc4;font-size:11px;line-height:1.7}
+.proof-unsupported{color:#d1b6ff;background:#23263a;border:1px solid #48445f;border-radius:8px;padding:13px}
+.proof-form{display:grid;gap:9px;margin:22px 0}
+.proof-form label{font-size:9px;font-weight:800;letter-spacing:.1em;color:#c4c0d1}
+.proof-form input,.proof-form select{width:100%;background:#0b0f17;border:1px solid #45475c;border-radius:9px;padding:13px 14px;color:#fff;font:inherit;font-size:13px;min-width:0}
+.proof-form input:focus,.proof-form select:focus{border-color:#a184ff;outline:none;box-shadow:0 0 0 3px #a184ff20}
+.proof-form .small-button{margin-top:9px;justify-self:start}
+.proof-result p{font-size:11px;line-height:1.6;border-radius:8px;padding:13px;margin:8px 0}
+.proof-success{background:#172d33;border:1px solid #43646f;color:#b9e5dd}
+.proof-error{background:#352334;border:1px solid #774559;color:#ffc8d2}
+.proof-history{border-top:1px solid #373e51;margin-top:16px;padding-top:14px}
+.proof-history h4{margin:0 0 8px;font-size:13px;color:#f1ebff}
+.proof-history .source-link{display:inline-block;margin-top:11px}
+.proof-comparison{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+.proof-check-card{border:1px solid #3a4459;background:#1b2434;border-radius:10px;padding:13px;min-width:0;overflow-wrap:anywhere}
+.proof-check-card strong{display:block;font-size:9px;letter-spacing:.06em;color:#c8b4ff}
+.proof-check-card small{display:block;margin:7px 0;color:#929db3;font-size:10px}
+.proof-check-card p{font-size:11px;line-height:1.6;color:#d8dceb}
+.proof-footnote{border-top:1px solid #373e51;padding-top:15px;margin-top:20px}
+@media(max-width:720px){.proof-panel{padding:23px 18px}.proof-comparison{grid-template-columns:1fr}}

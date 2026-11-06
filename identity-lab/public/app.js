@@ -196,6 +196,7 @@
   $("dialog-hint").textContent="Use an actual fact-based discrepancy. A suggested correction is not submitted automatically.";
   if(item.type==="site"){$("current-text").value=(item.description||"Missing or inaccurate public identity information").slice(0,1000);}
   else if(item.description)$("current-text").placeholder="Verify the current wording on "+(item.host||"the public record")+" before drafting.";
+  document.dispatchEvent(new CustomEvent("ulab:repair-open",{detail:{subject:report.subject.name,platform:item.platform,type:item.type,url:item.url||report.subject.link||"",anchor:report.subject.link||""}}));
   if(typeof dlg.showModal==="function")dlg.showModal();else dlg.setAttribute("open","");
  }
  $("close-dialog").addEventListener("click",()=>dlg.close());

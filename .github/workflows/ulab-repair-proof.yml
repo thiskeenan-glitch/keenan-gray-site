@@ -1,0 +1,30 @@
+name: Ulab repair proof checks
+on:
+  push:
+    branches:
+      - ulab-repair-proof-v1
+  pull_request:
+    paths:
+      - "identity-lab/**"
+      - ".github/workflows/ulab-repair-proof.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Check Node runtime
+        run: node --version
+      - name: Validate browser and server JavaScript syntax
+        run: |
+          node --check identity-lab/api/verify-repair.js
+          node --check identity-lab/lib/repair-proof.mjs
+          node --check identity-lab/public/proof-ui.js
+          node --check identity-lab/public/app.js
+      - name: Run public repair verification tests
+        run: node --test identity-lab/test-repair-proof.mjs
