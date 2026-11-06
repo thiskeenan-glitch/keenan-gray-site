@@ -2,6 +2,7 @@
 // The pilot fetches fixed-source Wikidata and (optionally) a licensed search API.
 // Arbitrary supplied websites are NOT fetched, to avoid server-side request forgery.
 import {parseIntake,cleanWikidataSearch,identifyWikidataAnchors,cleanSearchResults,reportFromSignals} from "../lib/identity-discovery.mjs";
+import {inspectPublicHomepage} from "../lib/safe-site-inspection.mjs";
 const limit=12000;
 async function fetchJson(url,{headers={},timeout=4500}={}){
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeout);
@@ -61,10 +62,11 @@ export default async function handler(req,res){
     if(JSON.stringify(body).length>2800)throw new Error("Request is too large.");
     input=parseIntake(body);
   }catch(e){return res.status(400).json({error:e.message||"Invalid audit request."});}
-  const [wikidata,web]=await Promise.allSettled([wikidataCandidates(input.name,input.anchor),searchCandidates(input.name,input.anchor)]);
+  const [wikidata,web,website]=await Promise.allSettled([wikidataCandidates(input.name,input.anchor),searchCandidates(input.name,input.anchor),input.anchor?.kind==="website"?inspectPublicHomepage(input.link):Promise.resolve(null)]);
   const records=wikidata.status==="fulfilled"?wikidata.value:[];
   const search=web.status==="fulfilled"?web.value:{results:[],status:"error"};
-  const report=reportFromSignals({input,wikidata:records,searchResults:search.results,searchStatus:search.status,wikidataStatus:wikidata.status==="fulfilled"?"ok":"error"});
+  const site=website.status==="fulfilled"?website.value:{ok:false,url:input.link||null,error:"Website inspection failed before completion."};
+  const report=reportFromSignals({input,site,wikidata:records,searchResults:search.results,searchStatus:search.status,wikidataStatus:wikidata.status==="fulfilled"?"ok":"error"});
   // Name-only matching and snippets cannot establish that a record belongs to the subject.
   return res.status(200).json(report);
 }
