@@ -27,7 +27,8 @@
   if(item.platform==="wikidata")return {label:"Sourced Wikidata review",description:"Review the exact Wikidata statement and cite appropriate published sources. Follow disclosure requirements for paid contributions."};
   if(item.platform==="wikipedia")return {label:"Neutral Wikipedia edit request",description:"Use an existing article talk page, an independent source, and a conflict-of-interest disclosure. Article creation is not included."};
   if(item.platform==="linkedin")return {label:"Owner-only LinkedIn update",description:"Prepare clear wording, then the profile owner must make the change through their account."};
-  return {label:"Profile or publisher request",description:"Prepare a factual correction with citations, then use the official publisher or account-owner correction route."};
+  if(item.platform==="website")return {label:"Owner-approved website correction",description:"Prepare a specific change and apply it only on a website you own or have explicit permission to manage."};
+  return {label:"Publisher or profile-owner request",description:"We can prepare a factual request, but this source has no authorized edit integration. Contact the publisher or account owner through its official process."};
  }
  function buildFixes(){
   const actions=(report.results||[]).filter(x=>x.status==="action"&&x.recommendation).map(x=>({
@@ -195,15 +196,15 @@
   const platform=recordPlatform(currentRepair),link=currentRepair.url||report.subject.link;
   let task=null,packetText="";
   try{
-   if(platform==="website"&&currentRepair.platform!=="website")throw Error("Unsupported platform.");
+   if(platform==="website"&&currentRepair.platform!=="website")throw Error("Use manual publisher correction route.");
    const engine=await import("/identity-engine.mjs");
    const data={subject:report.subject.name,platform,profileUrl:link,current,desired,evidence:evidence?[{url:evidence,kind:"unclassified",label:"Customer-supplied supporting source"}]:[]};
    task=engine.makeTask(data);
    packetText=engine.makePacket(task,{serviceName:"Ulab",clientName:report.subject.name});
   }catch(error){
    // For platforms not yet integrated with our correction engine, produce a manual evidence request only.
-   if(platform!=="website"&&platform!=="imdb"&&platform!=="tmdb"&&platform!=="wikipedia"&&platform!=="wikidata"&&platform!=="linkedin"){
-    packetText="REVIEW-ONLY CORRECTION REQUEST\n\nPERSON: "+report.subject.name+"\nSOURCE: "+link+"\nCURRENT: "+current+"\nPROPOSED: "+desired+"\nEVIDENCE: "+(evidence||"Not supplied")+"\n\nNOT SUBMITTED. Check publisher policies and submit through official channels.";
+   if(platform==="website"&&currentRepair.platform!=="website"){
+    packetText="PUBLISHER / PROFILE OWNER REQUEST — REVIEW ONLY\n\nPERSON: "+report.subject.name+"\nPUBLIC RECORD: "+link+"\nCURRENT STATEMENT: "+current+"\nREQUESTED FACTUAL CORRECTION: "+desired+"\nSUPPORTING SOURCE: "+(evidence||"Missing: add a reputable published source")+"\n\nPlease review the factual discrepancy and cited evidence and correct it under your platform policies.\n\nDRAFT ONLY. No account was accessed and no request submitted. Contact the publisher or profile owner through the official channel.";
    }else{$("dialog-hint").textContent=error.message||"Unable to prepare this packet.";return;}
   }
   packet={text:packetText,task};$("packet-text").textContent=packetText;$("packet-output").hidden=false;
