@@ -102,6 +102,7 @@
   for(const item of web)candidates.append(drawCandidate(item,"WEB SEARCH"));
   if(!wikidata.length&&!web.length)candidates.append(elt("p","candidate-intro","No public matches could be confidently proposed from the available sources. This is not evidence that none exist."));
   drawOpportunities();
+  $("fix-plan").hidden=true;
   const list=$("priority-list");list.replaceChildren();
   for(const item of report.priority||[]){
    const li=elt("li"),inner=elt("div");
@@ -128,21 +129,60 @@
    render(body);
    message.textContent="Preliminary audit complete. "+(body.candidates?.wikidata?.length||0)+" exact-name knowledge candidates and "+(body.candidates?.web?.length||0)+" web candidates. Review before claiming any match.";
   }catch(e){message.classList.add("error");message.textContent=e.name==="AbortError"?"Discovery timed out. Try again.":String(e.message||"Audit failed.");}
-  finally{clearTimeout(timer);submit.disabled=false;$("button-label").textContent="START AUDIT";}
+  finally{clearTimeout(timer);submit.disabled=false;$("button-label").textContent="Get my identity report";}
  });
  $("copy-report").addEventListener("click",async()=>{
   if(!current)return;
-  const lines=["IDENTITY LAB PRELIMINARY AUDIT",current.subject.name,"Starting link: "+(current.subject.link||"None"),"Generated: "+current.generatedAt,
+  const lines=["ULAB PRELIMINARY IDENTITY REPORT",current.subject.name,"Starting link: "+(current.subject.link||"None"),"Generated: "+current.generatedAt,
    "",...current.results.map(x=>x.title+": "+x.detail),"","NEXT STEPS",...current.priority.map(x=>x.title+" — "+x.description),"",current.disclaimer];
   try{await navigator.clipboard.writeText(lines.join("\n"));$("copy-report").textContent="COPIED ✓";}
   catch{$("copy-report").textContent="COPY UNAVAILABLE";}
-  setTimeout(()=>$("copy-report").textContent="COPY ACTIONS ↗",1800);
+  setTimeout(()=>$("copy-report").textContent="Copy findings ↗",1800);
  });
  $("download-report").addEventListener("click",()=>{
   if(!current)return;
   const blob=new Blob([JSON.stringify(current,null,2)],{type:"application/json"});
   const object=URL.createObjectURL(blob),a=elt("a");a.href=object;
-  a.download="identity-lab-"+current.subject.name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")+"-audit.json";
+  a.download="ulab-"+current.subject.name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")+"-audit.json";
   document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(object),1000);
+ });
+
+ function planCard(title,detail,url){
+  const card=elt("article","fix-action");
+  card.append(elt("h4","",title),elt("p","",detail));
+  const a=link(url,"VIEW SOURCE ↗");if(a)card.append(a);
+  return card;
+ }
+ function buildFixPlan(){
+  if(!current)return;
+  const prepared=$("fix-prepared"),manual=$("fix-manual");
+  prepared.replaceChildren();manual.replaceChildren();
+  const actions=(current.results||[]).filter(x=>x.status==="action"&&x.recommendation);
+  if($("repair-list")?.children.length){
+   prepared.append(planCard("Correction review drafts","Review the eligible, evidence-gated draft tasks shown below. These are NOT submissions."));
+  }
+  for(const item of actions.slice(0,5))prepared.append(planCard(item.title,item.recommendation,item.url));
+  if(!prepared.children.length)prepared.append(planCard("Further verification needed","This scan did not establish a correction Ulab can safely prepare. Verify your identity matches first; missing evidence isn't proof of an error."));
+  manual.append(planCard("Confirm your identity matches","Return to possible public profiles and identify which records are actually yours."));
+  const followups=(current.priority||[]).filter(x=>x.description);
+  for(const item of followups.slice(0,4))manual.append(planCard(item.title,item.description,item.source));
+  if(!followups.length)manual.append(planCard("Review your source records","Inspect the linked records, check your professional details, and gather independent evidence before requesting changes."));
+ }
+ $("fix-button").addEventListener("click",async()=>{
+  if(!current)return;
+  await drawOpportunities();
+  buildFixPlan();
+  $("fix-plan").hidden=false;
+  $("fix-plan").scrollIntoView({behavior:"smooth",block:"start"});
+ });
+ $("copy-fix-plan").addEventListener("click",async()=>{
+  if(!current)return;
+  const lines=["ULAB IDENTITY FIX PLAN",current.subject.name,"CORRECTIONS TO REVIEW",
+  ...(current.results||[]).filter(x=>x.status==="action").map(x=>x.title+": "+(x.recommendation||x.detail)),
+  "YOUR NEXT STEPS",...(current.priority||[]).map(x=>x.title+": "+x.description),
+  "No external correction has been performed."];
+  try{await navigator.clipboard.writeText(lines.join("\n"));$("copy-fix-plan").textContent="Copied ✓";}
+  catch{$("copy-fix-plan").textContent="Copy unavailable";}
+  setTimeout(()=>$("copy-fix-plan").textContent="Copy my action plan ↗",1900);
  });
 })();
