@@ -97,7 +97,7 @@ $("note-form").addEventListener("submit",async event=>{
  try{
   requireSession();if(!activeCaseId)throw new Error("Choose a case first.");
   const note=cleanNote($("note-body").value);
-  const {error}=await api.from("idlab_case_events").insert({case_id:activeCaseId,kind:"customer_note",note});
+  const {error}=await api.from("idlab_case_events").insert({case_id:activeCaseId,note});
   if(error)throw error;
   $("note-body").value="";
   const {data}=await api.from("idlab_cases").select("id,subject").eq("id",activeCaseId).single();
