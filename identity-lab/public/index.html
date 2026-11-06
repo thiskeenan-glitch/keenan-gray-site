@@ -3,81 +3,110 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f4f4f0">
-  <meta name="description" content="Identity Lab discovers public professional identity records by name and an optional website or profile link.">
-  <title>Identity Lab — See how your online identity connects</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23202525'/%3E%3Ccircle cx='32' cy='32' r='16' fill='%23bbef67'/%3E%3C/svg%3E">
+  <meta name="theme-color" content="#0B0F14">
+  <meta name="description" content="Ulab helps you discover inconsistencies in your public professional identity, review source-backed findings, and prepare accurate corrections.">
+  <title>Ulab — Find and fix mistakes in your online identity</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230B0F14'/%3E%3Ctext x='13' y='47' fill='%238F65FF' font-family='Arial,sans-serif' font-size='48' font-weight='800'%3Eu%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="/style.css">
   <script src="/app.js" defer></script>
 </head>
 <body>
   <header class="topbar">
     <div class="shell top-inner">
-      <a href="/" class="brand" aria-label="Identity Lab home"><span class="brand-icon" aria-hidden="true"><span></span><span></span><span></span></span><span>IDENTITY<span class="brand-light">LAB</span></span></a>
-      <div class="nav-right"><span class="nav-status"><span class="status-dot"></span>RESEARCH PILOT</span><a class="top-link" href="#how">HOW IT WORKS <span aria-hidden="true">↗</span></a></div>
+      <a href="/" class="brand" aria-label="Ulab home"><span class="brand-mark" aria-hidden="true">u</span><span>ulab<span class="accent-dot">.</span></span></a>
+      <nav class="nav-right" aria-label="Main navigation">
+        <a class="top-link" href="#how">How it works</a>
+        <a class="nav-cta" href="#run">Run an audit <span aria-hidden="true">↗</span></a>
+      </nav>
     </div>
   </header>
   <main>
-    <section class="hero shell">
+    <section class="hero shell" aria-labelledby="hero-heading">
       <div class="hero-copy">
-        <div class="eyebrow"><span class="eyebrow-rule"></span> YOUR ONLINE PRESENCE, DECODED</div>
-        <h1>Make your name<br><span class="hl">make sense.</span></h1>
-        <p class="hero-description">Your accomplishments should tell one consistent story online. Discover possible matches, identify missing connections, and find corrections backed by real evidence.</p>
-        <a class="hero-cta" href="#run">RUN YOUR AUDIT <span class="arrow-round" aria-hidden="true">↗</span></a>
-        <p class="hero-footnote"><span class="tiny-check">✓</span> Public pages only <span class="foot-sep">/</span> No passwords <span class="foot-sep">/</span> No edits</p>
-      </div>
-      <div class="diagram-card" aria-label="Illustrative identity connection diagram">
-        <div class="diagram-head"><span>FIG 01 — IDENTITY NETWORK</span><span>ILLUSTRATIVE</span></div>
-        <div class="diagram-stage">
-          <svg class="graph-lines" viewBox="0 0 530 360" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M262 173 L106 82 M262 173 L431 79 M262 173 L102 287 M262 173 L436 281 M106 82 L102 287 M431 79 L436 281" fill="none" stroke="#b7bdb8" stroke-width="1.2" stroke-dasharray="5 7"/><path d="M262 173 L431 79 M262 173 L102 287" fill="none" stroke="#6b815b" stroke-width="1.5"/></svg>
-          <div class="graph-node center-node"><span class="big-icon">K</span><strong>YOU</strong></div>
-          <div class="graph-node n-web"><span class="mini-icon">↗</span><strong>WEBSITE</strong><small>your home base</small></div>
-          <div class="graph-node n-imdb"><span class="mini-icon">▶</span><strong>PROFILES</strong><small>professional records</small></div>
-          <div class="graph-node n-media"><span class="mini-icon">◈</span><strong>SOURCES</strong><small>public records</small></div>
-          <div class="graph-node n-google"><span class="mini-icon">G</span><strong>GOOGLE</strong><small>independent systems</small></div>
-          <span class="graph-pip pip-a"></span><span class="graph-pip pip-b"></span><span class="graph-pip pip-c"></span>
+        <div class="eyebrow"><span class="eyebrow-rule"></span> YOUR PUBLIC IDENTITY, MADE CLEAR</div>
+        <h1 id="hero-heading">Find and fix <span class="hl">mistakes</span> in your online identity<span class="accent-dot">.</span></h1>
+        <p class="hero-description">Your name, work, and accomplishments are scattered across the web. Ulab checks supported public records for mismatched details and missing connections, then helps you prepare corrections.</p>
+        <div class="hero-actions">
+          <a class="hero-cta" href="#run">Run your free audit <span class="arrow-round" aria-hidden="true">↗</span></a>
+          <a class="hero-secondary" href="#how">See how it works <span aria-hidden="true">↘</span></a>
         </div>
-        <div class="diagram-bottom"><span>ONE PERSON. MANY SIGNALS.</span><span>↘</span></div>
+        <p class="hero-footnote"><span class="tiny-check">●</span> No account required <span class="foot-sep">·</span> Public information only <span class="foot-sep">·</span> No changes without your review</p>
+      </div>
+      <div class="diagram-card" aria-label="Illustration showing how Ulab connects public identity records">
+        <div class="diagram-head"><span class="visual-label"><span class="visual-dot"></span> IDENTITY OVERVIEW</span><span>ILLUSTRATIVE EXAMPLE</span></div>
+        <div class="diagram-stage">
+          <div class="visual-halo"></div>
+          <div class="visual-person"><span class="person-avatar">U</span><div><span>ONE PERSON</span><strong>Many public records</strong></div><span class="person-spark">✳</span></div>
+          <div class="visual-thread"><span></span><span></span><span></span></div>
+          <div class="visual-records">
+            <div class="visual-record"><span class="record-symbol">↗</span><div><strong>Personal website</strong><small>Starting identity link</small></div><span class="record-status">FOUND</span></div>
+            <div class="visual-record"><span class="record-symbol">◈</span><div><strong>Professional profiles</strong><small>Possible public matches</small></div><span class="record-status">REVIEW</span></div>
+            <div class="visual-record accent-record"><span class="record-symbol">!</span><div><strong>Conflicting details</strong><small>Corrections to investigate</small></div><span class="record-status">CHECK</span></div>
+          </div>
+          <div class="visual-outcome"><span class="visual-outcome-icon">✳</span><div><strong>Find the gaps. Know the next step.</strong><small>Evidence first, corrections with your approval.</small></div></div>
+        </div>
+        <div class="diagram-bottom"><span>FROM SCATTERED FACTS TO A CLEARER RECORD</span><span class="diagram-bottom-mark">↗</span></div>
       </div>
     </section>
-    <section class="audit-section" id="run">
+    <section class="audit-section" id="run" aria-labelledby="audit-title">
       <div class="shell">
-        <div class="section-intro"><span class="section-kicker">01 / THE AUDIT</span><h2>Find the gaps.<br><span>Keep the facts.</span></h2><p>Start with your name. Add one link if you have it. We search supported public sources and clearly separate possible matches from verified facts.</p></div>
+        <div class="section-intro"><div><span class="section-kicker">01 / START HERE</span><h2 id="audit-title">See what the internet <span>gets right. And wrong.</span></h2></div><p>Begin with your professional name. Add a public link to help us distinguish you from other people with the same name. Your first report is free.</p></div>
         <div class="audit-workspace">
           <form id="audit-form" class="form-box" novalidate>
-            <div class="form-top"><span class="form-label-heading"><span class="form-index">01</span> ENTER YOUR DETAILS</span><span class="form-beta">DISCOVERY PILOT</span></div>
+            <div class="form-top"><span class="form-label-heading">YOUR IDENTITY AUDIT</span><span class="form-beta"><span class="form-beta-dot"></span> PRIVATE PILOT</span></div>
             <div class="form-fields">
-              <label for="person-name">PROFESSIONAL NAME <input id="person-name" name="name" autocomplete="name" placeholder="Your full professional name" maxlength="100" required></label>
-              <label for="site-url">ONE LINK THAT IDENTIFIES YOU <span class="optional">OPTIONAL</span><input id="site-url" name="link" type="url" inputmode="url" placeholder="Website, LinkedIn, IMDb, portfolio or another profile"></label>
-              <p class="universal-helper">Name alone works. An optional link helps distinguish you from others with the same name.</p>
+              <label for="person-name">Your professional name <input id="person-name" name="name" autocomplete="name" placeholder="e.g. Alex Morgan" maxlength="100" required></label>
+              <label for="site-url">One public link <span class="optional">OPTIONAL</span><input id="site-url" name="link" type="url" inputmode="url" placeholder="https://yourwebsite.com or a professional profile"></label>
+              <p class="universal-helper">A website, LinkedIn, IMDb, or other HTTPS profile works. You can also search by name alone.</p>
             </div>
-            
-            <button class="run-button" id="run-button" type="submit"><span id="button-label">START AUDIT</span><span class="run-arrow">↗</span></button>
-            <div class="form-bottom"><span><span class="safe-dot"></span> READ-ONLY PUBLIC SOURCE DISCOVERY</span><span>NO ACCOUNT ACCESS REQUIRED</span></div>
+            <button class="run-button" id="run-button" type="submit"><span id="button-label">Get my identity report</span><span class="run-arrow" aria-hidden="true">↗</span></button>
+            <div class="form-bottom"><span>NO PASSWORD OR PAYMENT NEEDED</span><span>READ-ONLY DISCOVERY</span></div>
             <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
           </form>
           <div class="expect-box">
-            <div class="expect-heading"><span class="expect-kicker">WHAT YOU GET</span><span class="expect-mark">✳</span></div>
-            <div class="expect-item"><span>01</span><div><strong>Identity evidence</strong><p>Potential public records, clearly labeled as candidates.</p></div></div>
-            <div class="expect-item"><span>02</span><div><strong>Connection check</strong><p>Connections between the link you provided and supported public records.</p></div></div>
-            <div class="expect-item"><span>03</span><div><strong>Action list</strong><p>Corrections to consider after source verification.</p></div></div>
-            <div class="expect-item"><span>04</span><div><strong>Honest blind spots</strong><p>Namesake ambiguity, missing sources and independent search decisions.</p></div></div>
-            <div class="expect-note"><span>↗</span> POSSIBLE MATCHES ARE NOT VERIFIED FACTS OR A PANEL SCORE.</div>
+            <div class="expect-heading"><span class="expect-kicker">INSIDE YOUR REPORT</span><span class="expect-mark">✳</span></div>
+            <div class="expect-item"><span>01</span><div><strong>What we found</strong><p>Potential public records and identity links, with sources you can open.</p></div></div>
+            <div class="expect-item"><span>02</span><div><strong>What needs attention</strong><p>Missing details, conflicting claims, and uncertain connections.</p></div></div>
+            <div class="expect-item"><span>03</span><div><strong>How to fix it</strong><p>A concrete action plan, with drafts where the evidence allows.</p></div></div>
+            <p class="expect-note">Early pilot: coverage is limited to connected public sources. A missing result is not proof a record does not exist.</p>
           </div>
         </div>
         <section id="results" class="results" aria-labelledby="results-heading" hidden>
-          <div class="results-heading"><div><span class="section-kicker">02 / YOUR REPORT</span><h2 id="results-heading">Your identity,<br><span>under the lens.</span></h2><p id="report-subtitle"></p></div><div class="report-actions"><button id="copy-report" class="outline-btn" type="button">COPY ACTIONS ↗</button><button id="download-report" class="outline-btn dark-btn" type="button">DOWNLOAD JSON ↓</button></div></div>
-          <div class="report-overview"><div class="overview-lead"><span>PUBLIC EVIDENCE CHECK</span><strong id="check-count">—</strong><small>TECHNICAL CHECKS</small></div><div class="overview-stat"><strong id="pass-count">—</strong><span>CONFIRMED</span></div><div class="overview-stat"><strong id="action-count">—</strong><span>NEEDS ATTENTION</span></div><div class="overview-stat"><strong id="manual-count">—</strong><span>MANUAL / UNKNOWN</span></div></div>
-          <div class="findings-layout">
-            <div class="findings-main"><div class="findings-top"><h3>Evidence findings</h3><span id="findings-total">— CHECKS</span></div><div id="findings-list" class="findings-list"></div><div class="discovery-panel"><h3>Possible public matches <span class="candidate-pill">NOT CONFIRMED</span></h3><p class="candidate-intro">Similar names can belong to unrelated people. Review these sources before requesting corrections.</p><div id="candidate-list" class="candidate-list"></div><section id="repair-review" class="repair-review" hidden><h3>Possible correction reviews</h3><p>These are not confirmed errors. A reviewed identity match and independent supporting evidence are required before any platform request.</p><div id="repair-list"></div><a class="repair-center-link" href="/workspace/operations">OPEN CORRECTION CENTER ↗</a></section></div></div>
-            <aside class="priority-panel"><span class="aside-eyebrow">YOUR NEXT STEPS</span><h3>Next moves<span class="green-point">.</span></h3><ol id="priority-list"></ol><div class="ai-note" id="ai-note" hidden><strong>AI NOTES</strong><p id="ai-text"></p></div><div class="honesty-note"><strong>What this isn't.</strong><p>Google decides whether a Knowledge Panel appears. This report does not confirm indexing, notability, independent coverage, or an existing panel.</p></div></aside>
+          <div class="results-heading">
+            <div><span class="section-kicker">02 / YOUR IDENTITY REPORT</span><h2 id="results-heading">Here's what <span>we found.</span></h2><p id="report-subtitle"></p></div>
+            <div class="report-actions"><button id="copy-report" class="outline-btn" type="button">Copy findings ↗</button><button id="download-report" class="outline-btn dark-btn" type="button">Download report ↓</button></div>
           </div>
-          <div class="report-footer"><span id="report-date"></span><span>NO CHANGES WERE MADE TO ANY ACCOUNT.</span></div>
+          <div class="report-overview" aria-label="Report summary"><div class="overview-lead"><span>PUBLIC SOURCE REVIEW</span><strong id="check-count">—</strong><small>CHECKS IN THIS REPORT</small></div><div class="overview-stat"><strong id="pass-count">—</strong><span>OBSERVED</span></div><div class="overview-stat"><strong id="action-count">—</strong><span>NEEDS ATTENTION</span></div><div class="overview-stat"><strong id="manual-count">—</strong><span>REVIEW / UNKNOWN</span></div></div>
+          <div class="report-callout"><div><span class="report-callout-mark">✳</span><div><strong>Ready to make your public record clearer?</strong><p>We'll organize possible corrections and show which steps require you.</p></div></div><button type="button" id="fix-button" class="fix-button">Fix it <span aria-hidden="true">↗</span></button></div>
+          <div class="findings-layout">
+            <div class="findings-main">
+              <div class="findings-top"><h3>Evidence findings</h3><span id="findings-total">— CHECKS</span></div>
+              <div id="findings-list" class="findings-list"></div>
+              <div class="discovery-panel"><h3>Possible public profiles <span class="candidate-pill">NOT CONFIRMED</span></h3><p class="candidate-intro">Same-name records can belong to different people. Mark a record as yours or not yours before preparing a correction.</p><div id="candidate-list" class="candidate-list"></div>
+                <section id="identity-graph-view" class="identity-graph-view" hidden><h3>Linked professional records <span class="candidate-pill">SOURCE CLAIMS</span></h3><p>Published identifiers connect these records. The linked external profiles have not necessarily been inspected; matching names alone do not verify identity.</p><div id="linked-records-list"></div><div id="cross-source-comparisons"></div></section>
+              </div>
+            </div>
+            <aside class="priority-panel"><span class="aside-eyebrow">WHAT MATTERS FIRST</span><h3>Next steps<span class="green-point">.</span></h3><ol id="priority-list"></ol><div class="ai-note" id="ai-note" hidden><strong>ADDITIONAL NOTES</strong><p id="ai-text"></p></div><div class="honesty-note"><strong>What we can't promise</strong><p>Google decides whether a Knowledge Panel appears. This report cannot prove indexing, eligibility, or an existing panel.</p></div></aside>
+          </div>
+          <section id="fix-plan" class="fix-plan" hidden aria-labelledby="fix-plan-heading">
+            <div class="fix-plan-heading"><div><span class="section-kicker">03 / YOUR FIX PLAN</span><h2 id="fix-plan-heading">Let's get this <span>sorted.</span></h2><p>These are suggested next steps, not completed changes. Ulab won't change a third-party record without the required evidence and authorization.</p></div><span class="fix-status">FREE PILOT · NO PAYMENT</span></div>
+            <div class="fix-plan-grid">
+              <div class="fix-plan-card"><span class="fix-column-label">ULAB PREPARES</span><h3>Suggested corrections</h3><div id="fix-prepared" class="fix-prepared" aria-live="polite"></div></div>
+              <div class="fix-plan-card fix-plan-manual"><span class="fix-column-label">YOUR PART</span><h3>What needs you</h3><div id="fix-manual" class="fix-manual"></div></div>
+            </div>
+            <section id="repair-review" class="repair-review" hidden><div class="fix-column-label">EVIDENCE-GATED DRAFTS</div><h3>Platform correction reviews</h3><p>These suggestions need independent supporting evidence and your approval. Adding a draft does not submit an edit.</p><div id="repair-list"></div><a class="repair-center-link" href="/workspace/operations">Open correction center ↗</a></section>
+            <div class="fix-plan-foot"><p id="fix-note">Nothing has been submitted or changed on any third-party site.</p><button id="copy-fix-plan" class="outline-btn" type="button">Copy my action plan ↗</button></div>
+          </section>
+          <div class="report-footer"><span id="report-date"></span><span>PRELIMINARY REPORT · NOT AN IDENTITY VERIFICATION</span></div>
         </section>
       </div>
     </section>
-    <section id="how" class="how shell"><div class="how-title"><span class="section-kicker">03 / HOW IT WORKS</span><h2>An auditor first.<br><span>An agent later.</span></h2></div><div class="how-grid"><div class="how-item"><span>01 / OBSERVE</span><h3>Public signals</h3><p>Discover possible identity records from public knowledge sources without requesting passwords.</p></div><div class="how-item"><span>02 / EXPLAIN</span><h3>Source-backed gaps</h3><p>Clearly label uncertain matches, missing evidence and sources needing a human check.</p></div><div class="how-item"><span>03 / FIX (LATER)</span><h3>Permissioned repairs</h3><p>Prepare supported corrections and submit through authorized pathways, then monitor real outcomes.</p></div></div></section>
+    <section id="how" class="how shell" aria-labelledby="how-heading">
+      <div class="how-title"><span class="section-kicker">HOW ULAB WORKS</span><h2 id="how-heading">From confusion <span>to clarity.</span></h2><p>One simple starting point for understanding and improving your public professional identity.</p></div>
+      <div class="how-grid"><article class="how-item"><span>01 / DISCOVER</span><div class="how-glyph">⌕</div><h3>Enter your name</h3><p>Give us your professional name and one optional link. Ulab checks the public sources currently supported by the pilot.</p></article><article class="how-item"><span>02 / UNDERSTAND</span><div class="how-glyph">◈</div><h3>See your report</h3><p>Review possible identity matches, missing connections and issues, all labeled with the available evidence.</p></article><article class="how-item"><span>03 / TAKE ACTION</span><div class="how-glyph">↗</div><h3>Prepare your fixes</h3><p>Get a clear action plan and eligible correction drafts. Finish any steps that require your account or approval.</p></article></div>
+    </section>
+    <section class="closing shell"><div><span class="section-kicker">MAKE YOUR NAME ADD UP</span><h2>Your work deserves <span>an accurate record.</span></h2></div><a href="#run" class="hero-cta">Check my identity <span class="arrow-round" aria-hidden="true">↗</span></a></section>
   </main>
-  <footer class="footer"><div class="shell footer-inner"><span>IDENTITY<span class="brand-light">LAB</span> <span class="footer-small">/ EXPERIMENT 001</span></span><span>AUDIT · REPAIR · MONITOR. NO GUARANTEED PANEL.</span></div></footer>
+  <footer class="footer"><div class="shell footer-inner"><a href="/" class="footer-brand">ulab<span>.</span></a><p>Public identity, reviewed with evidence. No guaranteed Google Knowledge Panel, automatic edits, or third-party account access.</p><span class="footer-small">PRIVATE PILOT / 2026</span></div></footer>
 </body>
 </html>
