@@ -7,7 +7,8 @@ This is a **disabled-by-default** account foundation. It does not use the existi
 - Supabase email magic-link authentication is invite-only: `shouldCreateUser: false`. A project owner must first invite/test an authenticated email in the Identity Lab Supabase Auth console.
 - Signed-in customers can create cases, list **their own** cases, and add immutable `customer_note` events.
 - A private operator membership table controls operator-level read/status permissions; membership **must** be assigned explicitly by the database administrator.
-- Customers cannot claim submitted receipts, edit platform outcomes, update a status, access someone else's case, or delete history.
+- Customers cannot claim submitted receipts, edit platform outcomes, update a status, access someone else's case, change timestamps, or delete history. Database column privileges allow only intake fields and case notes.
+- Operator case status updates are permitted for database-approved operators, but operator event logging still needs a secure interface and is not connected to this page.
 - No AI, crawler, profile submission, or payment flow is wired into accounts. The old /workspace/operations browser-local prototype is unchanged and does not synchronize with this system.
 
 ## Activate only after separate project creation
