@@ -20,6 +20,7 @@ This is a **disabled-by-default** account foundation. It does not use the existi
 6. Set on **Identity Lab Vercel project only**:
    - `IDLAB_SUPABASE_URL=https://<dedicated-project-ref>.supabase.co`
    - `IDLAB_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...`
+   - **After testing the schema and Auth redirect settings**, `IDLAB_ACCOUNTS_ENABLED=true`. Without this explicit flag, customer sign-in remains disabled.
    These two values are **public browser config**, not privileged secrets. Never set service-role or secret API keys in public JS or this endpoint.
 7. Redeploy and test magic-link login, creating two separate accounts, row isolation, note persistence and sign-out across browsers. Monitor Vercel and Supabase logs.
 8. Do not import old browser-local records automatically: customer identity mapping and consent must be verified before any migration.
