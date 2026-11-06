@@ -134,7 +134,7 @@ export function reportFromSignals({input,site=null,wikidata=[],searchResults=[],
     const siteSource=site?.url||link;
     if(site?.ok&&site.parsed){
       const page=site.parsed,matching=page.people.filter(x=>normalizeName(x.name)===normalizeName(name));
-      const cleanHost=url=>{try{return new URL(url).hostname.toLowerCase().replace(/^www\\./,"");}catch{return "";}};
+      const cleanHost=url=>{try{return new URL(url).hostname.toLowerCase().replace(/^www[.]/,"");}catch{return "";}};
       if(page.title)results.push(finding("site_title","Website title: "+page.title.slice(0,80),"pass",
         "Read directly from the supplied homepage's HTML title. Check whether this title communicates your name and profession clearly.",siteSource,
         !normalizeName(page.title).includes(normalizeName(name))?"Consider including your professional name in the homepage title.":null));
