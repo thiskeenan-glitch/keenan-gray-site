@@ -118,3 +118,25 @@
 .proof-check-card p{font-size:11px;line-height:1.6;color:#d8dceb}
 .proof-footnote{border-top:1px solid #373e51;padding-top:15px;margin-top:20px}
 @media(max-width:720px){.proof-panel{padding:23px 18px}.proof-comparison{grid-template-columns:1fr}}
+
+/* Reviewed first-party correction, distinct from speculative external fixes. */
+.execution-pilot{padding:23px 21px 14px;margin:0 0 28px;background:linear-gradient(135deg,#221c37,#141c2c);border:1px solid #6c5b9b;border-radius:13px}
+.execution-top{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.execution-kicker,.execution-state{font-size:9px;letter-spacing:.09em;font-weight:800;color:#c3aaff}
+.execution-state{color:#d4c29b;border:1px solid #756747;border-radius:30px;padding:6px 9px}
+.execution-title{font:600 26px "Space Grotesk",sans-serif;letter-spacing:-.05em;margin:18px 0 8px}
+.execution-description{color:#b6b5c8;font-size:12px;line-height:1.65}
+.execution-card{border-top:1px solid #51496a;margin-top:20px;padding:17px 0 0}
+.execution-card>strong{font-size:15px}
+.execution-progress{display:flex;flex-wrap:wrap;gap:7px;margin:18px 0}
+.execution-progress span{font-size:9px;letter-spacing:.05em;border:1px solid #46445c;padding:8px 10px;border-radius:5px;font-weight:760}
+.execution-done{background:#302e43;color:#d3c7f0}
+.execution-pending{background:#1a2230;color:#9aa6b9}
+.execution-patch{border:1px solid #464456;border-radius:8px;background:#101521;padding:12px}
+.execution-patch-row{display:grid;grid-template-columns:minmax(0,1fr) 20px minmax(0,1fr);gap:8px;padding:6px 0;font-size:10px;line-height:1.5}
+.execution-patch-row span{overflow-wrap:anywhere}
+.execution-before{color:#eaa9b3}.execution-arrow{text-align:center;color:#a98fce}.execution-after{color:#bce4cc}
+.execution-buttons{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:18px 0 11px}
+.execution-buttons .small-button{text-decoration:none;display:inline-flex;align-items:center;justify-content:center;white-space:normal;text-align:center;cursor:pointer}
+.execution-note{color:#9f9db3;font-size:10px;line-height:1.7;margin:10px 0 0}
+@media(max-width:720px){.execution-pilot{padding:17px 14px 10px}.execution-patch-row{grid-template-columns:minmax(0,1fr);gap:3px}.execution-arrow{text-align:left}.execution-top{align-items:start}.execution-title{font-size:23px}}
