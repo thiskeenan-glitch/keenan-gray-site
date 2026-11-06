@@ -89,6 +89,18 @@
   current=report;
   results.hidden=false;
   $("report-subtitle").textContent=report.subject.name+" · "+(report.subject.link||"Name-only scan")+" · Preliminary public-source audit";
+  const snapshot=$("evidence-overview");snapshot.replaceChildren();
+  if(report.site?.parsed){
+   const page=report.site.parsed;
+   snapshot.append(elt("strong","","YOUR WEBSITE WAS INSPECTED"));
+   snapshot.append(elt("p","","Homepage title: "+(page.title||"Not detected")));
+   if(page.heading)snapshot.append(elt("p","","Visible heading: "+page.heading));
+   snapshot.append(elt("p","","Published identity-profile links: "+(page.sameAs?.length||0)+" · Other external links: "+(page.outlinks?.length||0)));
+   const a=link(report.site.url,"OPEN INSPECTED HOMEPAGE ↗");if(a)snapshot.append(a);
+  }else{
+   snapshot.append(elt("strong","","PUBLIC IDENTITY DISCOVERY · LIMITED COVERAGE"));
+   snapshot.append(elt("p","",report.subject.linkType==="website"?"We could not complete a safe inspection of your homepage. The findings below do not describe its contents.":"The scan checks supported public records but cannot yet search every professional website."));
+  }
   $("check-count").textContent=String(report.results.length);
   $("pass-count").textContent=String(report.summary.pass);
   $("action-count").textContent=String(report.summary.action);
@@ -158,22 +170,42 @@
   const prepared=$("fix-prepared"),manual=$("fix-manual");
   prepared.replaceChildren();manual.replaceChildren();
   const actions=(current.results||[]).filter(x=>x.status==="action"&&x.recommendation);
-  if($("repair-list")?.children.length){
-   prepared.append(planCard("Correction review drafts","Review the eligible, evidence-gated draft tasks shown below. These are NOT submissions."));
+  const site=current.site?.parsed;
+  const hasPersonMarkup=!!site?.people?.length;
+  if(site&&!hasPersonMarkup&&current.subject.linkType==="website"){
+   const subject=current.subject;
+   const schema={"@context":"https://schema.org","@type":"Person",name:subject.name,url:current.site.url};
+   const schemaText='<script type="application/ld+json">\\n'+JSON.stringify(schema,null,2)+'\\n<'+"/script>";
+   const card=planCard("Prepared: Person structured data","Your homepage did not contain detectable Person structured data. If you control the site, review this snippet, confirm the name and website, and add it to the homepage HTML. This does not guarantee a Google Knowledge Panel.",current.site.url);
+   const btn=elt("button","copy-snippet","COPY HTML SNIPPET");btn.type="button";
+   btn.addEventListener("click",async()=>{
+    try{await navigator.clipboard.writeText(schemaText);btn.textContent="COPIED ✓";}
+    catch{btn.textContent="COPY UNAVAILABLE";}
+   });
+   const pre=elt("pre","snippet-preview",schemaText);
+   card.append(pre,btn);prepared.append(card);
   }
-  for(const item of actions.slice(0,5))prepared.append(planCard(item.title,item.recommendation,item.url));
-  if(!prepared.children.length)prepared.append(planCard("Further verification needed","This scan did not establish a correction Ulab can safely prepare. Verify your identity matches first; missing evidence isn't proof of an error."));
-  manual.append(planCard("Confirm your identity matches","Return to possible public profiles and identify which records are actually yours."));
+  if($("repair-list")?.children.length){
+   prepared.append(planCard("Evidence-gated correction drafts","Possible Wikidata correction reviews are below. Confirm source records and obtain independent evidence before adding a draft. No edits have been submitted."));
+  }
+  for(const item of actions.slice(0,5)){
+   if(item.id==="site_name"&&site&&!hasPersonMarkup)continue;
+   prepared.append(planCard(item.title,item.recommendation,item.url));
+  }
+  if(!prepared.children.length)prepared.append(planCard("No verified automatic correction yet","This scan did not establish a discrepancy that Ulab can safely correct. Review possible matches and check the sources before requesting edits."));
+  manual.append(planCard("Confirm which profiles are yours","Find possible public profiles below, then mark each candidate as THIS IS ME or NOT ME."));
   const followups=(current.priority||[]).filter(x=>x.description);
   for(const item of followups.slice(0,4))manual.append(planCard(item.title,item.description,item.source));
-  if(!followups.length)manual.append(planCard("Review your source records","Inspect the linked records, check your professional details, and gather independent evidence before requesting changes."));
+  if(!followups.length)manual.append(planCard("Verify your public identity links","Open the available sources, check your professional name and credits, and collect independent supporting evidence for incorrect statements."));
  }
- $("fix-button").addEventListener("click",async()=>{
+ $("fix-button").addEventListener("click",()=>{
   if(!current)return;
-  await drawOpportunities();
+  const plan=$("fix-plan");
+  plan.hidden=false;
+  $("fix-button").textContent="YOUR FIX PLAN IS READY ✓";
   buildFixPlan();
-  $("fix-plan").hidden=false;
-  $("fix-plan").scrollIntoView({behavior:"smooth",block:"start"});
+  plan.scrollIntoView({behavior:"smooth",block:"start"});
+  drawOpportunities().then(()=>buildFixPlan()).catch(()=>{});
  });
  $("copy-fix-plan").addEventListener("click",async()=>{
   if(!current)return;
