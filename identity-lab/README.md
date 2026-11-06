@@ -69,7 +69,7 @@ A private client workspace is implemented at `/account`. It stays disabled unles
 
 ## Linked identity graph (v0.4)
 - Wikidata exact-name candidates can expose **published source claims** for official website (P856), IMDb person (P345), TMDb person (P4985), ORCID (P496) and OpenAlex (P10283). These linked URLs are not automatically fetched and **must not** be misrepresented as verified external profiles.
-- Optional OpenAlex **direct author lookups** are supported only for IDs that Wikidata explicitly lists, and only when `IDLAB_OPENALEX_API_KEY` is configured server-side (not currently configured). OpenAlex free-key usage is budgeted; see https://help.openalex.org/api/authentication/.
+- Optional OpenAlex **direct author lookups** are supported only for IDs that Wikidata explicitly lists, using at most one direct fixed-ID lookup per pilot audit without a key. For higher scale, configure `IDLAB_OPENALEX_API_KEY` server-side and durable rate limits. OpenAlex usage is budgeted; see https://help.openalex.org/api/authentication/.
 - ORCID checksum validation and exact OpenAlex author-name matching reduce false matches. Shared identifiers still require human verification because scholarly records can be misassigned/merged.
 - The cross-source comparison engine flags potential missing/different ORCID claims and missing OpenAlex IDs for **review only**. The customer must identify the candidate as theirs; any correction draft still starts in `needs_evidence` and requires independent sources and approval. No external edits.
 - The pilot's broad web search, general website crawler and customer-account sync are still unconfigured. The product is not yet suitable for unattended, paid large-scale corrections.
