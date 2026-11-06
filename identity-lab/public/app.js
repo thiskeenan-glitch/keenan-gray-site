@@ -24,6 +24,22 @@
   card.append(meta,title);
   if(item.description)card.append(elt("p","",item.description));
   const a=link(item.url,"REVIEW PUBLIC SOURCE ↗");if(a)card.append(a);
+  const choices=elt("div","candidate-choices");
+  const decision=elt("span","candidate-decision","");
+  for(const [value,label] of [["self_reported_match","THIS IS ME"],["self_reported_not_match","NOT ME"]]){
+   const button=elt("button","candidate-choice",label);button.type="button";
+   button.addEventListener("click",()=>{
+    if(!current)return;
+    current.review=current.review||{};
+    current.review[item.url]={decision:value,reviewedAt:new Date().toISOString(),basis:"customer_self_report_only"};
+    decision.textContent=value==="self_reported_match"?"Customer identified this as their record. Independent verification still required.":"Customer marked as a different person.";
+   });
+   choices.append(button);
+  }
+  card.append(choices,decision);
+  if(current?.review?.[item.url]){
+   decision.textContent=current.review[item.url].decision==="self_reported_match"?"Customer identified this as their record. Independent verification still required.":"Customer marked as a different person.";
+  }
   return card;
  }
  function render(report){
