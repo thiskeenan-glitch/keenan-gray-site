@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - ulab-repair-proof-v1
+      - ulab-execution-engine-v1
   pull_request:
     paths:
       - "identity-lab/**"
@@ -26,5 +27,9 @@ jobs:
           node --check identity-lab/lib/repair-proof.mjs
           node --check identity-lab/public/proof-ui.js
           node --check identity-lab/public/app.js
+          node --check identity-lab/public/repair-ui.js
+          node --check identity-lab/api/execute-repair.js
+          node --check identity-lab/api/repair-plans.js
+          node --check identity-lab/lib/github-repair-executor.mjs
       - name: Run public repair verification tests
-        run: node --test identity-lab/test-repair-proof.mjs
+        run: node --test identity-lab/test-repair-proof.mjs identity-lab/test-repair-execution.mjs

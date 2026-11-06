@@ -134,6 +134,7 @@
    filtered.forEach(x=>holder.append(card(x)));
   }
   if(category==="overview"||category==="fixes")$("tab-counter").textContent=category==="fixes"?fixes.length+" WEBSITE OPPORTUNITIES":items.length+" SOURCE LEADS";
+  if(category==="fixes")document.dispatchEvent(new CustomEvent("ulab:fix-tab"));
  }
  function renderReport(data){
   report=data;report.review=report.review||{};items=buildItems(data);fixes=buildFixes();const score=evidenceScore(data,items);
@@ -154,6 +155,7 @@
   $("coverage-status").textContent=research.status==="ok"?"WEB SEARCH ACTIVE":research.status==="partial"?"PARTIAL COVERAGE":research.status==="not_configured"?"WEB SEARCH DISCONNECTED":"SEARCH LIMITED";
   $("coverage-note").textContent=(research.queryCount||0)+" queries · "+items.length+" public leads";
   screen("report-screen");activateTab("overview");
+  document.dispatchEvent(new CustomEvent("ulab:report-ready",{detail:{name:data.subject.name,link:data.subject.link||""}}));
  }
  function stageAnimation(){
   const elapsed=Date.now()-scanStart,stage=elapsed<1250?0:elapsed<2600?1:2;

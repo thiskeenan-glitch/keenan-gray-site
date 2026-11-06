@@ -97,3 +97,27 @@ The homepage uses name plus an optional identity link, attempts a bounded read-o
 **Suggested first case:** The current personal About page uses the visible H1 `Me` rather than the filmmaker's name (see `FIRST_AUDIT.md`). Capture a new field-specific baseline at `https://www.thiskeenan.com/about` and request an authorized website edit; recheck the public About URL after deployment. One change is not three independent repair successes.
 
 **Pilot success criterion:** Three distinct evidence-backed corrections, each with permission/legitimate submission, baseline public observation, independently observed later value, and time spent recorded. If an external editorial request is rejected or never appears publicly, record that outcome rather than calling it a fix.
+
+
+## Owner-approved website execution pilot (November 6, 2026)
+
+This branch adds a narrow **real execution adapter**, not an open-ended AI editor. It supports one specific, previously reviewed change to the owner's website: updating the Keenan Gray About-page H1 and matching metadata. A draft pull request already exists for this case at https://github.com/thiskeenan-glitch/keenan-gray-site/pull/11.
+
+**Product flow in preview**
+
+1. Run a public Ulab audit with \`Keenan Gray\` and \`https://www.thiskeenan.com\`, then open Fix center.
+2. The client calls read-only \`GET /api/repair-plans?name=...&link=...\` and shows the one narrowly matched real correction and its existing GitHub draft PR.
+3. The user can copy the full PR URL, review the exact proposed code edit, and run the before/after verifier. The website is **not** automatically published.
+4. Operator-side code \`lib/github-repair-executor.mjs\` implements idempotent creation/reuse of a draft GitHub PR for an allowlisted exact-source patch. It rejects changed/mismatched source, existing foreign branches, unknown plans, and non-GitHub targets. It cannot merge or deploy.
+5. A human with site ownership must review and merge the patch. Verify the live published result against a saved baseline through \`POST /api/verify-repair\`. A PR or successful test is **not** a verified live repair.
+
+**Security and activation**
+
+- \`POST /api/execute-repair\` is **off by default** and never invoked by the public front end. It requires all of \`IDLAB_REPAIR_EXECUTION_ENABLED=true\`, a private \`IDLAB_REPAIR_OPERATOR_KEY\` of at least 32 characters, and a dedicated server-only \`IDLAB_GITHUB_REPAIR_TOKEN\` with **repository-scoped** read/write contents and pull-request permissions. Configure these only in the dedicated Ulab deployment, never in browser JavaScript or Git history. Prefer a narrowly scoped GitHub App installation token over a broad personal access token. A secure operator-to-server channel, durable authorization ledger, abuse quotas, and rotating credentials are required before enabling for actual customers.
+- Even when configured, accepted requests must provide the allowlisted plan ID, an authenticated operator bearer credential, the exact approval marker \`OWNER_APPROVED_DRAFT_PR\`, and same-origin browser origin where applicable. The operator must independently confirm actual owner consent. A self-reported name or website link in the free audit is **not proof of authorization**.
+- Public account visitors cannot execute a repair via an unauthenticated browser request. Third-party IMDb, Wikipedia, Wikidata, and LinkedIn writes remain out of scope. Only their permitted/manual contributor or owner workflows are described. Do not pretend this pilot has third-party write access.
+- Existing \`/api/verify-repair\` is now explicitly included in \`vercel.json\` builds and routes, and \`proof-ui.js\` has a public route. These previously missing mappings would otherwise prevent the proof feature from working in Vercel.
+- The execution process creates **draft pull requests only**. A successful draft PR is a proposed repair, not a successful public identity correction.
+- Unit tests: \`node --test identity-lab/test-repair-proof.mjs identity-lab/test-repair-execution.mjs\`. The CI workflow validates JavaScript and both test suites.
+
+**Launch gate:** Exercise baseline -> explicit authorized edit -> draft PR -> owner approval -> production merge -> verified public change for one case, then repeat across different approved sites/identities. Add provider-specific OAuth, customer authentication, persistent consent/activity records, durable rate limiting, and receipt tracking before accepting payments or enabling unattended execution.
