@@ -134,6 +134,7 @@
    filtered.forEach(x=>holder.append(card(x)));
   }
   if(category==="overview"||category==="fixes")$("tab-counter").textContent=category==="fixes"?fixes.length+" WEBSITE OPPORTUNITIES":items.length+" SOURCE LEADS";
+  if(category==="fixes")document.dispatchEvent(new CustomEvent("ulab:fix-tab"));
  }
  function renderReport(data){
   report=data;report.review=report.review||{};items=buildItems(data);fixes=buildFixes();const score=evidenceScore(data,items);
