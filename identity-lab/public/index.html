@@ -92,6 +92,23 @@
    <button class="primary-button" id="prepare-correction" type="submit">Prepare correction packet <span aria-hidden="true">↗</span></button>
   </form>
   <div id="packet-output" class="packet-output" hidden><p class="tab-kicker">READY TO REVIEW · NOT SUBMITTED</p><pre id="packet-text"></pre><div class="packet-actions"><button id="copy-packet" type="button" class="primary-button">Copy packet <span aria-hidden="true">↗</span></button><button id="save-packet" type="button" class="small-button">Save to correction center</button></div><p id="packet-status" role="status" aria-live="polite"></p></div>
+  <section id="proof-panel" class="proof-panel" hidden aria-labelledby="proof-heading">
+   <div class="proof-head"><div><p class="tab-kicker">THE PUBLIC RECORD · READ ONLY</p><h3 id="proof-heading">Verify an actual change.</h3></div><span class="proof-beta">REPAIR PILOT</span></div>
+   <p class="proof-description">Check a specific fact on the live public record before and after a correction. A draft or submitted request is not proof of a change.</p>
+   <p id="proof-unsupported" class="proof-unsupported" hidden>This source does not yet support automated verification. Use the correction packet and independently confirm the published result.</p>
+   <form id="proof-form" class="proof-form">
+    <label for="proof-url">PUBLIC RECORD URL</label>
+    <input id="proof-url" type="url" inputmode="url" required placeholder="https://example.com/about">
+    <label for="proof-field">FACT TO VERIFY</label>
+    <select id="proof-field" required></select>
+    <label for="proof-expected">EXACT CORRECT VALUE</label>
+    <input id="proof-expected" type="text" maxlength="240" required placeholder="The expected public text or URL">
+    <button id="proof-check" type="submit" class="small-button">Check the live public record ↗</button>
+   </form>
+   <div id="proof-result" class="proof-result" role="status" aria-live="polite"></div>
+   <div id="proof-history" class="proof-history"></div>
+   <p class="proof-footnote">Private browser-local checks. Source snapshots are not synchronized to an account. A visible change does not prove who made it or guarantee Google indexing.</p>
+  </section>
  </dialog>
  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 </body>
