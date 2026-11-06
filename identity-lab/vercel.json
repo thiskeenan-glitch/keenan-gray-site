@@ -6,6 +6,10 @@
       "use": "@vercel/node"
     },
     {
+      "src": "api/identity-config.js",
+      "use": "@vercel/node"
+    },
+    {
       "src": "public/**",
       "use": "@vercel/static"
     }
@@ -14,6 +18,10 @@
     {
       "src": "^/$",
       "dest": "/public/index.html"
+    },
+    {
+      "src": "^/account/?$",
+      "dest": "/public/account.html"
     },
     {
       "src": "^/workspace/?$",
@@ -36,7 +44,11 @@
       "dest": "/api/audit.js"
     },
     {
-      "src": "^/(style\\.css|app\\.js|client\\.css|client\\.js|contributor-engine\\.mjs|contributor-ui\\.mjs|identity-engine\\.mjs|case-engine\\.mjs|operations\\.mjs|operations\\.css)$",
+      "src": "^/api/identity-config/?$",
+      "dest": "/api/identity-config.js"
+    },
+    {
+      "src": "^/(style\\.css|app\\.js|client\\.css|client\\.js|contributor-engine\\.mjs|contributor-ui\\.mjs|identity-engine\\.mjs|case-engine\\.mjs|operations\\.mjs|operations\\.css|account\\.css|account\\.mjs|account-model\\.mjs)$",
       "dest": "/public/$1"
     },
     {

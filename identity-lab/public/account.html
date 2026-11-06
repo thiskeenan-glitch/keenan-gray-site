@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f3f5ef">
+<meta name="description" content="Identity Lab private client workspace: sign in and manage professional identity cases.">
+<title>Client account | Identity Lab</title><link rel="stylesheet" href="/account.css"><script type="module" src="/account.mjs"></script>
+</head>
+<body>
+<header class="top"><div class="wrap top-inner"><a class="logo" href="/">✳ IDENTITY<span>LAB</span></a><a href="/" class="back">BACK TO IDENTITY LAB ↗</a></div></header>
+<main class="wrap">
+<section class="hero"><div><p class="eyebrow">PRIVATE CLIENT WORKSPACE / PILOT</p><h1>One place for your<br><em>public identity.</em></h1><p>Start a case, gather factual corrections, and see its progress from any device. Nothing here automatically edits third-party websites.</p></div>
+<div class="security"><span class="spark">✳</span><b>Your record stays yours.</b><p>Cases are private to your account. Authorized operators can help review them. Editorial submissions and public changes are tracked separately.</p></div></section>
+<div class="notice" role="status" aria-live="polite" id="notice">Checking account availability…</div>
+<section class="panel" id="unavailable" hidden><h2>Accounts aren't enabled yet.</h2><p>We're preparing a dedicated Identity Lab database and its sign-in settings. No customer data is being stored here until it is connected.</p></section>
+<section class="panel signin" id="signed-out" hidden>
+  <div><p class="eyebrow">01 / SECURE SIGN-IN</p><h2>Access your cases</h2><p>Enter your email and we'll send you a one-time sign-in link. No password required.</p></div>
+  <form id="login-form"><label for="email">EMAIL ADDRESS</label><input id="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com"><button class="primary" type="submit" id="login-button">SEND SIGN-IN LINK ↗</button></form>
+  <p class="fine">By signing in, you receive only access to your own cases. There is no guaranteed Knowledge Panel outcome.</p>
+</section>
+<section id="signed-in" hidden>
+  <div class="workspace-head"><div><p class="eyebrow">YOUR WORKSPACE</p><h2>My identity cases</h2><p id="account-email"></p></div><button class="secondary" id="logout" type="button">SIGN OUT</button></div>
+  <div class="layout">
+    <section class="panel"><p class="eyebrow">NEW CASE</p><h3>Tell us what needs attention.</h3>
+      <form id="case-form">
+        <label for="subject">PUBLIC PROFESSIONAL NAME</label><input id="subject" required maxlength="100" autocomplete="off" placeholder="e.g. Jane Filmmaker">
+        <label for="website">PERSONAL WEBSITE (OPTIONAL)</label><input id="website" type="url" autocomplete="url" placeholder="https://example.com">
+        <label for="summary">WHAT SEEMS WRONG OR MISSING? (OPTIONAL)</label><textarea id="summary" maxlength="1000" rows="5" placeholder="For example: my directing credits are missing from a film database."></textarea>
+        <button type="submit" class="primary" id="create-case">SAVE CASE ↗</button>
+      </form><p class="fine">Do not enter passwords, private identifiers, or confidential documents. Only share information you are authorized to provide.</p>
+    </section>
+    <section class="panel"><div class="panel-heading"><div><p class="eyebrow">SAVED RECORDS</p><h3>Your cases</h3></div><button id="reload" class="secondary" type="button">REFRESH</button></div><div id="cases-list" class="cases"><p class="empty">No cases yet.</p></div></section>
+  </div>
+  <section class="panel activity" id="activity-panel" hidden><div class="panel-heading"><div><p class="eyebrow">CASE HISTORY</p><h3 id="activity-title"></h3></div><button id="close-activity" class="secondary" type="button">CLOSE</button></div><p class="fine">A recorded receipt is not proof of editorial approval. An observation is not independently verified unless supported by the actual current public page.</p><div id="case-events"></div>
+  <form id="note-form"><label for="note-body">ADD A NOTE OR SOURCE</label><textarea id="note-body" rows="3" maxlength="3000" placeholder="What needs fixing? You can include a source URL."></textarea><button class="primary" id="add-note" type="submit">ADD TO CASE ↗</button></form></section>
+</section>
+</main>
+<footer class="wrap">IDENTITY LAB / RESEARCH PILOT <span>PRIVATE CASES. VERIFIED FACTS. NO GUARANTEED PANELS.</span></footer>
+</body></html>

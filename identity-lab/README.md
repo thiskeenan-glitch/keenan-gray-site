@@ -43,3 +43,8 @@ From the repository root, use `node --test identity-lab/test-audit.mjs` with Nod
 See [FIRST_AUDIT.md](FIRST_AUDIT.md) for verified and unverified findings from thiskeenan.com on 2026-11-05.
 
 <!-- Deployment trigger: after linking Vercel project identity-lab-pilot to branch identity-lab-pilot on 2026-11-05. -->
+
+
+## Customer accounts (disabled until dedicated database)
+
+A private client workspace is implemented at `/account`. It stays disabled if `IDLAB_SUPABASE_URL` and `IDLAB_SUPABASE_PUBLISHABLE_KEY` are not set on the **Identity Lab Vercel project**. Do **not** reuse Filmshow's Supabase database. Read [ACCOUNT_SETUP.md](ACCOUNT_SETUP.md) and review `supabase/identity_lab_schema.sql` before activating. The old browser-only operator queue does not automatically sync with accounts. No external platform submissions are performed by this feature.
