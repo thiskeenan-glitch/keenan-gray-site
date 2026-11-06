@@ -13,3 +13,8 @@
 .candidate-card h4{font-size:15px;margin:4px 0;color:#23392d;overflow-wrap:anywhere}.candidate-card p{color:#66776a;font-size:12px;margin:6px 0}
 .candidate-meta{display:block;color:#947448;font-weight:850;font-size:9px;letter-spacing:.09em}
 .candidate-card a{display:inline-block;margin-top:9px;font-size:10px;font-weight:850;color:#3c6c48;text-decoration:underline;text-underline-offset:3px}
+
+.candidate-choices{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.candidate-choice{border:1px solid #ccd9c9;border-radius:4px;background:#fff;padding:8px 10px;font-size:9px;font-weight:850;letter-spacing:.06em;color:#35543d}
+.candidate-choice:hover{background:#eaf5e4}
+.candidate-decision{display:block;font-size:11px;color:#6c775f;margin-top:10px;line-height:1.5}
