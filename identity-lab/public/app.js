@@ -88,6 +88,28 @@
   }
   return panel;
  }
+
+ function panelGroundwork(data,found){
+  const section=$new("section","panel-groundwork");
+  const header=$new("div","section-divide");header.append($new("h3","","Knowledge Panel groundwork"),$new("span","","EVIDENCE, NOT ELIGIBILITY"));section.append(header);
+  section.append($new("p","probe-intro","Google decides when and whether to display a Knowledge Panel. These indicators show what Ulab observed that may help clarify a public identity. They cannot establish notability or promise a panel."));
+  const source=data.site?.parsed;
+  const linked=(found||[]).filter(x=>x.connection==="linked"||x.connection==="anchor").length;
+  const knowledge=(data.candidates?.wikidata||[]).filter(x=>x.status==="cross_linked").length;
+  const independent=(found||[]).filter(x=>x.type==="coverage"&&x.connection!=="anchor").length;
+  const items=[
+   {label:"Clear personal website",state:source?"OBSERVED":"NOT CHECKED",detail:source?"First-party homepage details were inspected.":"Add a website that states the professional name and work accurately."},
+   {label:"Cross-site profile connections",state:linked?"OBSERVED":"LIMITED",detail:linked?linked+" search source(s) were linked to the supplied site. Confirm the profiles actually belong to the person.":"No direct cross-site links were established in this sample."},
+   {label:"Linked public knowledge record",state:knowledge?"IDENTIFIER LINKED":"NOT ESTABLISHED",detail:knowledge?knowledge+" knowledge record(s) linked an identifier to the supplied source. Verify the claims.":"An existing relevant public knowledge record was not linked by an identifier in this scan."},
+   {label:"Independent published coverage",state:independent?"LEADS FOUND":"NOT VERIFIED",detail:independent?independent+" public mention lead(s) to review. These have not been assessed for independence, significance or accuracy.":"No independent publication has been verified by this scan."}
+  ];
+  for(const part of items){
+   const row=$new("div","groundwork-row"),left=$new("div","");
+   left.append($new("strong","",part.label),$new("p","",part.detail));
+   row.append(left,$new("span","groundwork-state",part.state));section.append(row);
+  }
+  return section;
+ }
  function improvementPanel(data,found){
   const panel=$new("section","improvements");
   const head=$new("div","section-divide");head.append($new("h3","","Improve your findability"),$new("span","","PRIORITIZED GUIDANCE"));panel.append(head);
@@ -174,7 +196,7 @@
     infoCard("Knowledge Panel: not verified","An identity score does not determine whether Google will show a panel. Independent coverage, verified records, and Google's own systems matter.","GOOGLE STATUS")
    );
    holder.append(intro);
-   holder.append(searchPanel(research.findability||{}),improvementPanel(report,items));
+   holder.append(searchPanel(research.findability||{}),panelGroundwork(report,items),improvementPanel(report,items));
    const rec=$new("div","section-divide");rec.append($new("h3","","Your strongest leads"),$new("span","",items.length+" records"));holder.append(rec);
    const selected=items.filter(x=>report.review?.[x.url]?.decision!=="self_reported_not_match").slice(0,6);
    if(!selected.length)holder.append(infoCard("No suitable matches surfaced","Try adding a public identity link, or search again. This doesn't mean the person has no online footprint.","NO RESULTS"));
