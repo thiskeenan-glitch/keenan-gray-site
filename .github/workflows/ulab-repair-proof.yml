@@ -5,6 +5,7 @@ on:
       - ulab-repair-proof-v1
       - ulab-execution-engine-v1
       - ulab-four-person-pilot
+      - ulab-identity-intelligence-v1
   pull_request:
     paths:
       - "identity-lab/**"
@@ -31,8 +32,10 @@ jobs:
           node --check identity-lab/public/repair-ui.js
           node --check identity-lab/public/pilot-ui.js
           node --check identity-lab/public/pilot-engine.mjs
+          node --check identity-lab/lib/identity-intelligence.mjs
+          node --check identity-lab/api/discover.js
           node --check identity-lab/api/execute-repair.js
           node --check identity-lab/api/repair-plans.js
           node --check identity-lab/lib/github-repair-executor.mjs
       - name: Run public repair verification tests
-        run: node --test identity-lab/test-repair-proof.mjs identity-lab/test-repair-execution.mjs identity-lab/test-four-person-pilot.mjs
+        run: node --test identity-lab/test-repair-proof.mjs identity-lab/test-repair-execution.mjs identity-lab/test-four-person-pilot.mjs identity-lab/test-identity-intelligence.mjs
