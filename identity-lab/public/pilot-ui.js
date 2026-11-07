@@ -1,4 +1,4 @@
-import {PILOT_COHORT,normalizePilotLink,makePilotCase} from "/pilot-engine.mjs";
+import {PILOT_COHORT,normalizePilotLink,makePilotCase,draftImdbContributorBrief} from "/pilot-engine.mjs";
 
 const $=id=>document.getElementById(id);
 const STORE="ulab.validation.cohort.v1";
@@ -17,7 +17,7 @@ for(const person of PILOT_COHORT){
  const item=saved[person.id];
  state[person.id]={
   link:typeof item?.link==="string"?item.link:person.link,
-  report:item?.report?.schemaVersion===2&&item.report.participantId===person.id?item.report:null,
+  report:item?.report?.schemaVersion===3&&item.report.participantId===person.id?item.report:null,
   error:"",loading:false
  };
 }
@@ -36,7 +36,7 @@ function totals(){
  const reports=PILOT_COHORT.map(p=>state[p.id].report).filter(r=>r&&["ok","partial"].includes(r.researchStatus));
  $("scans-count").textContent=reports.length+" / "+PILOT_COHORT.length;
  $("leads-count").textContent=reports.reduce((sum,r)=>sum+r.counts.sourceLeads,0);
- $("gaps-count").textContent=reports.reduce((sum,r)=>sum+r.counts.potentialGaps,0);
+ $("gaps-count").textContent=reports.reduce((sum,r)=>sum+r.counts.potentialGaps+(r.counts.thirdPartyCandidates||0),0);
  $("verified-count").textContent="0";
  $("run-all").disabled=running;
  for(const btn of document.querySelectorAll(".run-person"))btn.disabled=running;
@@ -65,9 +65,53 @@ function renderCase(slot,report){
  slot.append(meta);
  const latest=new Date(report.generatedAt).toLocaleString();
  slot.append(el("p","",latest+" · Audited by Ulab · "+report.researchStatus+" web coverage"));
- slot.append(el("h4","","Correction candidates"));
+ slot.append(el("h4","","Identity source matching"));
+ const matches=report.identityMatches||{linked:[],contextual:[],ambiguous:[]};
+ const matchSections=[
+  ["LINKED PROFILE LEADS",matches.linked],
+  ["CONTEXTUAL CANDIDATES · VERIFY IDENTITY",matches.contextual],
+  ["AMBIGUOUS / POSSIBLE NAMESAKES",matches.ambiguous]
+ ];
+ for(const [heading,items] of matchSections){
+  slot.append(el("p","tag",heading+" · "+items.length));
+  const block=el("div","sources");
+  for(const x of (items||[]).slice(0,5)){
+   const a=sourceLink(x.url);if(a)block.append(a);
+   if(x.reason)block.append(el("p","empty",x.reason));
+  }
+  if(!items?.length)block.append(el("p","empty","None identified by this stage."));
+  slot.append(block);
+ }
+ slot.append(el("h4","","Third-party discrepancy investigations"));
+ const cases=report.thirdPartyCandidates||[];
+ if(!cases.length){
+  slot.append(el("p","empty","No sufficiently anchored, cross-source discrepancy candidate surfaced. This does not prove the records are accurate."));
+ }else{
+  for(const candidate of cases){
+   const caseCard=el("div","gap");
+   caseCard.append(el("strong","",candidate.platform?.toUpperCase()+" · NEEDS LIVE FACT CHECK"));
+   caseCard.append(el("p","",candidate.currentStatement));
+   caseCard.append(el("p","",candidate.conflictingStatement));
+   caseCard.append(el("p","",candidate.proposedAction));
+   const source=sourceLink(candidate.recordUrl);
+   if(source)caseCard.append(source);
+   const copy=el("button","run-person","Copy evidence-based contributor brief");
+   copy.type="button";
+   copy.addEventListener("click",async()=>{
+    try{
+     const brief=draftImdbContributorBrief(candidate);
+     await navigator.clipboard.writeText(brief);
+     copy.textContent="Copied · Review before submitting";
+    }catch(error){copy.textContent="Copy unavailable · "+String(error.message||"review required").slice(0,65);}
+   });
+   if(candidate.platform==="imdb")caseCard.append(copy);
+   caseCard.append(el("p","tag","SYSTEM-DETECTED CANDIDATE · NOT SUBMITTED"));
+   slot.append(caseCard);
+  }
+ }
+ slot.append(el("h4","","Owned-website potential gaps"));
  if(!report.opportunities.length){
-  slot.append(el("p","empty","No evidence-backed website correction candidate surfaced in this scan. This is not proof there are no problems elsewhere. Human source-matching review is required."));
+  slot.append(el("p","empty","No observed owned-website gap from this scan. Third-party discrepancies appear separately above."));
  }else{
   for(const item of report.opportunities){
    const gap=el("div","gap");
@@ -139,7 +183,7 @@ async function startOne(id){
  data.loading=true;data.error="";status("Ulab is researching "+person.name+"…");renderPeople();
  try{
   const report=await runScan(id);
-  status("Research finished for "+person.name+". "+report.counts.sourceLeads+" public leads; "+report.counts.potentialGaps+" potential website gaps. No edits made.");
+  status("Research finished for "+person.name+". "+report.counts.sourceLeads+" public leads; "+((report.counts.thirdPartyCandidates||0)+report.counts.potentialGaps)+" candidates for review. No edits made.");
  }catch(error){
   data.error=String(error.message||"Research failed.").slice(0,160);
   status(person.name+": "+data.error);

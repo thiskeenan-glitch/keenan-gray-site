@@ -65,14 +65,38 @@ export function makePilotCase({personId,report,link=""}){
  });
  const sources=[...new Set((Array.isArray(report.evidence)?report.evidence:[])
   .map(x=>https(x?.url||"")).filter(Boolean))].slice(0,40);
+ const intelligence=report.intelligence&&typeof report.intelligence==="object"?report.intelligence:null;
+ const graph=intelligence?.graph&&typeof intelligence.graph==="object"?intelligence.graph:{linked:[],contextual:[],ambiguous:[],counts:{linked:0,contextual:0,ambiguous:0}};
+ const matches={
+  linked:(graph.linked||[]).slice(0,16).map(x=>({url:https(x.url),title:clip(x.title,160),
+   reason:clip(x.signals?.join("; "),200),confidence:"linked_source_requires_confirmation"})).filter(x=>x.url),
+  contextual:(graph.contextual||[]).slice(0,12).map(x=>({url:https(x.url),title:clip(x.title,160),
+   reason:clip(x.signals?.join("; "),200),confidence:"needs_independent_identity_confirmation"})).filter(x=>x.url),
+  ambiguous:(graph.ambiguous||[]).slice(0,16).map(x=>({url:https(x.url),title:clip(x.title,160),
+   reason:clip(x.signals?.join("; "),200),confidence:"likely_namesake_or_unknown"})).filter(x=>x.url)
+ };
+ const thirdPartyCandidates=(Array.isArray(intelligence?.discrepancies)?intelligence.discrepancies:[]).slice(0,5).map(x=>({
+  id:clip(x.id,180),platform:clip(x.platform,30),recordUrl:https(x.recordUrl),
+  status:"requires_live_fact_check_before_correction",
+  currentStatement:clip(x.currentStatement,550),
+  conflictingStatement:clip(x.conflictingStatement,550),
+  proposedAction:clip(x.proposedAction,650),
+  evidence:(Array.isArray(x.evidence)?x.evidence:[]).slice(0,4).map(y=>({
+   url:https(y.url),title:clip(y.title,160),excerpt:clip(y.excerpt,500)
+  })).filter(y=>y.url),
+  actor:"ulab_system",submissionPerformed:false,publicChangeVerified:false
+ }));
  const researchStatus=clip(report.webResearch?.status||report.coverage?.webSearch||"unknown",40);
  const generated=report.generatedAt&&Number.isFinite(Date.parse(report.generatedAt))?new Date(report.generatedAt).toISOString():new Date().toISOString();
  return {
-  schemaVersion:2,participantId:person.id,participantName:person.name,
+  schemaVersion:3,participantId:person.id,participantName:person.name,
   inputLink:supplied||null,generatedAt:generated,
   source:"ulab_discover_api",researchStatus,
-  sourceLeads:sources,opportunities,
-  counts:{sourceLeads:sources.length,potentialGaps:opportunities.length,proposedEdits:0,
+  sourceLeads:sources,opportunities,identityMatches:matches,thirdPartyCandidates,
+  intelligence:{version:intelligence?.version||null,investigationStatus:clip(intelligence?.investigationStatus,80),imdbResearchStatus:clip(intelligence?.imdbResearchStatus,80)},
+  counts:{sourceLeads:sources.length,potentialGaps:opportunities.length,linkedIdentityLeads:matches.linked.length,
+   contextualIdentityLeads:matches.contextual.length,ambiguousIdentityLeads:matches.ambiguous.length,
+   thirdPartyCandidates:thirdPartyCandidates.length,proposedEdits:0,
    submittedEdits:0,verifiedPublicChanges:0,humanMinutes:0},
   permission:{publicResearchOnly:true,participantAuthorizedEdits:false,
    siteOwnershipVerified:false,thirdPartyEditPermission:false},
@@ -91,4 +115,41 @@ export function canDispatchPilotRepair(task,authorization){
  if(!authorization?.scopedCredentialPresent||!authorization?.adapterSupportsExactChange)return false;
  if(task.route!=="owner_website")return false;
  return authorization.requestedScope==="owner_approved_patch_only";
+}
+
+
+// Reusable evidence-only contributor brief generated from a system-detected case.
+// Not a substitute for the live source check or an official platform submission.
+export function draftImdbContributorBrief(candidate){
+ if(candidate?.platform!=="imdb"||typeof candidate.recordUrl!=="string"||
+  !/^https:\/\/www\.imdb\.com\/name\/nm[0-9]+\/$/.test(candidate.recordUrl))
+  throw Error("Only an anchored IMDb name-page candidate may generate this brief.");
+ if(!candidate.currentStatement||!candidate.conflictingStatement||!Array.isArray(candidate.evidence)||
+  candidate.evidence.length<2)throw Error("Candidate needs two independently recorded evidence excerpts.");
+ const sources=candidate.evidence.filter(x=>x.url===candidate.recordUrl&&x.excerpt);
+ if(sources.length<2)throw Error("Only evidence from the exact person page can be used.");
+ return [
+  "ULAB · IMDb BIOGRAPHY CHRONOLOGY REVIEW",
+  "STATUS: RESEARCH CANDIDATE · NO EDIT SUBMITTED",
+  "",
+  "PROFILE: "+candidate.recordUrl,
+  "POSSIBLY OUTDATED BIOGRAPHY:",
+  candidate.currentStatement,
+  "",
+  "CONFLICTING CREDIT EVIDENCE:",
+  candidate.conflictingStatement,
+  "",
+  "NEXT ACTION:",
+  "Confirm the exact live biography text and whether the film chronology is factually correct.",
+  "If the statement is outdated, propose accurate, neutral, sourced wording via IMDb's official contributor interface.",
+  "IMDb approval and the final public page cannot be guaranteed.",
+  "",
+  "EVIDENCE / INDEXED EXCERPTS (MAY BE STALE):",
+  ...sources.slice(0,4).map(x=>"- "+clip(x.excerpt,500)+"\n  "+x.url),
+  "",
+  "IMDb CONTRIBUTOR GUIDANCE:",
+  "https://help.imdb.com/article/contribution/contribution-information/how-do-i-contribute-data-to-imdb/G3G5Z4MZJUR6D9Q8",
+  "",
+  "No IMDb account was accessed. No submission, acceptance, or live update occurred."
+ ].join("\n");
 }

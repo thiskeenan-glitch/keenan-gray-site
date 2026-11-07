@@ -4,6 +4,7 @@
 import {parseIntake,cleanWikidataSearch,identifyWikidataAnchors,cleanSearchResults,reportFromSignals} from "../lib/identity-discovery.mjs";
 import {inspectPublicHomepage} from "../lib/safe-site-inspection.mjs";
 import {researchQueries,organizeWebResults,normalizeBraveResponse} from "../lib/web-research.mjs";
+import {analyzeIdentity,findAnchoredImdb,imdbResearchQueries} from "../lib/identity-intelligence.mjs";
 const limit=12000;
 async function fetchJson(url,{headers={},timeout=4500}={}){
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeout);
@@ -51,6 +52,33 @@ async function searchCandidates(input,site){
   message:successful.length?"Web results are public leads, not independently verified identity matches.":"The external search provider did not return results."};
 }
 
+// Targeted read-only indexed excerpts for a uniquely anchor-linked IMDb person profile.
+// Search-provider excerpts are not substituted for the live IMDb biography.
+async function imdbEvidence(input,site){
+ const profile=findAnchoredImdb({link:input.link,site});
+ if(!profile)return {profile:null,results:[],status:"no_anchored_profile"};
+ const key=process.env.IDLAB_BRAVE_SEARCH_KEY;
+ if(!key)return {profile,results:[],status:"not_configured"};
+ const queries=imdbResearchQueries(input.name,profile.id);
+ const checks=await Promise.allSettled(queries.map(async q=>{
+  const params=new URLSearchParams({q,count:"12",safesearch:"moderate",text_decorations:"false",result_filter:"web"});
+  const data=await fetchJson("https://api.search.brave.com/res/v1/web/search?"+params,{
+   headers:{"X-Subscription-Token":key},timeout:5500});
+  return normalizeBraveResponse(data);
+ }));
+ const fulfilled=checks.filter(x=>x.status==="fulfilled").flatMap(x=>x.value);
+ const seen=new Set();
+ const results=fulfilled.filter(x=>{
+  // Preserve different indexed excerpts for the same IMDb person page:
+  // one query may expose the biography while another exposes directing credits.
+  const url=String(x.url||""),excerpt=String(x.description||"").trim();
+  const key=url+"|"+excerpt;
+  if(seen.has(key))return false;
+  seen.add(key);return true;
+ }).slice(0,20);
+ return {profile,results,status:!fulfilled.length?"not_found":checks.some(x=>x.status==="rejected")?"partial":"ok"};
+}
+
 const buckets=new Map();
 function permit(request){
   const forwarded=String(request.headers?.["x-forwarded-for"]||"").split(",")[0].trim();
@@ -80,6 +108,10 @@ export default async function handler(req,res){
   const site=website.status==="fulfilled"?website.value:{ok:false,url:input.link||null,error:"Website inspection failed before completion."};
   const search=await searchCandidates(input,site).catch(()=>({results:[],status:"error",queryCount:0,sourceCount:0,message:"Web search temporarily unavailable."}));
   const report=reportFromSignals({input,site,wikidata:records,searchResults:search.results,searchStatus:search.status,wikidataStatus:wikidata.status==="fulfilled"?"ok":"error"});
+  const imdb=await imdbEvidence(input,site).catch(()=>({profile:null,results:[],status:"error"}));
+  report.intelligence=analyzeIdentity({input,site,wikidata:records,web:search.results,imdbSearch:imdb.results});
+  report.intelligence.imdbResearchStatus=imdb.status;
+  report.intelligence.indexedImdbExcerptCount=imdb.results.length;
   report.webResearch={status:search.status,queryCount:search.queryCount||0,attemptedQueries:search.attemptedQueries||0,
    sourceCount:search.sourceCount||0,counts:search.counts||{},message:search.message||"No coverage data available."};
   // Name-only matching and snippets cannot establish that a record belongs to the subject.
