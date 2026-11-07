@@ -112,3 +112,24 @@ test("rejects cross-person data or missing name without inventing identity",()=>
  assert.throws(()=>get("liam-gundlach","",null,reportFor("Liam Gundlach")));
  assert.throws(()=>get("Not-a-key","Sam Ferlo",null,reportFor("Sam Ferlo")));
 });
+
+test("search observations work across professions but cannot assert a person's facts",()=>{
+ const r=reportFor("Davis Brown");
+ r.candidates.web=[{
+  url:"https://www.eliteprospects.com/player/116975/davis-brown",
+  title:"Davis Brown ice hockey",
+  description:"Davis Brown is a hockey player with several recent appearances."
+ }];
+ const g=get("davis-brown","Davis Brown",null,r);
+ assert.equal(g.observations.length,1);
+ assert.equal(g.observations[0].identityConfirmed,false);
+ assert.equal(g.observations[0].factVerified,false);
+ assert.equal(g.claims.length,0);
+ assert.equal(g.repairs.length,0);
+ const r2=structuredClone(r);r2.generatedAt="2026-11-08T18:00:00Z";
+ r2.candidates.web[0].description="Davis Brown hockey profile updated 2026.";
+ const next=get("davis-brown","Davis Brown",null,r2);
+ const changes=compareIdentityGraphs(g,next);
+ assert.ok(changes.changes.some(x=>x.kind==="indexed_excerpt_changed"&&x.status==="recheck_needed"));
+ assert.equal(changes.changes.some(x=>x.kind==="observed_claim_text_changed"),false);
+});
