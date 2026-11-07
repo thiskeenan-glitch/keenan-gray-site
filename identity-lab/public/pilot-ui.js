@@ -1,4 +1,4 @@
-import {PILOT_COHORT,normalizePilotLink,makePilotCase} from "/pilot-engine.mjs";
+import {PILOT_COHORT,normalizePilotLink,makePilotCase,draftImdbContributorBrief} from "/pilot-engine.mjs";
 
 const $=id=>document.getElementById(id);
 const STORE="ulab.validation.cohort.v1";
@@ -95,6 +95,16 @@ function renderCase(slot,report){
    caseCard.append(el("p","",candidate.proposedAction));
    const source=sourceLink(candidate.recordUrl);
    if(source)caseCard.append(source);
+   const copy=el("button","run-person","Copy evidence-based contributor brief");
+   copy.type="button";
+   copy.addEventListener("click",async()=>{
+    try{
+     const brief=draftImdbContributorBrief(candidate);
+     await navigator.clipboard.writeText(brief);
+     copy.textContent="Copied · Review before submitting";
+    }catch(error){copy.textContent="Copy unavailable · "+String(error.message||"review required").slice(0,65);}
+   });
+   if(candidate.platform==="imdb")caseCard.append(copy);
    caseCard.append(el("p","tag","SYSTEM-DETECTED CANDIDATE · NOT SUBMITTED"));
    slot.append(caseCard);
   }
