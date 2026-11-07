@@ -47,6 +47,11 @@ export function renderIdentityGraph(parent,graph,comparison){
   for(const n of nodes.slice(0,6))fact(shell,n.title,n.reasons.join(" · "),n.url,n.state.toUpperCase().replace(/_/g," "));
   if(nodes.length>6)shell.append(el("p","empty","Showing 6 of "+nodes.length+" nodes. Export the full graph to inspect all sources."));
  }
+ shell.append(el("h4","","UNVERIFIED SEARCH OBSERVATIONS · "+(graph.observations||[]).length));
+ if(!(graph.observations||[]).length)shell.append(el("p","empty","No matching indexed excerpts were captured."));
+ for(const observation of (graph.observations||[]).slice(0,6))
+  fact(shell,observation.title,observation.excerpt,observation.sourceUrl,
+   "UNVERIFIED PERSON MATCH · SEARCH EXCERPT");
  shell.append(el("h4","","SOURCE-BACKED FACTS · "+graph.claims.length));
  if(!graph.claims.length)shell.append(el("p","empty","No direct source facts were extracted. Name-only snippets are not validated facts."));
  for(const c of graph.claims.slice(0,8))
