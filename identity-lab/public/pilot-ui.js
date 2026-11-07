@@ -1,4 +1,7 @@
 import {PILOT_COHORT,normalizePilotLink,makePilotCase,draftImdbContributorBrief} from "/pilot-engine.mjs";
+import {buildIdentityGraph,compareIdentityGraphs,graphPortfolio} from "/identity-graph.mjs";
+import {renderIdentityGraph} from "/identity-graph-ui.mjs";
+import {saveGraphToAccount,loadGraphFromAccount} from "/identity-graph-store.mjs";
 
 const $=id=>document.getElementById(id);
 const STORE="ulab.validation.cohort.v1";
@@ -18,6 +21,8 @@ for(const person of PILOT_COHORT){
  state[person.id]={
   link:typeof item?.link==="string"?item.link:person.link,
   report:item?.report?.schemaVersion===3&&item.report.participantId===person.id?item.report:null,
+  graph:item?.graph?.schemaVersion===1&&item.graph.subject?.id===person.id?item.graph:null,
+  comparison:item?.comparison?.version===1&&item.comparison.subjectId===person.id?item.comparison:null,
   error:"",loading:false
  };
 }
@@ -27,7 +32,7 @@ function persist(){
  const output={};
  for(const person of PILOT_COHORT){
   const value=state[person.id];
-  output[person.id]={link:value.link,report:value.report};
+  output[person.id]={link:value.link,report:value.report,graph:value.graph,comparison:value.comparison};
  }
  try{localStorage.setItem(STORE,JSON.stringify(output));return true;}
  catch{return false;}
@@ -35,7 +40,7 @@ function persist(){
 function totals(){
  const reports=PILOT_COHORT.map(p=>state[p.id].report).filter(r=>r&&["ok","partial"].includes(r.researchStatus));
  $("scans-count").textContent=reports.length+" / "+PILOT_COHORT.length;
- $("leads-count").textContent=reports.reduce((sum,r)=>sum+r.counts.sourceLeads,0);
+ $("leads-count").textContent=graphPortfolio(PILOT_COHORT.map(p=>state[p.id].graph).filter(Boolean)).sources;
  $("gaps-count").textContent=reports.reduce((sum,r)=>sum+r.counts.potentialGaps+(r.counts.thirdPartyCandidates||0),0);
  $("verified-count").textContent="0";
  $("run-all").disabled=running;
@@ -171,8 +176,10 @@ async function runScan(personId){
   if(!response.ok)throw Error(result?.error||"Research request failed.");
   const report=makePilotCase({personId,report:result,link:normalized});
   if(report.researchStatus==="not_configured")throw Error("Web search is not configured on this preview. This is not a complete audit.");
-  // A missing search provider is disclosed rather than framed as complete research.
-  data.report=report;
+  // System-owned identity graph and monitoring comparison from the live discovery response.
+  const graph=buildIdentityGraph({personId,name:person.name,link:normalized,discovery:result});
+  const comparison=compareIdentityGraphs(data.graph,graph);
+  data.graph=graph;data.comparison=comparison;data.report=report;
   if(!persist())throw Error("The scan finished, but browser storage was unavailable. Export the results before leaving.");
   return report;
  }finally{clearTimeout(timer);}
@@ -203,11 +210,11 @@ async function startAll(){
  status("System research complete: "+completed+" successful, "+failed+" unsuccessful. No accounts accessed or external edits submitted.");
 }
 function exportReports(){
- const reports=PILOT_COHORT.map(person=>({participant:person.name,report:state[person.id].report})),
+ const reports=PILOT_COHORT.map(person=>({participant:person.name,report:state[person.id].report,graph:state[person.id].graph,maintenance:state[person.id].comparison})),
   data={program:"Ulab four-person system validation",createdAt:new Date().toISOString(),
    cohort:PILOT_COHORT.map(person=>person.name),scans:reports,
-   correctionsPerformed:0,verificationPerformed:0,
-   note:"These are system-generated research summaries, not verified identity changes."};
+   correctionsPerformed:0,verificationPerformed:0,graphSchemaVersion:1,
+   note:"System-generated identity graph snapshots. Matches unverified; no external edits or account access."};
  const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"})),
   link=el("a");link.href=url;link.download="ulab-four-person-pilot.json";
  document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
