@@ -103,7 +103,7 @@ test("system emits a precise IMDb contributor brief without claiming it was subm
  const brief=draftImdbContributorBrief(pilot.thirdPartyCandidates[0]);
  assert.match(brief,/Seedless/);
  assert.match(brief,/Toy Gun/);
- assert.match(brief,/NOT SUBMITTED/);
+ assert.match(brief,/NO EDIT SUBMITTED/);
  assert.match(brief,/No IMDb account was accessed/);
  assert.throws(()=>draftImdbContributorBrief({
   ...pilot.thirdPartyCandidates[0],recordUrl:"https://www.imdb.com/name/nm999999/"
