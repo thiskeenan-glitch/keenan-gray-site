@@ -175,6 +175,18 @@ export function buildIdentityGraph({personId,name,link=null,discovery}){
   (x.to===root||validSourceIds.has(x.to)||claimIds.has(x.to))
  ).sort(ordered).slice(0,160);
  const repairs=[...repairMap.values()].sort(ordered).slice(0,14);
+ // Search excerpts are useful observations for every subject, including those with
+ // no supplied website. Keep them segregated from asserted person facts.
+ const observations=[...new Map((Array.isArray(discovery.candidates?.web)?discovery.candidates.web:[])
+  .filter(x=>https(x.url)&&text(x.description,400))
+  .slice(0,28).map(x=>{
+   const url=https(x.url),excerpt=text(x.description,400);
+   return [urlKey(url),{
+    id:stableId("observation",urlKey(url)),sourceUrl:url,title:text(x.title,170),
+    excerpt,identityConfirmed:false,factVerified:false,
+    state:"indexed_excerpt_unverified_person",observedAt:time
+   }];
+  })).values()].slice(0,20);
  return {
   schemaVersion:1,subject:{id:personId,name:personName,anchorUrl:anchor||null},
   generatedAt:time,source:"ulab_discovery_identity_graph",research:{
@@ -182,11 +194,11 @@ export function buildIdentityGraph({personId,name,link=null,discovery}){
    coverageDescription:discovery.webResearch?.message||"Coverage depends on search provider and supplied identity anchor.",
    externalEditsMade:false
   },nodes:[{id:root,type:"person",name:personName,verifiedByPerson:false},...sourceNodes],
-  edges,claims,repairs,
+  edges,claims,repairs,observations,
   overview:{sourceCount:sourceNodes.length,linkedCandidates:sourceNodes.filter(n=>["site_sameas","linked_identifier"].includes(n.type)).length,
    contextualCandidates:sourceNodes.filter(n=>n.type==="contextual_candidate").length,
    unverifiedCandidates:sourceNodes.filter(n=>["unverified_name_match","indexed_source"].includes(n.type)).length,
-   observedClaims:claims.length,correctionCandidates:repairs.length,
+   observedClaims:claims.length,unverifiedIndexedObservations:observations.length,correctionCandidates:repairs.length,
    submittedCorrections:0,verifiedCorrections:0},
   actionPolicy:"Read-only mapping. No discovered URL is treated as an authorized editing target. Owner-approved edits require separate scoped permission and verification."
  };
@@ -216,6 +228,17 @@ export function compareIdentityGraphs(previous,current){
   for(const [id,n] of oldNodes){
    if(!currentNodes.has(id))changes.push({kind:"not_in_latest_scan",url:n.url,label:n.title,
     status:"recheck_needed",message:"Not returned by this scan. This does not establish deletion or a broken link."});
+  }
+ }
+ // Indexed excerpts can change without any live site content changing. Surface
+ // these as search-observation fluctuations, never as verified factual changes.
+ const priorExcerpts=new Map((previous.observations||[]).map(o=>[o.id,o]));
+ for(const observation of current.observations||[]){
+  const last=priorExcerpts.get(observation.id);
+  if(last&&normalize(last.excerpt)!==normalize(observation.excerpt)){
+   changes.push({kind:"indexed_excerpt_changed",url:observation.sourceUrl,
+    label:observation.title,status:"recheck_needed",
+    message:"The indexed search excerpt changed. Recheck the underlying live page before drawing conclusions."});
   }
  }
  const oldClaims=new Map(previous.claims.map(c=>[c.id,c]));
