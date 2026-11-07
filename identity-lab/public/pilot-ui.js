@@ -27,6 +27,7 @@ for(const person of PILOT_COHORT){
  };
 }
 let running=false;
+let accountEnabled=false;
 
 function persist(){
  const output={};
@@ -183,7 +184,7 @@ function renderPeople(){
   const restore=el("button","run-person","Restore graph");
   restore.type="button";restore.disabled=running;
   restore.addEventListener("click",()=>restorePersonGraph(person.id,restore));
-  foot.append(save,restore);
+  if(accountEnabled)foot.append(save,restore);
   foot.append(run,el("span","person-count",data.loading?"Scanning public sources…":data.error?data.error:data.report&&data.report.researchStatus==="not_configured"?"Web search was unavailable":data.report?"Last scanned "+new Date(data.report.generatedAt).toLocaleDateString():"Research not started"));
   card.append(foot);
   renderIdentityGraph(card,data.graph,data.comparison);
@@ -253,3 +254,8 @@ function exportReports(){
 $("run-all").addEventListener("click",startAll);
 $("export").addEventListener("click",exportReports);
 renderPeople();
+fetch("/api/identity-config",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(config=>{
+ accountEnabled=!!(config?.enabled);
+ $("pilot-account").hidden=!accountEnabled;
+ renderPeople();
+}).catch(()=>{accountEnabled=false;$("pilot-account").hidden=true;});
