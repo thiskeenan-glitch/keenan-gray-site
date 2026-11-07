@@ -118,7 +118,10 @@ function credits(text){
   const title=clean(m[1],90),year=Number(m[2]);
   if(title.length<3||year<2000||year>2100)continue;
   // The role must be shown near the title, rather than inferred from the person's overall profession.
-  const nearby=src.slice(m.index+m[0].length,m.index+m[0].length+110);
+  const tail=src.slice(m.index+m[0].length,m.index+m[0].length+110);
+  // Never borrow a director role from the *next* film entry in a compact snippet.
+  const nextCredit=tail.search(/\b[A-Z][A-Za-z0-9'’-]*(?:\s+[A-Z][A-Za-z0-9'’-]*){0,5}\s*\(20[0-9]{2}\)/);
+  const nearby=nextCredit>=0?tail.slice(0,nextCredit):tail;
   if(!/\b(?:director|directed)\b/i.test(nearby))continue;
   items.push({title,year});
  }
