@@ -137,6 +137,29 @@ function renderCase(slot,report){
  if(!report.sourceLeads.length)slot.append(el("p","empty","No usable public source leads found in this run."));
  slot.append(el("p","warn","No external changes were made. A public URL does not establish this is the correct person."));
 }
+async function savePersonGraph(id,button){
+ const data=state[id],person=PILOT_COHORT.find(p=>p.id===id);
+ if(!data.graph){status("Run an audit before saving "+person.name+".");return;}
+ button.disabled=true;status("Saving "+person.name+"'s graph and maintenance snapshot to your private Ulab account…");
+ try{
+  await saveGraphToAccount(data.graph,data.comparison);
+  status("Saved "+person.name+"'s evidence graph privately. No public records were edited.");
+ }catch(e){status("Account save unavailable: "+String(e.message||"unknown error").slice(0,180));}
+ finally{button.disabled=false;}
+}
+async function restorePersonGraph(id,button){
+ const person=PILOT_COHORT.find(p=>p.id===id),data=state[id];
+ button.disabled=true;status("Loading "+person.name+"'s private graph…");
+ try{
+  const record=await loadGraphFromAccount(id);
+  if(!record){status("No account graph exists for "+person.name+".");return;}
+  if(record.graph.subject?.id!==id)throw Error("Saved identity belongs to a different participant.");
+  data.graph=record.graph;data.comparison=compareIdentityGraphs(null,data.graph);
+  if(!persist())throw Error("Browser storage is unavailable.");
+  renderPeople();status("Restored "+person.name+"'s graph. Rerun the audit to compare against the saved baseline.");
+ }catch(e){status("Account restore unavailable: "+String(e.message||"unknown error").slice(0,180));}
+ finally{button.disabled=false;}
+}
 function renderPeople(){
  const holder=$("people");holder.replaceChildren();
  for(const [i,person] of PILOT_COHORT.entries()){
@@ -154,8 +177,16 @@ function renderPeople(){
   const foot=el("div","person-foot"),run=el("button","run-person","Run audit ↗");
   run.type="button";run.dataset.scanId=person.id;run.disabled=running;
   run.addEventListener("click",()=>startOne(person.id));
+  const save=el("button","run-person","Save graph privately");
+  save.type="button";save.disabled=running||!data.graph;
+  save.addEventListener("click",()=>savePersonGraph(person.id,save));
+  const restore=el("button","run-person","Restore graph");
+  restore.type="button";restore.disabled=running;
+  restore.addEventListener("click",()=>restorePersonGraph(person.id,restore));
+  foot.append(save,restore);
   foot.append(run,el("span","person-count",data.loading?"Scanning public sources…":data.error?data.error:data.report&&data.report.researchStatus==="not_configured"?"Web search was unavailable":data.report?"Last scanned "+new Date(data.report.generatedAt).toLocaleDateString():"Research not started"));
   card.append(foot);
+  renderIdentityGraph(card,data.graph,data.comparison);
   const report=el("div","case-report");renderCase(report,data.report);card.append(report);
   holder.append(card);
  }
