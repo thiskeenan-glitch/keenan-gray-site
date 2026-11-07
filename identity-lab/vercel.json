@@ -10,6 +10,10 @@
       "use": "@vercel/node"
     },
     {
+      "src": "api/public-identity.js",
+      "use": "@vercel/node"
+    },
+    {
       "src": "api/identity-config.js",
       "use": "@vercel/node"
     },
@@ -38,6 +42,14 @@
     {
       "src": "^/pilot/?$",
       "dest": "/public/pilot.html"
+    },
+    {
+      "src": "^/studio/?$",
+      "dest": "/public/studio.html"
+    },
+    {
+      "src": "^/u/([a-z0-9][a-z0-9-]{1,46}[a-z0-9])/?$",
+      "dest": "/api/public-identity.js?slug=$1"
     },
     {
       "src": "^/account/?$",
@@ -84,7 +96,7 @@
       "dest": "/api/execute-repair.js"
     },
     {
-      "src": "^/(style\\.css|app\\.js|proof-ui\\.js|pilot\\.css|pilot-ui\\.js|pilot-engine\\.mjs|identity-graph\\.mjs|identity-graph-ui\\.mjs|identity-graph-store\\.mjs|repair-ui\\.js|client\\.css|client\\.js|contributor-engine\\.mjs|contributor-ui\\.mjs|identity-engine\\.mjs|case-engine\\.mjs|operations\\.mjs|operations\\.css|account\\.css|account\\.mjs|account-model\\.mjs|repair-opportunities\\\\.mjs)$",
+      "src": "^/(style\\.css|app\\.js|proof-ui\\.js|pilot\\.css|studio\\.css|studio\\.mjs|pilot-ui\\.js|pilot-engine\\.mjs|identity-graph\\.mjs|identity-graph-ui\\.mjs|identity-graph-store\\.mjs|repair-ui\\.js|client\\.css|client\\.js|contributor-engine\\.mjs|contributor-ui\\.mjs|identity-engine\\.mjs|case-engine\\.mjs|operations\\.mjs|operations\\.css|account\\.css|account\\.mjs|account-model\\.mjs|repair-opportunities\\\\.mjs)$",
       "dest": "/public/$1"
     },
     {
