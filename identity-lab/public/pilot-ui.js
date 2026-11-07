@@ -1,4 +1,7 @@
 import {PILOT_COHORT,normalizePilotLink,makePilotCase,draftImdbContributorBrief} from "/pilot-engine.mjs";
+import {buildIdentityGraph,compareIdentityGraphs,graphPortfolio} from "/identity-graph.mjs";
+import {renderIdentityGraph} from "/identity-graph-ui.mjs";
+import {saveGraphToAccount,loadGraphFromAccount} from "/identity-graph-store.mjs";
 
 const $=id=>document.getElementById(id);
 const STORE="ulab.validation.cohort.v1";
@@ -18,24 +21,27 @@ for(const person of PILOT_COHORT){
  state[person.id]={
   link:typeof item?.link==="string"?item.link:person.link,
   report:item?.report?.schemaVersion===3&&item.report.participantId===person.id?item.report:null,
+  graph:item?.graph?.schemaVersion===1&&item.graph.subject?.id===person.id?item.graph:null,
+  comparison:item?.comparison?.version===1&&item.comparison.subjectId===person.id?item.comparison:null,
   error:"",loading:false
  };
 }
 let running=false;
+let accountEnabled=false;
 
 function persist(){
  const output={};
  for(const person of PILOT_COHORT){
   const value=state[person.id];
-  output[person.id]={link:value.link,report:value.report};
+  output[person.id]={link:value.link,report:value.report,graph:value.graph,comparison:value.comparison};
  }
  try{localStorage.setItem(STORE,JSON.stringify(output));return true;}
  catch{return false;}
 }
 function totals(){
  const reports=PILOT_COHORT.map(p=>state[p.id].report).filter(r=>r&&["ok","partial"].includes(r.researchStatus));
- $("scans-count").textContent=reports.length+" / "+PILOT_COHORT.length;
- $("leads-count").textContent=reports.reduce((sum,r)=>sum+r.counts.sourceLeads,0);
+ $("scans-count").textContent=PILOT_COHORT.filter(p=>state[p.id].graph?.schemaVersion===1).length+" / "+PILOT_COHORT.length;
+ $("leads-count").textContent=graphPortfolio(PILOT_COHORT.map(p=>state[p.id].graph).filter(Boolean)).sources;
  $("gaps-count").textContent=reports.reduce((sum,r)=>sum+r.counts.potentialGaps+(r.counts.thirdPartyCandidates||0),0);
  $("verified-count").textContent="0";
  $("run-all").disabled=running;
@@ -132,6 +138,29 @@ function renderCase(slot,report){
  if(!report.sourceLeads.length)slot.append(el("p","empty","No usable public source leads found in this run."));
  slot.append(el("p","warn","No external changes were made. A public URL does not establish this is the correct person."));
 }
+async function savePersonGraph(id,button){
+ const data=state[id],person=PILOT_COHORT.find(p=>p.id===id);
+ if(!data.graph){status("Run an audit before saving "+person.name+".");return;}
+ button.disabled=true;status("Saving "+person.name+"'s graph and maintenance snapshot to your private Ulab account…");
+ try{
+  await saveGraphToAccount(data.graph,data.comparison);
+  status("Saved "+person.name+"'s evidence graph privately. No public records were edited.");
+ }catch(e){status("Account save unavailable: "+String(e.message||"unknown error").slice(0,180));}
+ finally{button.disabled=false;}
+}
+async function restorePersonGraph(id,button){
+ const person=PILOT_COHORT.find(p=>p.id===id),data=state[id];
+ button.disabled=true;status("Loading "+person.name+"'s private graph…");
+ try{
+  const record=await loadGraphFromAccount(id);
+  if(!record){status("No account graph exists for "+person.name+".");return;}
+  if(record.graph.subject?.id!==id)throw Error("Saved identity belongs to a different participant.");
+  data.graph=record.graph;data.comparison=compareIdentityGraphs(null,data.graph);
+  if(!persist())throw Error("Browser storage is unavailable.");
+  renderPeople();status("Restored "+person.name+"'s graph. Rerun the audit to compare against the saved baseline.");
+ }catch(e){status("Account restore unavailable: "+String(e.message||"unknown error").slice(0,180));}
+ finally{button.disabled=false;}
+}
 function renderPeople(){
  const holder=$("people");holder.replaceChildren();
  for(const [i,person] of PILOT_COHORT.entries()){
@@ -149,8 +178,16 @@ function renderPeople(){
   const foot=el("div","person-foot"),run=el("button","run-person","Run audit ↗");
   run.type="button";run.dataset.scanId=person.id;run.disabled=running;
   run.addEventListener("click",()=>startOne(person.id));
+  const save=el("button","run-person","Save graph privately");
+  save.type="button";save.disabled=running||!data.graph;
+  save.addEventListener("click",()=>savePersonGraph(person.id,save));
+  const restore=el("button","run-person","Restore graph");
+  restore.type="button";restore.disabled=running;
+  restore.addEventListener("click",()=>restorePersonGraph(person.id,restore));
+  if(accountEnabled)foot.append(save,restore);
   foot.append(run,el("span","person-count",data.loading?"Scanning public sources…":data.error?data.error:data.report&&data.report.researchStatus==="not_configured"?"Web search was unavailable":data.report?"Last scanned "+new Date(data.report.generatedAt).toLocaleDateString():"Research not started"));
   card.append(foot);
+  renderIdentityGraph(card,data.graph,data.comparison);
   const report=el("div","case-report");renderCase(report,data.report);card.append(report);
   holder.append(card);
  }
@@ -171,8 +208,10 @@ async function runScan(personId){
   if(!response.ok)throw Error(result?.error||"Research request failed.");
   const report=makePilotCase({personId,report:result,link:normalized});
   if(report.researchStatus==="not_configured")throw Error("Web search is not configured on this preview. This is not a complete audit.");
-  // A missing search provider is disclosed rather than framed as complete research.
-  data.report=report;
+  // System-owned identity graph and monitoring comparison from the live discovery response.
+  const graph=buildIdentityGraph({personId,name:person.name,link:normalized,discovery:result});
+  const comparison=compareIdentityGraphs(data.graph,graph);
+  data.graph=graph;data.comparison=comparison;data.report=report;
   if(!persist())throw Error("The scan finished, but browser storage was unavailable. Export the results before leaving.");
   return report;
  }finally{clearTimeout(timer);}
@@ -203,11 +242,11 @@ async function startAll(){
  status("System research complete: "+completed+" successful, "+failed+" unsuccessful. No accounts accessed or external edits submitted.");
 }
 function exportReports(){
- const reports=PILOT_COHORT.map(person=>({participant:person.name,report:state[person.id].report})),
+ const reports=PILOT_COHORT.map(person=>({participant:person.name,report:state[person.id].report,graph:state[person.id].graph,maintenance:state[person.id].comparison})),
   data={program:"Ulab four-person system validation",createdAt:new Date().toISOString(),
    cohort:PILOT_COHORT.map(person=>person.name),scans:reports,
-   correctionsPerformed:0,verificationPerformed:0,
-   note:"These are system-generated research summaries, not verified identity changes."};
+   correctionsPerformed:0,verificationPerformed:0,graphSchemaVersion:1,
+   note:"System-generated identity graph snapshots. Matches unverified; no external edits or account access."};
  const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"})),
   link=el("a");link.href=url;link.download="ulab-four-person-pilot.json";
  document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
@@ -215,3 +254,8 @@ function exportReports(){
 $("run-all").addEventListener("click",startAll);
 $("export").addEventListener("click",exportReports);
 renderPeople();
+fetch("/api/identity-config",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(config=>{
+ accountEnabled=!!(config?.enabled);
+ $("pilot-account").hidden=!accountEnabled;
+ renderPeople();
+}).catch(()=>{accountEnabled=false;$("pilot-account").hidden=true;});
