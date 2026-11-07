@@ -96,7 +96,7 @@ export function imdbResearchQueries(name,id){
  const quote='"'+clean(name,100).replace(/"/g,"")+'"';
  return [
   "site:imdb.com/name/"+id+"/ "+quote+' "most recent short film"',
-  "site:imdb.com/name/"+id+"/ "+quote+" director short 2026 2025"
+  "site:imdb.com/name/"+id+"/ "+quote+' "Director" "Short"'
  ];
 }
 function imdbProfileResult(item,id,name){
