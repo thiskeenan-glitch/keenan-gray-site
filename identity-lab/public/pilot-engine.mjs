@@ -65,14 +65,38 @@ export function makePilotCase({personId,report,link=""}){
  });
  const sources=[...new Set((Array.isArray(report.evidence)?report.evidence:[])
   .map(x=>https(x?.url||"")).filter(Boolean))].slice(0,40);
+ const intelligence=report.intelligence&&typeof report.intelligence==="object"?report.intelligence:null;
+ const graph=intelligence?.graph&&typeof intelligence.graph==="object"?intelligence.graph:{linked:[],contextual:[],ambiguous:[],counts:{linked:0,contextual:0,ambiguous:0}};
+ const matches={
+  linked:(graph.linked||[]).slice(0,16).map(x=>({url:https(x.url),title:clip(x.title,160),
+   reason:clip(x.signals?.join("; "),200),confidence:"linked_source_requires_confirmation"})).filter(x=>x.url),
+  contextual:(graph.contextual||[]).slice(0,12).map(x=>({url:https(x.url),title:clip(x.title,160),
+   reason:clip(x.signals?.join("; "),200),confidence:"needs_independent_identity_confirmation"})).filter(x=>x.url),
+  ambiguous:(graph.ambiguous||[]).slice(0,16).map(x=>({url:https(x.url),title:clip(x.title,160),
+   reason:clip(x.signals?.join("; "),200),confidence:"likely_namesake_or_unknown"})).filter(x=>x.url)
+ };
+ const thirdPartyCandidates=(Array.isArray(intelligence?.discrepancies)?intelligence.discrepancies:[]).slice(0,5).map(x=>({
+  id:clip(x.id,180),platform:clip(x.platform,30),recordUrl:https(x.recordUrl),
+  status:"requires_live_fact_check_before_correction",
+  currentStatement:clip(x.currentStatement,550),
+  conflictingStatement:clip(x.conflictingStatement,550),
+  proposedAction:clip(x.proposedAction,650),
+  evidence:(Array.isArray(x.evidence)?x.evidence:[]).slice(0,4).map(y=>({
+   url:https(y.url),title:clip(y.title,160),excerpt:clip(y.excerpt,500)
+  })).filter(y=>y.url),
+  actor:"ulab_system",submissionPerformed:false,publicChangeVerified:false
+ }));
  const researchStatus=clip(report.webResearch?.status||report.coverage?.webSearch||"unknown",40);
  const generated=report.generatedAt&&Number.isFinite(Date.parse(report.generatedAt))?new Date(report.generatedAt).toISOString():new Date().toISOString();
  return {
-  schemaVersion:2,participantId:person.id,participantName:person.name,
+  schemaVersion:3,participantId:person.id,participantName:person.name,
   inputLink:supplied||null,generatedAt:generated,
   source:"ulab_discover_api",researchStatus,
-  sourceLeads:sources,opportunities,
-  counts:{sourceLeads:sources.length,potentialGaps:opportunities.length,proposedEdits:0,
+  sourceLeads:sources,opportunities,identityMatches:matches,thirdPartyCandidates,
+  intelligence:{version:intelligence?.version||null,investigationStatus:clip(intelligence?.investigationStatus,80),imdbResearchStatus:clip(intelligence?.imdbResearchStatus,80)},
+  counts:{sourceLeads:sources.length,potentialGaps:opportunities.length,linkedIdentityLeads:matches.linked.length,
+   contextualIdentityLeads:matches.contextual.length,ambiguousIdentityLeads:matches.ambiguous.length,
+   thirdPartyCandidates:thirdPartyCandidates.length,proposedEdits:0,
    submittedEdits:0,verifiedPublicChanges:0,humanMinutes:0},
   permission:{publicResearchOnly:true,participantAuthorizedEdits:false,
    siteOwnershipVerified:false,thirdPartyEditPermission:false},
