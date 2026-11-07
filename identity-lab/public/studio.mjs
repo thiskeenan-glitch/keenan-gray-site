@@ -65,6 +65,25 @@ function setForm(row=null){
   loadMonitor(row.id).catch(()=>{});
  }
 }
+function applyPilotHandoff(){
+ let raw=null;
+ try{
+  raw=sessionStorage.getItem("ulab.studio.prefill.v1");
+  if(!raw)return;
+  sessionStorage.removeItem("ulab.studio.prefill.v1");
+  const draft=JSON.parse(raw);
+  if(draft?.source!=="ulab_identity_graph_review")return;
+  setForm();
+  $("slug").value=typeof draft.slug==="string"?draft.slug.slice(0,48):"";
+  $("display-name").value=typeof draft.display_name==="string"?draft.display_name.slice(0,100):"";
+  $("headline").value="";
+  $("website").value=typeof draft.website_url==="string"?draft.website_url.slice(0,1000):"";
+  $("profiles").value=(Array.isArray(draft.profile_urls)?draft.profile_urls:[])
+   .filter(x=>typeof x==="string").slice(0,8).join("\n");
+  $("attestation").checked=false;
+  say("Imported Ulab's source candidates into an unpublished draft. Confirm each link belongs to the right person before approving publication.");
+ }catch{say("Draft import could not be read. Your private identity record was not changed.",true);}
+}
 function rowCard(row){
  const card=el("article","record");
  card.append(el("strong","",row.display_name));
@@ -203,5 +222,6 @@ $("logout").addEventListener("click",async()=>{if(api){await api.auth.signOut();
   if(!api){show("unavailable",true);say("Private beta accounts are disabled. Public publishing and customer writes remain locked.");return;}
   api.auth.onAuthStateChange(()=>setTimeout(()=>refreshSession().catch(e=>say(e.message,true)),0));
   await refreshSession();
+  applyPilotHandoff();
  }catch(e){show("unavailable",true);say("Account setup unavailable: "+String(e.message||"unknown error"),true);}
 })();
