@@ -5,7 +5,7 @@
  <meta name="viewport" content="width=device-width,initial-scale=1">
  <meta name="theme-color" content="#090a10">
  <meta name="description" content="Ulab validation pilot for four known creative professionals.">
- <title>Ulab — Validation Pilot</title>
+ <title>Ulab — Identity Graph Pilot</title>
  <link rel="stylesheet" href="/pilot.css">
  <script type="module" src="/pilot-ui.js"></script>
 </head>
@@ -16,22 +16,23 @@
  </header>
  <main class="shell">
   <p class="eyebrow"><span class="live-dot"></span> RESEARCH LAB / FOUR SUBJECTS</p>
-  <h1>Prove the system.<br><em>Not the pitch.</em></h1>
-  <p class="lede">Ulab runs the public discovery and candidate triage. Every result records who did the work. External edits are locked until the participant authorizes the specific change and an appropriate integration is available.</p>
+  <h1>One person.<br><em>Every public identity.</em></h1>
+  <p class="lede">Ulab maps each professional’s public identity, separates confirmed-looking crosslinks from namesakes, records source-backed facts, and compares new audits against previous snapshots. Only explicitly authorized corrections can ever be executed.</p>
   <div class="hero-controls">
-   <button id="run-all" class="primary" type="button">Run all four audits <span aria-hidden="true">↗</span></button>
-   <button id="export" class="secondary" type="button">Export pilot results ↓</button>
+   <button id="run-all" class="primary" type="button">Build / recheck four graphs <span aria-hidden="true">↗</span></button>
+   <button id="export" class="secondary" type="button">Export graphs + monitoring ↓</button>
+   <a class="secondary" href="/account" style="text-decoration:none">Private account sign-in ↗</a>
   </div>
   <p id="global-status" class="global-status" role="status" aria-live="polite">Ready. Audits are run on demand; this page does not schedule research or external edits.</p>
   <div class="metrics" aria-label="Pilot metrics">
-   <div><strong id="scans-count">0 / 4</strong><span>AUDITS COMPLETED</span></div>
-   <div><strong id="leads-count">0</strong><span>PUBLIC SOURCE LEADS</span></div>
+   <div><strong id="scans-count">0 / 4</strong><span>IDENTITY GRAPHS BUILT</span></div>
+   <div><strong id="leads-count">0</strong><span>GRAPH SOURCE NODES</span></div>
    <div><strong id="gaps-count">0</strong><span>CORRECTION CANDIDATES</span></div>
    <div><strong id="verified-count">0</strong><span>VERIFIED LIVE REPAIRS</span></div>
   </div>
   <div class="section-heading">
    <h2>Validation cohort</h2>
-   <p>Research each person individually. Adding one identifying link improves matching, but does not prove they control it.</p>
+   <p>One reusable graph engine for four different people. Run the scan again to detect changes, then optionally save the snapshot to your private Ulab account.</p>
   </div>
   <div id="people" class="people"></div>
   <section class="protocol">
@@ -41,7 +42,7 @@
     <div><span>01</span><strong>Discover</strong><p>System runs public-source research. Name-only matches remain candidates.</p></div>
     <div><span>02</span><strong>Confirm</strong><p>Actual person verifies records and factual discrepancies; authorization is recorded.</p></div>
     <div><span>03</span><strong>Execute</strong><p>A permitted integration applies or submits an exact approved correction. No invented platform access.</p></div>
-    <div><span>04</span><strong>Verify</strong><p>System independently checks public facts before and after, and records any failures.</p></div>
+    <div><span>04</span><strong>Maintain</strong><p>Repeat scans compare source leads and observed facts, flagging changes for review. Automatic scheduled monitoring is not yet enabled.</p></div>
    </div>
    <p class="small">No friends’ accounts or records will be modified from this screen. An audit by itself is not a successful repair, and manual assistant edits do not count as system execution.</p>
   </section>
