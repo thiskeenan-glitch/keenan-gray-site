@@ -40,7 +40,7 @@ function persist(){
 }
 function totals(){
  const reports=PILOT_COHORT.map(p=>state[p.id].report).filter(r=>r&&["ok","partial"].includes(r.researchStatus));
- $("scans-count").textContent=reports.length+" / "+PILOT_COHORT.length;
+ $("scans-count").textContent=PILOT_COHORT.filter(p=>state[p.id].graph?.schemaVersion===1).length+" / "+PILOT_COHORT.length;
  $("leads-count").textContent=graphPortfolio(PILOT_COHORT.map(p=>state[p.id].graph).filter(Boolean)).sources;
  $("gaps-count").textContent=reports.reduce((sum,r)=>sum+r.counts.potentialGaps+(r.counts.thirdPartyCandidates||0),0);
  $("verified-count").textContent="0";
