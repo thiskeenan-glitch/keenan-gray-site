@@ -16,7 +16,7 @@ export function publicUrl(raw){
  !host.includes(".")||host==="localhost"||host.endsWith(".local")||host.endsWith(".internal")||
  /^(\d{1,3}\.){3}\d{1,3}$/.test(host)||host.startsWith("["))
   throw Error("Only public HTTPS website and profile links are supported.");
- u.hash="";return u.toString().slice(0,1000);
+ u.hash="";if(u.toString().length>1000)throw Error("Public URLs must be under 1,000 characters.");return u.toString();
 }
 export function cleanIdentityInput(input){
  const slug=parseSlug(input?.slug);
