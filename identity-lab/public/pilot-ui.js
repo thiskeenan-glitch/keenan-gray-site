@@ -188,6 +188,21 @@ function renderPeople(){
   foot.append(run,el("span","person-count",data.loading?"Scanning public sources…":data.error?data.error:data.report&&data.report.researchStatus==="not_configured"?"Web search was unavailable":data.report?"Last scanned "+new Date(data.report.generatedAt).toLocaleDateString():"Research not started"));
   card.append(foot);
   renderIdentityGraph(card,data.graph,data.comparison);
+  if(data.graph?.schemaVersion===1){
+   const prep=el("button","run-person","Prepare owner-approved identity record ↗");
+   prep.type="button";prep.disabled=running;
+   prep.addEventListener("click",()=>{
+    const graph=data.graph;
+    const links=graph.nodes.filter(n=>n.type==="site_sameas"&&typeof n.url==="string").map(n=>n.url).slice(0,8);
+    const website=graph.research?.siteInspected?graph.subject.anchorUrl||"":"";
+    const draft={source:"ulab_identity_graph_review",slug:person.id,display_name:person.name,
+     headline:"",website_url:website,profile_urls:links,
+     warning:"Review every URL and verify it belongs to this person before publishing. This is a draft, not an approved change."};
+    try{sessionStorage.setItem("ulab.studio.prefill.v1",JSON.stringify(draft));window.location.assign("/studio?from=pilot");}
+    catch(error){status("Draft handoff unavailable: "+String(error.message||"Browser blocked session data"));}
+   });
+   card.append(prep);
+  }
   const report=el("div","case-report");renderCase(report,data.report);card.append(report);
   holder.append(card);
  }
