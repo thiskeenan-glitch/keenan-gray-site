@@ -69,9 +69,12 @@ async function imdbEvidence(input,site){
  const fulfilled=checks.filter(x=>x.status==="fulfilled").flatMap(x=>x.value);
  const seen=new Set();
  const results=fulfilled.filter(x=>{
-  const url=String(x.url||"");
-  if(seen.has(url))return false;
-  seen.add(url);return true;
+  // Preserve different indexed excerpts for the same IMDb person page:
+  // one query may expose the biography while another exposes directing credits.
+  const url=String(x.url||""),excerpt=String(x.description||"").trim();
+  const key=url+"|"+excerpt;
+  if(seen.has(key))return false;
+  seen.add(key);return true;
  }).slice(0,20);
  return {profile,results,status:!fulfilled.length?"not_found":checks.some(x=>x.status==="rejected")?"partial":"ok"};
 }
