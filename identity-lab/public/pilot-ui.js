@@ -33,7 +33,7 @@ function persist(){
  catch{return false;}
 }
 function totals(){
- const reports=PILOT_COHORT.map(p=>state[p.id].report).filter(Boolean);
+ const reports=PILOT_COHORT.map(p=>state[p.id].report).filter(r=>r&&["ok","partial"].includes(r.researchStatus));
  $("scans-count").textContent=reports.length+" / "+PILOT_COHORT.length;
  $("leads-count").textContent=reports.reduce((sum,r)=>sum+r.counts.sourceLeads,0);
  $("gaps-count").textContent=reports.reduce((sum,r)=>sum+r.counts.potentialGaps,0);
@@ -93,8 +93,8 @@ function renderPeople(){
  for(const [i,person] of PILOT_COHORT.entries()){
   const data=state[person.id],card=el("article","person");
   card.dataset.personId=person.id;
-  const head=el("div","person-head"),nameGroup=el("div"),badge=el("span","status"+(data.error?" error":data.report?" completed":""),
-   data.loading?"RUNNING":data.error?"ERROR":data.report?"AUDITED":"NOT SCANNED");
+  const head=el("div","person-head"),nameGroup=el("div"),badge=el("span","status"+(data.error?" error":data.report&&["ok","partial"].includes(data.report.researchStatus)?" completed":""),
+   data.loading?"RUNNING":data.error?"ERROR":data.report&&["ok","partial"].includes(data.report.researchStatus)?"AUDITED":data.report?"INCOMPLETE":"NOT SCANNED");
   nameGroup.append(el("span","person-index",String(i+1).padStart(2,"0")+" / PILOT"),el("h3","",person.name));
   head.append(nameGroup,badge);card.append(head);
   const id="link-"+person.id,label=el("label","","IDENTITY ANCHOR · OPTIONAL");
@@ -105,7 +105,7 @@ function renderPeople(){
   const foot=el("div","person-foot"),run=el("button","run-person","Run audit ↗");
   run.type="button";run.dataset.scanId=person.id;run.disabled=running;
   run.addEventListener("click",()=>startOne(person.id));
-  foot.append(run,el("span","person-count",data.loading?"Scanning public sources…":data.error?data.error:data.report?"Last scanned "+new Date(data.report.generatedAt).toLocaleDateString():"Research not started"));
+  foot.append(run,el("span","person-count",data.loading?"Scanning public sources…":data.error?data.error:data.report&&data.report.researchStatus==="not_configured"?"Web search was unavailable":data.report?"Last scanned "+new Date(data.report.generatedAt).toLocaleDateString():"Research not started"));
   card.append(foot);
   const report=el("div","case-report");renderCase(report,data.report);card.append(report);
   holder.append(card);
@@ -126,6 +126,7 @@ async function runScan(personId){
   try{result=await response.json();}catch{throw Error("The research API returned an unreadable response.");}
   if(!response.ok)throw Error(result?.error||"Research request failed.");
   const report=makePilotCase({personId,report:result,link:normalized});
+  if(report.researchStatus==="not_configured")throw Error("Web search is not configured on this preview. This is not a complete audit.");
   // A missing search provider is disclosed rather than framed as complete research.
   data.report=report;
   if(!persist())throw Error("The scan finished, but browser storage was unavailable. Export the results before leaving.");
