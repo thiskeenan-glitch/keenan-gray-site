@@ -4,7 +4,7 @@ import {
  identityMatches,findAnchoredImdb,imdbResearchQueries,
  detectImdbBiographyDiscrepancy,analyzeIdentity
 } from "./lib/identity-intelligence.mjs";
-import {makePilotCase} from "./public/pilot-engine.mjs";
+import {makePilotCase,draftImdbContributorBrief} from "./public/pilot-engine.mjs";
 
 const person={
  name:"Keenan Gray",link:"https://www.thiskeenan.com/",
@@ -90,4 +90,22 @@ test("name-only audit cannot generate an anchored IMDb correction",()=>{
  const report=analyzeIdentity({input:{name:"Keenan Gray",link:null},site:null,web:imdbEvidence,imdbSearch:imdbEvidence});
  assert.equal(report.investigatedProfile,null);
  assert.equal(report.discrepancies.length,0);
+});
+
+test("system emits a precise IMDb contributor brief without claiming it was submitted",()=>{
+ const detected=detectImdbBiographyDiscrepancy({
+  name:person.name,profile:{id:"nm16096261",url:imdbUrl},results:imdbEvidence
+ });
+ assert.equal(detected.length,1);
+ const report={subject:{name:person.name,link:person.link},site,results:[],
+  webResearch:{status:"ok"},intelligence:{version:1,discrepancies:detected,graph:{linked:[],contextual:[],ambiguous:[]}}};
+ const pilot=makePilotCase({personId:"keenan-gray",report});
+ const brief=draftImdbContributorBrief(pilot.thirdPartyCandidates[0]);
+ assert.match(brief,/Seedless/);
+ assert.match(brief,/Toy Gun/);
+ assert.match(brief,/NOT SUBMITTED/);
+ assert.match(brief,/No IMDb account was accessed/);
+ assert.throws(()=>draftImdbContributorBrief({
+  ...pilot.thirdPartyCandidates[0],recordUrl:"https://www.imdb.com/name/nm999999/"
+ }));
 });
