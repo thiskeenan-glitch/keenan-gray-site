@@ -17,7 +17,7 @@ for(const person of PILOT_COHORT){
  const item=saved[person.id];
  state[person.id]={
   link:typeof item?.link==="string"?item.link:person.link,
-  report:item?.report?.schemaVersion===2&&item.report.participantId===person.id?item.report:null,
+  report:item?.report?.schemaVersion===3&&item.report.participantId===person.id?item.report:null,
   error:"",loading:false
  };
 }
@@ -65,9 +65,43 @@ function renderCase(slot,report){
  slot.append(meta);
  const latest=new Date(report.generatedAt).toLocaleString();
  slot.append(el("p","",latest+" · Audited by Ulab · "+report.researchStatus+" web coverage"));
- slot.append(el("h4","","Correction candidates"));
+ slot.append(el("h4","","Identity source matching"));
+ const matches=report.identityMatches||{linked:[],contextual:[],ambiguous:[]};
+ const matchSections=[
+  ["LINKED PROFILE LEADS",matches.linked],
+  ["CONTEXTUAL CANDIDATES · VERIFY IDENTITY",matches.contextual],
+  ["AMBIGUOUS / POSSIBLE NAMESAKES",matches.ambiguous]
+ ];
+ for(const [heading,items] of matchSections){
+  slot.append(el("p","tag",heading+" · "+items.length));
+  const block=el("div","sources");
+  for(const x of (items||[]).slice(0,5)){
+   const a=sourceLink(x.url);if(a)block.append(a);
+   if(x.reason)block.append(el("p","empty",x.reason));
+  }
+  if(!items?.length)block.append(el("p","empty","None identified by this stage."));
+  slot.append(block);
+ }
+ slot.append(el("h4","","Third-party discrepancy investigations"));
+ const cases=report.thirdPartyCandidates||[];
+ if(!cases.length){
+  slot.append(el("p","empty","No sufficiently anchored, cross-source discrepancy candidate surfaced. This does not prove the records are accurate."));
+ }else{
+  for(const candidate of cases){
+   const caseCard=el("div","gap");
+   caseCard.append(el("strong","",candidate.platform?.toUpperCase()+" · NEEDS LIVE FACT CHECK"));
+   caseCard.append(el("p","",candidate.currentStatement));
+   caseCard.append(el("p","",candidate.conflictingStatement));
+   caseCard.append(el("p","",candidate.proposedAction));
+   const source=sourceLink(candidate.recordUrl);
+   if(source)caseCard.append(source);
+   caseCard.append(el("p","tag","SYSTEM-DETECTED CANDIDATE · NOT SUBMITTED"));
+   slot.append(caseCard);
+  }
+ }
+ slot.append(el("h4","","Owned-website potential gaps"));
  if(!report.opportunities.length){
-  slot.append(el("p","empty","No evidence-backed website correction candidate surfaced in this scan. This is not proof there are no problems elsewhere. Human source-matching review is required."));
+  slot.append(el("p","empty","No observed owned-website gap from this scan. Third-party discrepancies appear separately above."));
  }else{
   for(const item of report.opportunities){
    const gap=el("div","gap");
