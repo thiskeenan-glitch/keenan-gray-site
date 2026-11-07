@@ -36,7 +36,7 @@ function totals(){
  const reports=PILOT_COHORT.map(p=>state[p.id].report).filter(r=>r&&["ok","partial"].includes(r.researchStatus));
  $("scans-count").textContent=reports.length+" / "+PILOT_COHORT.length;
  $("leads-count").textContent=reports.reduce((sum,r)=>sum+r.counts.sourceLeads,0);
- $("gaps-count").textContent=reports.reduce((sum,r)=>sum+r.counts.potentialGaps,0);
+ $("gaps-count").textContent=reports.reduce((sum,r)=>sum+r.counts.potentialGaps+(r.counts.thirdPartyCandidates||0),0);
  $("verified-count").textContent="0";
  $("run-all").disabled=running;
  for(const btn of document.querySelectorAll(".run-person"))btn.disabled=running;
@@ -183,7 +183,7 @@ async function startOne(id){
  data.loading=true;data.error="";status("Ulab is researching "+person.name+"…");renderPeople();
  try{
   const report=await runScan(id);
-  status("Research finished for "+person.name+". "+report.counts.sourceLeads+" public leads; "+report.counts.potentialGaps+" potential website gaps. No edits made.");
+  status("Research finished for "+person.name+". "+report.counts.sourceLeads+" public leads; "+((report.counts.thirdPartyCandidates||0)+report.counts.potentialGaps)+" candidates for review. No edits made.");
  }catch(error){
   data.error=String(error.message||"Research failed.").slice(0,160);
   status(person.name+": "+data.error);
