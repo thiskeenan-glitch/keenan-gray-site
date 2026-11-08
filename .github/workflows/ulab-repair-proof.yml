@@ -9,6 +9,7 @@ on:
       - ulab-universal-identity-graph
       - ulab-first-live-fix
       - ulab-cinematic-homepage-v1
+      - ulab-minimal-red-customer-v1
   pull_request:
     paths:
       - "identity-lab/**"
