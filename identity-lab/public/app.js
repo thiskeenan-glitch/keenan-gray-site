@@ -37,7 +37,7 @@
  function buildFixes(){
   const actions=(report.results||[]).filter(x=>x.status==="action"&&x.recommendation).map(x=>({
    title:x.title,detail:x.detail,action:x.recommendation,url:x.url||report.subject.link,type:"site",platform:"website",
-   route:"Website owner action",supported:!!report.site?.ok}));
+   route:"Website owner action",supported:!!report.site?.parsed}));
   if(report.subject?.linkType==="website"&&report.subject.link){
    const siteHost=host(report.subject.link);
    for(const candidate of report.candidates?.wikidata||[]){
@@ -124,7 +124,7 @@
     infoCard(scope,search.status==="not_configured"?"We could not run broad web search. A website scan and public knowledge lookup may still reveal useful details.":(search.queryCount||0)+" searches completed across the available public index.","SEARCH COVERAGE")
    );
    holder.append(intro);
-   if(report.site?.ok&&report.site.parsed){
+   if(report.site?.parsed){
     const site=report.site.parsed;
     const facts=[];
     if(site.title)facts.push("Title: "+site.title.slice(0,95));
