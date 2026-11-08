@@ -18,6 +18,10 @@
  }
  function buildItems(data){
   const combined=[...(data.candidates?.web||[]).map(x=>classify(x,"web")),...(data.candidates?.wikidata||[]).map(x=>classify(x,"wikidata"))];
+  if(data.subject?.link){
+   const link=data.subject.link;
+   combined.unshift(classify({url:link,title:"Your starting link",description:"The link you provided. Ownership and related profiles still need verification.",connection:"anchor",score:999,source:"customer"},data.subject.linkType==="website"?"website":"web"));
+  }
   const seen=new Set();
   return combined.filter(x=>{if(!x.url||seen.has(x.url))return false;seen.add(x.url);return true;}).sort((a,b)=>(b.score||0)-(a.score||0));
  }
@@ -64,76 +68,88 @@
   return {value,anchor:anchors,diversity,explanation:"Based only on observed website links, source connections and supporting mentions in this scan. Not a Google rating or Knowledge Panel probability."};
  }
  const tabs={
-  overview:["01 / OVERVIEW","The whole picture.","The strongest source connections and the most useful next steps."],
-  profiles:["02 / PROFILES","Your public profiles.","Potential professional and social records. Confirm which belong to you."],
-  coverage:["03 / ARTICLES & MENTIONS","Where you're mentioned.","Pages and publications found in broad-web search. Results may include namesakes."],
-  knowledge:["04 / KNOWLEDGE RECORDS","Public knowledge sources.","Wikidata and similar public records, where established entries can help connect identifiers."],
-  fixes:["05 / FIX CENTER","Make the record clearer.","Prepare a source-specific correction, then follow the legitimate submission route."]
+  overview:["YOUR AUDIT","What we found","Your strongest public connections and the clearest next step."],
+  sources:["PUBLIC SOURCES","Where you appear","Review the public records before confirming they belong to you."],
+  fixes:["NEXT STEPS","What you can improve","Specific issues first. You can prepare correction requests for free."]
  };
  function card(item){
   const c=$new("article","result-card");
-  const head=$new("div","result-head"),stamp=$new("span","result-type",item.type==="profiles"?"PROFILE":item.type==="knowledge"?"KNOWLEDGE RECORD":"PUBLIC MENTION");
-  const relation=$new("span","relation "+(item.connection==="linked"||item.connection==="anchor"?"connected":"candidate"),item.connection==="anchor"?"STARTING LINK":item.connection==="linked"?"WEBSITE-LINKED":item.connection==="strong_candidate"?"WEBSITE MENTION":"POSSIBLE MATCH");
-  head.append(stamp,relation);c.append(head,$new("h3","",item.title));
-  if(item.description)c.append($new("p","result-desc",item.description.slice(0,320)));
-  if(item.reasons?.length)c.append($new("p","result-reason",item.reasons.join(" · ")));
-  const foot=$new("div","result-foot"),source=safeLink(item.url,"VIEW SOURCE ↗");if(source)foot.append(source);
+  const connection=item.connection==="anchor"?"YOU PROVIDED THIS LINK":item.connection==="linked"||item.status==="cross_linked"?"PUBLICLY CONNECTED":item.connection==="strong_candidate"?"CONTEXTUAL MATCH":"POSSIBLE MATCH";
+  const top=$new("div","result-head");
+  top.append($new("span","result-type",item.type==="profiles"?"PROFILE":item.type==="knowledge"?"KNOWLEDGE SOURCE":"PUBLIC MENTION"),$new("span","relation "+(connection==="POSSIBLE MATCH"?"candidate":"connected"),connection));
+  c.append(top,$new("h3","",item.title));
+  if(item.description)c.append($new("p","result-desc",item.description.slice(0,220)));
+  const foot=$new("div","result-foot"),source=safeLink(item.url,"Open source ↗");
+  if(source)foot.append(source);
   const decision=report.review?.[item.url]?.decision;
-  const confirm=$new("button","confirm-button "+(decision==="self_reported_match"?"selected":""),decision==="self_reported_match"?"✓ MINE":"THIS IS ME");
-  confirm.type="button";confirm.addEventListener("click",()=>{report.review=report.review||{};report.review[item.url]={decision:"self_reported_match",basis:"customer_self_report_only",reviewedAt:new Date().toISOString()};fixes=buildFixes();$("count-fixes").textContent=fixes.length;showToast("Marked as your record. Independent verification may still be required.");renderTab();});
-  const reject=$new("button","reject-button "+(decision==="self_reported_not_match"?"selected":""),decision==="self_reported_not_match"?"✓ NOT MINE":"NOT ME");
-  reject.type="button";reject.addEventListener("click",()=>{report.review=report.review||{};report.review[item.url]={decision:"self_reported_not_match",basis:"customer_self_report_only",reviewedAt:new Date().toISOString()};fixes=buildFixes();$("count-fixes").textContent=fixes.length;renderTab();});
+  const confirm=$new("button","confirm-button "+(decision==="self_reported_match"?"selected":""),decision==="self_reported_match"?"Confirmed by you":"This is me");
+  confirm.type="button";confirm.addEventListener("click",()=>{
+   report.review=report.review||{};report.review[item.url]={decision:"self_reported_match",basis:"customer_self_report_only",reviewedAt:new Date().toISOString()};
+   fixes=buildFixes();$("count-fixes").textContent=fixes.length;renderTab();
+  });
+  const reject=$new("button","reject-button "+(decision==="self_reported_not_match"?"selected":""),decision==="self_reported_not_match"?"Excluded":"Not me");
+  reject.type="button";reject.addEventListener("click",()=>{
+   report.review=report.review||{};report.review[item.url]={decision:"self_reported_not_match",basis:"customer_self_report_only",reviewedAt:new Date().toISOString()};
+   fixes=buildFixes();$("count-fixes").textContent=fixes.length;renderTab();
+  });
   foot.append(confirm,reject);
-  const edit=$new("button","mini-fix","PREPARE FIX ↗");edit.type="button";edit.addEventListener("click",()=>openCorrection(item));foot.append(edit);
+  const edit=$new("button","mini-fix","Review for correction ↗");
+  edit.type="button";edit.addEventListener("click",()=>openCorrection(item));foot.append(edit);
   c.append(foot);return c;
  }
  function infoCard(title,desc,tag){
-  const c=$new("div","insight-card");c.append($new("span","insight-kicker",tag),$new("h3","",title),$new("p","",desc));return c;
+  const c=$new("div","insight-card");if(tag)c.append($new("span","insight-kicker",tag));
+  c.append($new("h3","",title),$new("p","",desc));return c;
  }
  function fixCard(f){
-  const c=$new("article","fix-card");c.append($new("span","fix-tag",f.supported?"WEBSITE ACTION":"REVIEW REQUIRED"),$new("h3","",f.title),$new("p","",f.action));
-  const footer=$new("div","fix-card-foot"),source=safeLink(f.url,"SOURCE ↗");if(source)footer.append(source);
-  const button=$new("button","mini-fix","PREPARE CORRECTION ↗");button.type="button";button.addEventListener("click",()=>openCorrection({url:f.url,type:f.type,platform:f.platform,title:f.title,description:f.detail}));
+  const c=$new("article","fix-card");
+  c.append($new("span","fix-tag",f.supported?"WEBSITE FINDING":"REVIEW REQUIRED"),$new("h3","",f.title),$new("p","",f.action));
+  const footer=$new("div","fix-card-foot"),source=safeLink(f.url,"View current record ↗");
+  if(source)footer.append(source);
+  const button=$new("button","mini-fix","Prepare correction ↗");button.type="button";
+  button.addEventListener("click",()=>openCorrection({url:f.url,type:f.type,platform:f.platform,title:f.title,description:f.detail}));
   footer.append(button);c.append(footer);return c;
  }
  function activateTab(id){category=id;document.querySelectorAll("[data-tab]").forEach(b=>{const active=b.dataset.tab===id;b.classList.toggle("active",active);b.setAttribute("aria-selected",active?"true":"false");});renderTab();}
  function renderTab(){
   const holder=$("tab-content");holder.replaceChildren();
   const [kicker,title,desc]=tabs[category];$("tab-kicker").textContent=kicker;$("tab-title").textContent=title;$("tab-description").textContent=desc;
-  const filtered=category==="overview"?[]:category==="fixes"?[]:items.filter(x=>x.type===category&&report.review?.[x.url]?.decision!=="self_reported_not_match");
+  const activeItems=items.filter(x=>report.review?.[x.url]?.decision!=="self_reported_not_match");
   if(category==="overview"){
-   const research=report.webResearch||{},score=evidenceScore(report,items);
+   const search=report.webResearch||{};
    const intro=$new("div","insight-grid");
+   const scope=search.status==="ok"?"Broad web research completed":search.status==="partial"?"Web research partially completed":search.status==="not_configured"?"Limited public scan":"Web results unavailable";
    intro.append(
-    infoCard("A search, not an identity verdict",(research.queryCount||0)+" web searches completed, "+items.length+" distinct source leads found. Results require a human identity check.","RESEARCH SCOPE"),
-    infoCard("What connects",score.anchor+" source(s) linked through the provided website or published identifiers. Others remain candidate matches.","CROSS-SOURCE EVIDENCE"),
-    infoCard("Knowledge Panel: not verified","An identity score does not determine whether Google will show a panel. Independent coverage, verified records, and Google's own systems matter.","GOOGLE STATUS")
+    infoCard(activeItems.length+" public sources surfaced","These are leads, not verified matches. Confirm the records that actually belong to you.","YOUR FOOTPRINT"),
+    infoCard(scope,search.status==="not_configured"?"We could not run broad web search. A website scan and public knowledge lookup may still reveal useful details.":(search.queryCount||0)+" searches completed across the available public index.","SEARCH COVERAGE")
    );
    holder.append(intro);
-   const rec=$new("div","section-divide");rec.append($new("h3","","Your strongest leads"),$new("span","",items.length+" records"));holder.append(rec);
-   const selected=items.filter(x=>report.review?.[x.url]?.decision!=="self_reported_not_match").slice(0,6);
-   if(!selected.length)holder.append(infoCard("No suitable matches surfaced","Try adding a public identity link, or search again. This doesn't mean the person has no online footprint.","NO RESULTS"));
-   selected.forEach(x=>holder.append(card(x)));
-   const next=$new("div","section-divide");next.append($new("h3","","Where to begin"));holder.append(next);
-   if(fixes.length){fixes.slice(0,3).forEach(x=>holder.append(fixCard(x)));}
-   else holder.append(infoCard("Verify one important record first","Open a likely professional profile, mark it as yours, and prepare a factual correction if you find a real discrepancy.","NEXT STEP"));
+   if(fixes.length){
+    const heading=$new("div","section-divide");heading.append($new("h3","","Worth reviewing first"));holder.append(heading);
+    fixes.slice(0,2).forEach(x=>holder.append(fixCard(x)));
+   }
+   const section=$new("div","section-divide");section.append($new("h3","","Likely sources"),$new("span","",activeItems.length+" found"));holder.append(section);
+   if(activeItems.length){activeItems.slice(0,4).forEach(x=>holder.append(card(x)));}
+   else holder.append(infoCard("Try adding one public link","Add your website, LinkedIn or IMDb profile to give the audit a reliable starting point.","NEXT STEP"));
+   const follow=$new("button","overview-next","View all sources ↗");follow.type="button";follow.addEventListener("click",()=>activateTab("sources"));holder.append(follow);
+  }else if(category==="sources"){
+   $("tab-counter").textContent=activeItems.length+" SOURCES";
+   if(!activeItems.length)holder.append(infoCard("No matching sources surfaced","Try again with one public link. Search coverage and namesake ambiguity can limit what we find.","NO MATCHES"));
+   activeItems.forEach(x=>holder.append(card(x)));
   }else if(category==="fixes"){
-   const actions=$new("div","insight-grid");
-   actions.append(infoCard("Corrections, not cosmetic SEO","We prepare changes for a specific record. We won't invent an error or promise a third-party edit was accepted.","OUR APPROACH"),
-    infoCard("Account permissions still matter","IMDb and TMDb allow contributor workflows; LinkedIn is owner-only; Wikimedia has evidence and disclosure rules.","HOW IT WORKS"));
-   holder.append(actions);
-   if(fixes.length){const h=$new("div","section-divide");h.append($new("h3","","Website opportunities"));holder.append(h);fixes.forEach(f=>holder.append(fixCard(f)));}
-   const h=$new("div","section-divide");h.append($new("h3","","Find a record to correct"));holder.append(h);
-   const claimed=items.filter(x=>report.review?.[x.url]?.decision==="self_reported_match");
-   (claimed.length?claimed:items.filter(x=>x.type==="profiles"||x.type==="knowledge").slice(0,8)).forEach(x=>holder.append(card(x)));
-   if(!fixes.length&&!items.length)holder.append(infoCard("No verified discrepancy","We need a real record and supporting facts before we can prepare a meaningful correction.","NOTHING TO FIX YET"));
-   const a=$new("a","correction-center-link","OPEN EXISTING CORRECTION CENTER ↗");a.href="/workspace/operations";holder.append(a);
-  }else{
-   $("tab-counter").textContent=filtered.length+" SOURCES";
-   if(!filtered.length)holder.append(infoCard("No records in this category","Search visibility depends on the available sources and name ambiguity. This is not proof that none exist.","NO MATCHES"));
-   filtered.forEach(x=>holder.append(card(x)));
+   $("tab-counter").textContent=fixes.length+" FINDINGS";
+   if(fixes.length){
+    const heading=$new("div","section-divide");heading.append($new("h3","","Potential corrections"));holder.append(heading);
+    fixes.slice(0,8).forEach(f=>holder.append(fixCard(f)));
+   }else{
+    holder.append(infoCard("No verified issue found yet","That is okay. Review your public records for a real factual discrepancy before preparing an edit request.","NEXT STEP"));
+   }
+   const heading=$new("div","section-divide");heading.append($new("h3","","Check another record"));holder.append(heading);
+   const claimed=activeItems.filter(x=>report.review?.[x.url]?.decision==="self_reported_match");
+   (claimed.length?claimed:activeItems.filter(x=>x.type==="profiles"||x.type==="knowledge").slice(0,4)).forEach(x=>holder.append(card(x)));
+   const a=$new("a","correction-center-link","View saved corrections ↗");a.href="/workspace/operations";holder.append(a);
   }
-  if(category==="overview"||category==="fixes")$("tab-counter").textContent=category==="fixes"?fixes.length+" WEBSITE OPPORTUNITIES":items.length+" SOURCE LEADS";
+  if(category==="overview")$("tab-counter").textContent=activeItems.length+" SOURCE LEADS";
   if(category==="fixes")document.dispatchEvent(new CustomEvent("ulab:fix-tab"));
  }
  function renderReport(data){
@@ -141,8 +157,8 @@
   $("report-person").textContent=String(data.subject.name||"You").slice(0,80);
   $("report-subtitle").textContent=data.subject.name+" · "+(data.subject.link||"Name-only research");
   $("report-date").textContent=new Date(data.generatedAt).toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}).toUpperCase();
-  $("connection-score").textContent=score.value===null?"—":score.value;
-  $("score-title").textContent=score.value===null?"Insufficient evidence":"Observed evidence / 100";
+  $("connection-score").textContent=score.value===null?"-":score.value;
+  $("score-title").textContent=score.value===null?"Not enough linked evidence":"Observed evidence / 100";
   $("score-explanation").textContent=score.explanation;
   $("score-gauge").style.setProperty("--score",score.value===null?"0%":score.value+"%");
   $("profile-count").textContent=items.filter(x=>x.type==="profiles").length;
@@ -160,7 +176,7 @@
  }
  function stageAnimation(){
   const elapsed=Date.now()-scanStart,stage=elapsed<1250?0:elapsed<2600?1:2;
-  const stages=["Searching public identity records…","Looking for professional profiles and published mentions…","Comparing public links and building your report…"];
+  const stages=["Checking public sources...","Looking for professional profiles...","Putting your identity map together..."];
   $("search-message").textContent=stages[stage];
   document.querySelectorAll("[data-stage]").forEach(x=>{x.classList.toggle("active",Number(x.dataset.stage)===stage);x.classList.toggle("complete",Number(x.dataset.stage)<stage);});
  }
@@ -192,7 +208,7 @@
  $("fix-button").addEventListener("click",()=>activateTab("fixes"));
  const dlg=$("fix-dialog");
  function openCorrection(item){
-  currentRepair=item;packet=null;$("correction-form").reset();$("packet-output").hidden=true;
+  currentRepair=item;packet=null;$("correction-form").reset();$("packet-output").hidden=true;const details=$("proof-details");if(details)details.open=false;
   const kind=route(item);$("dialog-title").textContent=kind.label;$("dialog-kicker").textContent=(item.host||host(item.url)).toUpperCase();
   const context=$("dialog-context");context.replaceChildren($new("strong","",item.title||"Public record"),$new("p","",kind.description));
   const a=safeLink(item.url,"OPEN CURRENT RECORD ↗");if(a)context.append(a);
@@ -222,7 +238,7 @@
   }catch(error){
    // For platforms not yet integrated with our correction engine, produce a manual evidence request only.
    if(platform==="website"&&currentRepair.platform!=="website"){
-    packetText="PUBLISHER / PROFILE OWNER REQUEST — REVIEW ONLY\n\nPERSON: "+report.subject.name+"\nPUBLIC RECORD: "+link+"\nCURRENT STATEMENT: "+current+"\nREQUESTED FACTUAL CORRECTION: "+desired+"\nSUPPORTING SOURCE: "+(evidence||"Missing: add a reputable published source")+"\n\nPlease review the factual discrepancy and cited evidence and correct it under your platform policies.\n\nDRAFT ONLY. No account was accessed and no request submitted. Contact the publisher or profile owner through the official channel.";
+    packetText="PUBLISHER / PROFILE OWNER REQUEST - REVIEW ONLY\n\nPERSON: "+report.subject.name+"\nPUBLIC RECORD: "+link+"\nCURRENT STATEMENT: "+current+"\nREQUESTED FACTUAL CORRECTION: "+desired+"\nSUPPORTING SOURCE: "+(evidence||"Missing: add a reputable published source")+"\n\nPlease review the factual discrepancy and cited evidence and correct it under your platform policies.\n\nDRAFT ONLY. No account was accessed and no request submitted. Contact the publisher or profile owner through the official channel.";
    }else{$("dialog-hint").textContent=error.message||"Unable to prepare this packet.";return;}
   }
   packet={text:packetText,task};$("packet-text").textContent=packetText;$("packet-output").hidden=false;
