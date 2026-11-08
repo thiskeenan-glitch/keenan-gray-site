@@ -63,7 +63,7 @@ body:has(.search-screen:not([hidden])) .mast-start,body:has(.report-screen:not([
 .art-label{padding-left:24px;padding-right:20px;margin-bottom:0}
 .art-label-line{width:18px;height:1px;background:#9d83ee}
 .art-label>span:last-child{margin-left:auto}
-.identity-universe{width:min(680px,100%);aspect-ratio:1/1;position:relative;margin:auto;isolation:isolate;--mx:0px;--my:0px;transform:translate3d(calc(var(--mx) * .09),calc(var(--my) * .09),0);transition:transform .7s cubic-bezier(.2,.9,.3,1)}
+.identity-universe{width:min(680px,100%);aspect-ratio:1/1;position:relative;margin:auto;isolation:isolate;--mx:0px;--my:0px;transform:translate3d(var(--mx),var(--my),0);transition:transform .7s cubic-bezier(.2,.9,.3,1)}
 .universe-glow{position:absolute;inset:4%;border-radius:50%;background:radial-gradient(circle at 51% 46%,#5434865c 0%,#30264a32 29%,#140e2200 69%);filter:blur(16px);z-index:-1;animation:breathe 8s ease-in-out infinite}
 .universe-grid{position:absolute;inset:17%;border-radius:50%;background-image:radial-gradient(#c6a9ff19 1px,transparent 1px);background-size:18px 18px;opacity:.42;mask-image:radial-gradient(circle,#0006 10%,transparent 75%)}
 .universe-orbit{position:absolute;border-radius:50%;border:1px solid #9a81e126;pointer-events:none}
