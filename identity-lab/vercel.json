@@ -96,7 +96,7 @@
       "dest": "/api/execute-repair.js"
     },
     {
-      "src": "^/(style\\.css|app\\.js|proof-ui\\.js|pilot\\.css|studio\\.css|studio\\.mjs|pilot-ui\\.js|pilot-engine\\.mjs|identity-graph\\.mjs|identity-graph-ui\\.mjs|identity-graph-store\\.mjs|repair-ui\\.js|client\\.css|client\\.js|contributor-engine\\.mjs|contributor-ui\\.mjs|identity-engine\\.mjs|case-engine\\.mjs|operations\\.mjs|operations\\.css|account\\.css|account\\.mjs|account-model\\.mjs|repair-opportunities\\\\.mjs)$",
+      "src": "^/(style\\.css|cinematic\\.css|cinematic\\.js|app\\.js|proof-ui\\.js|pilot\\.css|studio\\.css|studio\\.mjs|pilot-ui\\.js|pilot-engine\\.mjs|identity-graph\\.mjs|identity-graph-ui\\.mjs|identity-graph-store\\.mjs|repair-ui\\.js|client\\.css|client\\.js|contributor-engine\\.mjs|contributor-ui\\.mjs|identity-engine\\.mjs|case-engine\\.mjs|operations\\.mjs|operations\\.css|account\\.css|account\\.mjs|account-model\\.mjs|repair-opportunities\\\\.mjs)$",
       "dest": "/public/$1"
     },
     {
