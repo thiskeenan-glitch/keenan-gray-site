@@ -124,6 +124,14 @@
     infoCard(scope,search.status==="not_configured"?"We could not run broad web search. A website scan and public knowledge lookup may still reveal useful details.":(search.queryCount||0)+" searches completed across the available public index.","SEARCH COVERAGE")
    );
    holder.append(intro);
+   if(report.site?.ok&&report.site.parsed){
+    const site=report.site.parsed;
+    const facts=[];
+    if(site.title)facts.push("Title: "+site.title.slice(0,95));
+    if(site.heading)facts.push("Headline: "+site.heading.slice(0,95));
+    if(Array.isArray(site.sameAs))facts.push(site.sameAs.length+" published profile links");
+    holder.append(infoCard("Your website, as the internet reads it",facts.join(". ")+". This is a direct homepage check, not a search ranking or Google result.","LIVE SITE SNAPSHOT"));
+   }
    if(fixes.length){
     const heading=$new("div","section-divide");heading.append($new("h3","","Worth reviewing first"));holder.append(heading);
     fixes.slice(0,2).forEach(x=>holder.append(fixCard(x)));
