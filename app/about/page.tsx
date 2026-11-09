@@ -15,7 +15,7 @@ const headshot = "/media/optimized/about-headshot.jpg";
 const headshotDimensions = getImageDimensions(headshot);
 
 export const metadata: Metadata = {
-  title: "Me | Brooklyn Film Director",
+  title: { absolute: "Keenan Gray | Film Director" },
   description: aboutDescription,
   alternates: {
     canonical: "/about",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     "Filmshow founder",
   ],
   openGraph: {
-    title: "Me | Keenan Gray",
+    title: "Keenan Gray | Film Director",
     description: aboutDescription,
     url: `${site.url}/about`,
     images: [
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Me | Keenan Gray",
+    title: "Keenan Gray | Film Director",
     description: aboutDescription,
     images: [headshot],
   },
@@ -57,7 +57,7 @@ export default function AboutPage() {
         data={withContext([
           webPageSchema({
             path: "/about",
-            name: "Me | Keenan Gray",
+            name: "Keenan Gray | Film Director",
             description: aboutDescription,
             type: "ProfilePage",
             primaryImage: headshot,
@@ -71,7 +71,7 @@ export default function AboutPage() {
         ])}
       />
       <section className="personal-statement about-me-section">
-        <h1>Me</h1>
+        <h1>Keenan Gray</h1>
         <img
           src={headshot}
           alt="Portrait of Keenan Gray."
