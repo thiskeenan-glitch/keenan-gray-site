@@ -30,6 +30,14 @@
       "use": "@vercel/node"
     },
     {
+      "src": "api/github-auth.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/github-owner-repair.js",
+      "use": "@vercel/node"
+    },
+    {
       "src": "public/**",
       "use": "@vercel/static"
     }
@@ -50,6 +58,18 @@
     {
       "src": "^/u/([a-z0-9][a-z0-9-]{1,46}[a-z0-9])/?$",
       "dest": "/api/public-identity.js?slug=$1"
+    },
+    {
+      "src": "^/repair/?$",
+      "dest": "/public/repair.html"
+    },
+    {
+      "src": "^/api/github-auth/?$",
+      "dest": "/api/github-auth.js"
+    },
+    {
+      "src": "^/api/github-owner-repair/?$",
+      "dest": "/api/github-owner-repair.js"
     },
     {
       "src": "^/account/?$",
@@ -96,7 +116,7 @@
       "dest": "/api/execute-repair.js"
     },
     {
-      "src": "^/(style\\.css|cinematic\\.css|cinematic\\.js|app\\.js|proof-ui\\.js|pilot\\.css|studio\\.css|studio\\.mjs|pilot-ui\\.js|pilot-engine\\.mjs|identity-graph\\.mjs|identity-graph-ui\\.mjs|identity-graph-store\\.mjs|repair-ui\\.js|client\\.css|client\\.js|contributor-engine\\.mjs|contributor-ui\\.mjs|identity-engine\\.mjs|case-engine\\.mjs|operations\\.mjs|operations\\.css|account\\.css|account\\.mjs|account-model\\.mjs|repair-opportunities\\\\.mjs)$",
+      "src": "^/(style\\.css|cinematic\\.css|cinematic\\.js|app\\.js|proof-ui\\.js|pilot\\.css|studio\\.css|studio\\.mjs|pilot-ui\\.js|pilot-engine\\.mjs|identity-graph\\.mjs|identity-graph-ui\\.mjs|identity-graph-store\\.mjs|github-repair\\.js|repair-ui\\.js|client\\.css|client\\.js|contributor-engine\\.mjs|contributor-ui\\.mjs|identity-engine\\.mjs|case-engine\\.mjs|operations\\.mjs|operations\\.css|account\\.css|account\\.mjs|account-model\\.mjs|repair-opportunities\\.mjs)$",
       "dest": "/public/$1"
     },
     {
