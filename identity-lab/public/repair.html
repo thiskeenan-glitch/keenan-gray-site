@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <meta name="robots" content="noindex,nofollow">
+ <meta name="theme-color" content="#09090f">
+ <title>Ulab | Owner-approved repair</title>
+ <style>
+ :root{color-scheme:dark;font-family:Inter,Arial,sans-serif;background:#09090f;color:#eeeaf9}
+ *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 70% 0%,#30234f 0%,#0d0a15 50%,#09090f 100%)}
+ a{color:#cbb9ff}button{cursor:pointer;font:inherit}button:disabled{opacity:.5;cursor:wait}
+ .shell{width:min(860px,calc(100% - 32px));margin:0 auto;padding:36px 0 90px}
+ header{display:flex;align-items:center;justify-content:space-between;margin-bottom:70px}
+ .logo{font-weight:800;color:white;text-decoration:none;font-size:24px;letter-spacing:-1px}
+ .logo span{color:#a781ff}.back{font-size:12px;color:#b5a9c9}
+ .kicker{letter-spacing:2px;font-size:11px;color:#baa5ff;text-transform:uppercase;font-weight:700}
+ h1{font-size:clamp(36px,6vw,64px);line-height:1.08;max-width:740px;letter-spacing:-2px;margin:12px 0 16px}
+ .lede{max-width:680px;line-height:1.7;color:#bcb6c9;margin-bottom:36px}
+ .card{border:1px solid #35303e;border-radius:18px;padding:26px;margin:16px 0;background:#15131d}
+ h2{font-size:19px;letter-spacing:-.3px;margin:0 0 12px}.muted{font-size:14px;color:#b1a7bc;line-height:1.6}
+ .step{color:#a98bff;font-size:12px;letter-spacing:1.5px;font-weight:700}
+ .btn{display:inline-flex;align-items:center;justify-content:center;border-radius:9px;border:1px solid #a789ed;padding:12px 17px;color:#f8f4ff;background:#6749b1;text-decoration:none;font-size:14px;font-weight:700}
+ .btn.secondary{background:transparent;border-color:#625a75}.btn:disabled{opacity:.45}
+ .buttons{display:flex;flex-wrap:wrap;gap:12px;margin:16px 0}
+ .compare{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+ .diff{border:1px solid #49405a;border-radius:12px;padding:16px;background:#171422;line-height:1.6;overflow-wrap:anywhere}
+ .diff small{display:block;color:#a69db1;margin-bottom:6px;letter-spacing:1px}
+ .diff.after{border-color:#7d60ac;background:#211833}
+ .status{border-left:3px solid #a789ed;padding:12px 14px;background:#1d182b;color:#e3dbf6;font-size:13px;line-height:1.7}
+ .approve{display:flex;align-items:flex-start;gap:12px;font-size:14px;line-height:1.6;margin:20px 0;max-width:700px}
+ input[type=checkbox]{width:19px;height:19px;accent-color:#b596ff;margin-top:3px;flex:none}
+ [hidden]{display:none!important}
+ @media(max-width:550px){.compare{grid-template-columns:1fr}.card{padding:19px}header{margin-bottom:42px}}
+ </style>
+ <script src="/github-repair.js" defer></script>
+</head>
+<body><div class="shell">
+<header><a class="logo" href="/">u<span>.</span> ulab</a><a class="back" href="/">← BACK TO ULAb</a></header>
+<p class="kicker">PRIVATE REPAIR PILOT / 002</p>
+<h1>Find it. Fix it.<br>Prove it changed.</h1>
+<p class="lede">This is a real first-party repair workflow, separate from ChatGPT. Ulab connects to an authorized GitHub account, proposes a narrowly scoped correction, creates a draft pull request after approval, and checks the public page. It never publishes without the site's owner reviewing the PR.</p>
+<section class="card">
+<p class="step">01 / CONNECT OWNED WEBSITE</p><h2>Connect GitHub</h2>
+<p class="muted">Private beta currently permits the owner of thiskeenan-glitch/keenan-gray-site. The server holds the temporary connection securely. GitHub authorization is required before any correction can run.</p>
+<div id="account-status" class="status">Checking connection…</div>
+<div class="buttons"><a class="btn" id="connect" href="/api/github-auth?action=login" hidden>Connect GitHub</a><button class="btn secondary" id="disconnect" type="button" hidden>Disconnect</button></div>
+</section>
+<section class="card">
+<p class="step">02 / REVIEW SPECIFIC CORRECTION</p><h2>Filmshow role consistency</h2>
+<p class="muted">The Filmshow project page says “Founder / Director,” but your updated portfolio biography says “Co-Founder and Creative Director.” We can correct the project page, subject to your confirmation that the latter is accurate.</p>
+<div class="compare"><div class="diff"><small>CURRENT CONTENT</small><strong>Founder / Director</strong></div><div class="diff after"><small>PROPOSED CONTENT</small><strong>Co-Founder / Creative Director</strong></div></div>
+<p class="muted">Only one precise source-code occurrence in <code>app/components/FilmshowProject.tsx</code> will be changed. The change goes to a reviewable GitHub pull request, not directly to your live site.</p>
+<label class="approve"><input type="checkbox" id="approval"><span>I control this repository and explicitly approve this specific role correction. I understand Ulab will create a draft pull request for my review, not silently publish it.</span></label>
+<button class="btn" id="execute" type="button" disabled>Create correction pull request</button>
+<div id="execution-status" class="status" style="margin-top:16px">No correction run has been requested.</div>
+<div id="review-link" class="buttons"></div>
+</section>
+<section class="card">
+<p class="step">03 / VERIFY PUBLIC RESULT</p><h2>Did the published page actually change?</h2>
+<p class="muted">After the site owner reviews and merges the pull request, Ulab fetches the live page. A draft pull request alone is never counted as a completed repair.</p>
+<button class="btn secondary" id="verify" type="button" disabled>Check live website</button>
+<div id="verification-status" class="status" style="margin-top:16px">No public verification has been performed in this session.</div>
+</section>
+<p class="muted">This pilot does not edit IMDb, LinkedIn, Wikipedia or Google, and it does not guarantee a Knowledge Panel. It is designed to prove real corrections to a customer's own connected website.</p>
+</div></body></html>

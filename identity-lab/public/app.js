@@ -138,6 +138,7 @@
  }
  function renderReport(data){
   report=data;report.review=report.review||{};items=buildItems(data);fixes=buildFixes();const score=evidenceScore(data,items);
+  $("report-person").textContent=String(data.subject.name||"You").slice(0,80);
   $("report-subtitle").textContent=data.subject.name+" · "+(data.subject.link||"Name-only research");
   $("report-date").textContent=new Date(data.generatedAt).toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}).toUpperCase();
   $("connection-score").textContent=score.value===null?"—":score.value;
