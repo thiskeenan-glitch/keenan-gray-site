@@ -61,7 +61,7 @@ export function personSchema(): SchemaValue {
     ],
     sameAs: [
       ...socialLinks.map((link) => link.href),
-      `${site.filmshow.replace(/\/$/, "")}/team`,
+      site.filmshow,
     ],
     subjectOf: [
       {
