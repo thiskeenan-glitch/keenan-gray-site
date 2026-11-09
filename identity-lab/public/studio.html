@@ -1,0 +1,62 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0a0b12">
+<title>Ulab | Identity Record Studio</title>
+<link rel="stylesheet" href="/studio.css">
+<script type="module" src="/studio.mjs"></script>
+</head><body>
+<header class="header"><a class="brand" href="/">u. <span>ulab</span></a><span>PRIVATE BETA · FIRST-PARTY REPAIR LAB</span></header>
+<main class="shell">
+<p class="kicker">AUDIT → FIX → VERIFY → MAINTAIN</p>
+<h1>Publish a <em>canonical identity record.</em></h1>
+<p class="lede">A controlled first-party test: create an accurate public profile, connect your confirmed professional links, publish through your authorized account, independently check what the public page displays, and monitor later changes. External profiles are not edited by this action.</p>
+<div id="notice" role="status" aria-live="polite" class="notice">Checking private beta access…</div>
+<section id="unavailable" class="card" hidden>
+<h2>Private beta is not yet enabled</h2>
+<p>The code and database are prepared. Account creation and public publishing remain disabled until the beta is authorized for launch. No public profiles have been created automatically.</p>
+</section>
+<section id="signed-out" class="card" hidden>
+<h2>Sign in to your Ulab account</h2>
+<p>The initial pilot is invite-only. Enter an invited email address to request a sign-in link.</p>
+<form id="login-form" class="form-row"><label for="email">Email address</label>
+<input type="email" id="email" autocomplete="email" required placeholder="you@example.com">
+<button type="submit" id="login-button" class="primary">Send sign-in link</button></form>
+</section>
+<div id="signed-in" hidden>
+<div class="accountbar"><span id="account-email"></span><button id="logout" type="button" class="tertiary">Sign out</button></div>
+<section class="card">
+<h2>My public identity records</h2><div id="existing" class="records"></div>
+</section>
+<section class="card">
+<div class="head"><h2>Create or update your record</h2><span id="editor-state" class="tag">DRAFT</span></div>
+<form id="profile-form">
+<div class="field"><label for="slug">Public slug</label><input id="slug" maxlength="48" placeholder="my-professional-name" required><small>Your public URL will be /u/your-slug. Choose carefully; the slug cannot be renamed.</small></div>
+<div class="field"><label for="display-name">Professional name</label><input id="display-name" maxlength="100" placeholder="Professional name" required></div>
+<div class="field"><label for="headline">Professional description</label><input id="headline" maxlength="180" placeholder="Founder · Designer · Brooklyn"></div>
+<div class="field"><label for="website">Official site (optional)</label><input id="website" placeholder="https://your-site.com" inputmode="url"></div>
+<div class="field"><label for="profiles">Professional profile links, one per line</label><textarea id="profiles" rows="4" placeholder="https://www.linkedin.com/in/your-profile/"></textarea><small>Only submit profiles that are actually yours. These links are not independently verified by Ulab.</small></div>
+<div class="field"><label class="check"><input id="attestation" type="checkbox"><span>I am authorized to publish these details, they are accurate, and the links refer to the person identified above.</span></label></div>
+<div class="buttons">
+<button type="button" id="save-draft" class="secondary">Save private draft</button>
+<button type="submit" id="publish" class="primary">Publish approved record</button>
+<button type="button" id="new-record" class="tertiary">New record</button>
+</div>
+</form>
+</section>
+<section id="published-panel" class="card" hidden>
+<h2>Public record and verification</h2>
+<p>Ulab must fetch the public profile and confirm that the visible record contains the expected values. A database save alone does not count as public verification.</p>
+<div class="buttons"><a id="public-link" target="_blank" rel="noopener noreferrer" class="secondary">Open public identity</a><button type="button" id="verify-live" class="primary">Verify published record</button></div>
+<div id="proof-status" class="notice">No public read-back check has been made.</div>
+<div class="head"><h3>Maintenance checks</h3><button type="button" id="enable-monitor" class="secondary">Start / reset monitoring baseline</button></div>
+<p>This is a daily source-record integrity check, not a scan of Google, IMDb, LinkedIn, or the open web. No external platform edits are implied.</p>
+<div id="monitor-status" class="notice">Monitoring has not been enabled.</div>
+</section>
+</div>
+<section class="protocol">
+<h2>What this proves, and what it doesn't</h2>
+<p>It proves Ulab can publish an authorized record that it controls, read it back publicly, and detect unexpected changes to its underlying record. It does <strong>not</strong> prove that third-party platforms changed or that Google's Knowledge Panel will appear. Public indexing is disabled during this beta to discourage impersonation.</p>
+</section>
+</main><footer>ULAB · RESEARCH AND CUSTOMER-OWNED RECORDS · NO THIRD-PARTY EDITS</footer>
+</body></html>

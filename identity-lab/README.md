@@ -67,9 +67,57 @@ A private client workspace is implemented at `/account`. It stays disabled unles
 - The customer can add an **evidence-gated Wikidata task** to the browser-only correction queue. Its state remains **needs_evidence** until an independent citation is added and reviewed. No third-party submission or login takes place.
 - This browser-local queue is not yet synchronized with the Supabase customer database.
 
-## Linked identity graph (v0.4)
-- Wikidata exact-name candidates can expose **published source claims** for official website (P856), IMDb person (P345), TMDb person (P4985), ORCID (P496) and OpenAlex (P10283). These linked URLs are not automatically fetched and **must not** be misrepresented as verified external profiles.
-- Optional OpenAlex **direct author lookups** are supported only for IDs that Wikidata explicitly lists, using at most one direct fixed-ID lookup per pilot audit without a key. For higher scale, configure `IDLAB_OPENALEX_API_KEY` server-side and durable rate limits. OpenAlex usage is budgeted; see https://help.openalex.org/api/authentication/.
-- ORCID checksum validation and exact OpenAlex author-name matching reduce false matches. Shared identifiers still require human verification because scholarly records can be misassigned/merged.
-- The cross-source comparison engine flags potential missing/different ORCID claims and missing OpenAlex IDs for **review only**. The customer must identify the candidate as theirs; any correction draft still starts in `needs_evidence` and requires independent sources and approval. No external edits.
-- The pilot's broad web search, general website crawler and customer-account sync are still unconfigured. The product is not yet suitable for unattended, paid large-scale corrections.
+## Ulab broad-web research preview (November 6, 2026)
+
+The client-facing Ulab redesign and public research engine live on `ulab-ux-redesign-v1`.
+The homepage uses name plus an optional identity link, attempts a bounded read-only inspection of supplied public websites, and displays preliminary findings with a correction review workflow.
+
+- Broad-web discovery uses the **server-side** `IDLAB_BRAVE_SEARCH_KEY` Vercel secret and several targeted Brave Search API queries per report.
+- Candidate results are deduplicated and ranked using publicly observed links, contextual overlap, and matching names. Search snippets and namesake matches are **not** verified facts.
+- When web search is not connected or errors, the UI explicitly says so. Website SEO inspections do not replace broad professional-profile research.
+- The Fix it panel prepares suggested tasks and evidence-gated drafts, not automatic edits to external sites. Identity review, evidence, and platform authorization are still required.
+- Keep preview deployments isolated from production; test research quality, latency, provider costs, and ambiguity before inviting paying users.
+- To pick up newly configured server-side secrets, trigger a **new deployment** from this branch. Existing deployments do not automatically receive newly added variables.
+
+
+
+## Repair proof pilot (preview branch)
+
+**Goal:** Test whether an audit leads to a defensible, permissioned correction that can be independently checked on a public page. Do not count draft packets or submission receipts as successful fixes.
+
+- Open a discovered source from the report's Fix Center and choose **Prepare correction**. The same dialog now includes **Verify an actual change**.
+- Select a *specific field*, enter the *exact expected public value*, then click **Check the live public record** before any edit. The first successful public check is the baseline.
+- Follow the authorized platform workflow (account owner or permitted contributor) and retain the relevant submission receipt. Ulab does not submit edits automatically.
+- Check again after an actual update. Ulab shows **Public change observed since baseline** only when the original check did not see the value and a later check did.
+- Records are stored only in this browser under `identitylab.publicProof.v1`. They are not synced across devices or linked to a paying customer.
+- Automated direct verification is limited to page title, visible H1, Person JSON-LD name, Person `sameAs` links, and existing Wikidata official-website/IMDb/TMDb ID claims. Other sites still need source-specific human checks.
+- Public visibility is not the same as approval, attribution, Google indexing, or Knowledge Panel eligibility. No claims are made about those outcomes.
+- Checks fetch only public pages and fixed-host public Wikidata records. Supplied website URLs use the existing bounded, DNS-pinned SSRF-protected homepage inspector. The proof endpoint has a best-effort instance-local rate limit; **do not launch to unrestricted paid customers** until durable account, quota, logging, and storage protections exist.
+
+**Suggested first case:** The current personal About page uses the visible H1 `Me` rather than the filmmaker's name (see `FIRST_AUDIT.md`). Capture a new field-specific baseline at `https://www.thiskeenan.com/about` and request an authorized website edit; recheck the public About URL after deployment. One change is not three independent repair successes.
+
+**Pilot success criterion:** Three distinct evidence-backed corrections, each with permission/legitimate submission, baseline public observation, independently observed later value, and time spent recorded. If an external editorial request is rejected or never appears publicly, record that outcome rather than calling it a fix.
+
+
+## Owner-approved website execution pilot (November 6, 2026)
+
+This branch adds a narrow **real execution adapter**, not an open-ended AI editor. It supports one specific, previously reviewed change to the owner's website: updating the Keenan Gray About-page H1 and matching metadata. A draft pull request already exists for this case at https://github.com/thiskeenan-glitch/keenan-gray-site/pull/11.
+
+**Product flow in preview**
+
+1. Run a public Ulab audit with \`Keenan Gray\` and \`https://www.thiskeenan.com\`, then open Fix center.
+2. The client calls read-only \`GET /api/repair-plans?name=...&link=...\` and shows the one narrowly matched real correction and its existing GitHub draft PR.
+3. The user can copy the full PR URL, review the exact proposed code edit, and run the before/after verifier. The website is **not** automatically published.
+4. Operator-side code \`lib/github-repair-executor.mjs\` implements idempotent creation/reuse of a draft GitHub PR for an allowlisted exact-source patch. It rejects changed/mismatched source, existing foreign branches, unknown plans, and non-GitHub targets. It cannot merge or deploy.
+5. A human with site ownership must review and merge the patch. Verify the live published result against a saved baseline through \`POST /api/verify-repair\`. A PR or successful test is **not** a verified live repair.
+
+**Security and activation**
+
+- \`POST /api/execute-repair\` is **off by default** and never invoked by the public front end. It requires all of \`IDLAB_REPAIR_EXECUTION_ENABLED=true\`, a private \`IDLAB_REPAIR_OPERATOR_KEY\` of at least 32 characters, and a dedicated server-only \`IDLAB_GITHUB_REPAIR_TOKEN\` with **repository-scoped** read/write contents and pull-request permissions. Configure these only in the dedicated Ulab deployment, never in browser JavaScript or Git history. Prefer a narrowly scoped GitHub App installation token over a broad personal access token. A secure operator-to-server channel, durable authorization ledger, abuse quotas, and rotating credentials are required before enabling for actual customers.
+- Even when configured, accepted requests must provide the allowlisted plan ID, an authenticated operator bearer credential, the exact approval marker \`OWNER_APPROVED_DRAFT_PR\`, and same-origin browser origin where applicable. The operator must independently confirm actual owner consent. A self-reported name or website link in the free audit is **not proof of authorization**.
+- Public account visitors cannot execute a repair via an unauthenticated browser request. Third-party IMDb, Wikipedia, Wikidata, and LinkedIn writes remain out of scope. Only their permitted/manual contributor or owner workflows are described. Do not pretend this pilot has third-party write access.
+- Existing \`/api/verify-repair\` is now explicitly included in \`vercel.json\` builds and routes, and \`proof-ui.js\` has a public route. These previously missing mappings would otherwise prevent the proof feature from working in Vercel.
+- The execution process creates **draft pull requests only**. A successful draft PR is a proposed repair, not a successful public identity correction.
+- Unit tests: \`node --test identity-lab/test-repair-proof.mjs identity-lab/test-repair-execution.mjs\`. The CI workflow validates JavaScript and both test suites.
+
+**Launch gate:** Exercise baseline -> explicit authorized edit -> draft PR -> owner approval -> production merge -> verified public change for one case, then repeat across different approved sites/identities. Add provider-specific OAuth, customer authentication, persistent consent/activity records, durable rate limiting, and receipt tracking before accepting payments or enabling unattended execution.

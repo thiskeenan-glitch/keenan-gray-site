@@ -134,6 +134,26 @@ export function reportFromSignals({input,site=null,wikidata=[],searchResults=[],
     const siteSource=site?.url||link;
     if(site?.ok&&site.parsed){
       const page=site.parsed,matching=page.people.filter(x=>normalizeName(x.name)===normalizeName(name));
+      const cleanHost=url=>{try{return new URL(url).hostname.toLowerCase().replace(/^www[.]/,"");}catch{return "";}};
+      if(page.title)results.push(finding("site_title","Website title: "+page.title.slice(0,80),"pass",
+        "Read directly from the supplied homepage's HTML title. Check whether this title communicates your name and profession clearly.",siteSource,
+        !normalizeName(page.title).includes(normalizeName(name))?"Consider including your professional name in the homepage title.":null));
+      if(page.heading)results.push(finding("site_heading","Website headline: "+page.heading.slice(0,80),"pass",
+        "Read directly from the visible H1 on the homepage; not a third-party verification.",siteSource));
+      const linkedProfiles=page.sameAs.filter(u=>cleanHost(u)!==cleanHost(siteSource));
+      if(linkedProfiles.length){
+        results.push(finding("site_linked_profiles","Published sameAs profile links","pass",
+          "The page's Person structured data lists "+linkedProfiles.length+" public profile link(s): "+linkedProfiles.slice(0,5).map(u=>{try{return new URL(u).hostname;}catch{return u;}}).join(", ")+". These have not been verified as belonging to you.",siteSource));
+      }else{
+        results.push(finding("site_linked_profiles","No Person.sameAs profile links found","action",
+          "The inspected homepage did not publish public profile links in Person.sameAs markup. Other site pages may be different.",siteSource,
+          "If you manage this website, publish accurate Person.sameAs links to professional profiles you control, then verify the structured data."));
+      }
+      if(page.outlinks?.length){
+        results.push(finding("site_outlinks","Homepage links to "+page.outlinks.length+" external URL(s)","pass",
+          "Examples: "+page.outlinks.slice(0,4).map(u=>{try{return new URL(u).hostname;}catch{return u;}}).join(", ")+". These links are not proof they represent the person.",siteSource));
+      }
+
       if(matching.length)results.push(finding("site_name","Public person markup matches the name","pass","A Person structured-data entry uses the supplied professional name. This is not a claim of identity ownership.",siteSource));
       else if(page.people.length)results.push(finding("site_name","Person markup needs human review","manual","The scanned page has Person markup, but the available name does not exactly match the submitted name.",siteSource,"Review the name and identity on this page before proposing changes."));
       else results.push(finding("site_name","No Person markup found","action","The scanned page has no detectable Person JSON-LD. Adding accurate structured information can clarify who the site represents.",siteSource,"If this is your site, add valid Person structured data using verifiable facts."));
