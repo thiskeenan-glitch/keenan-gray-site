@@ -10,7 +10,7 @@ import {
 } from "../seo";
 
 const aboutDescription =
-  "Keenan Gray is a mountain-born, Brooklyn-based film director whose work combines the physicality of his twelve years as a circus performer with the sharp comedic instincts he developed at Saturday Night Live. He explores outlandish concepts with emotional authenticity, directing loosely enough for performances to feel natural and unscripted, then editing like it's surgery.";
+  "Keenan Gray is a mountain-born, Brooklyn-based film director whose work combines the physicality of his twelve years as a circus performer with the sharp comedic instincts he developed at Saturday Night Live. He explores outlandish concepts with emotional authenticity, directing loosely enough for performances to feel natural and unscripted, then editing like it's surgery. His recent short Toy Gun (2026) was selected for HollyShorts Film Festival.";
 const headshot = "/media/optimized/about-headshot.jpg";
 const headshotDimensions = getImageDimensions(headshot);
 
@@ -90,6 +90,10 @@ export default function AboutPage() {
             emotional authenticity, directing loosely enough for performances to
             feel natural and unscripted, then editing like it&apos;s surgery.
           </p>
+          <p>
+            His short film <a href="/work/toy-gun">Toy Gun</a> (2026) was
+            selected for HollyShorts Film Festival.
+          </p>
         </div>
         <div className="about-links">
           {newsletter ? (
@@ -116,7 +120,22 @@ export default function AboutPage() {
             <li>Graduated from the National Circus School of Montreal</li>
             <li>Jack Daniel&apos;s campaign development</li>
             <li>Fenty and Puma campaign development</li>
-            <li>Founder and director of Filmshow</li>
+            <li>Co-Founder and Creative Director of Filmshow</li>
+          </ul>
+        </div>
+        <div>
+          <p className="scarlet">Independent coverage</p>
+          <ul>
+            <li>
+              <a href="https://www.leagueoffilmmakers.com/toy-gun-throws-a-birthday-party-at-the-end-of-the-world/" target="_blank" rel="noopener noreferrer">
+                Toy Gun filmmaker interview
+              </a>
+            </li>
+            <li>
+              <a href="https://www.timesunion.com/movies/article/saratoga-film-showcase-21298774.php" target="_blank" rel="noopener noreferrer">
+                Times Union filmmaker profile
+              </a>
+            </li>
           </ul>
         </div>
       </section>

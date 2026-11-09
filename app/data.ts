@@ -265,12 +265,12 @@ export const projects: Project[] = [
     eyebrow: "Live / Cultural",
     type: "Live / Cultural",
     year: "2026",
-    role: "Founder / Director",
+    role: "Co-Founder / Creative Director",
     context: "Live short-film show",
     summary: "This is not a festival.",
     description:
-      "Filmshow is a live show founded by Keenan Gray that combines short films from local filmmakers and live experimental theater to create a glimpse into the underground scene of New York City.",
-    metaTitle: "Filmshow | Keenan Gray Founder and Director",
+      "Filmshow is a live show co-founded by Keenan Gray that combines short films from local filmmakers and live experimental theater to create a glimpse into the underground scene of New York City.",
+    metaTitle: "Filmshow | Keenan Gray Co-Founder and Creative Director",
     metaDescription:
       "Filmshow is Keenan Gray's New York live show combining short films from local filmmakers with live experimental theater.",
     keywords: [

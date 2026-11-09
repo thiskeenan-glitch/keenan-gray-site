@@ -59,7 +59,22 @@ export function personSchema(): SchemaValue {
       "Creative production",
       "Experimental theater",
     ],
-    sameAs: [...socialLinks.map((link) => link.href), site.filmshow],
+    sameAs: [
+      ...socialLinks.map((link) => link.href),
+      site.filmshow,
+    ],
+    subjectOf: [
+      {
+        "@type": "Article",
+        name: '"Toy Gun" Throws a Birthday Party at the End of the World',
+        url: "https://www.leagueoffilmmakers.com/toy-gun-throws-a-birthday-party-at-the-end-of-the-world/",
+      },
+      {
+        "@type": "NewsArticle",
+        name: "'It's not all about horses': Saratoga Film Showcase spotlights indie industry",
+        url: "https://www.timesunion.com/movies/article/saratoga-film-showcase-21298774.php",
+      },
+    ],
   };
 }
 
@@ -84,7 +99,7 @@ export function filmshowOrganizationSchema(): SchemaValue {
     url: site.filmshow,
     founder: { "@id": personId },
     description:
-      "Filmshow is a New York live show founded by Keenan Gray that combines short films from local filmmakers and live experimental theater.",
+      "Filmshow is a New York live show co-founded by Keenan Gray that combines short films from local filmmakers and live experimental theater.",
     sameAs: [site.filmshow],
   };
 }
