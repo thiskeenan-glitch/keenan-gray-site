@@ -1,6 +1,21 @@
 // Ulab operator-controlled repair execution plans.
 // A plan is an audited, narrowly scoped website change. No arbitrary file or code edit input.
 export const REPAIR_PLANS=Object.freeze({
+ "filmshow-role-002":Object.freeze({
+  id:"filmshow-role-002",
+  subject:"Keenan Gray",
+  title:"Align the Filmshow project page with the director's public biography",
+  repository:"thiskeenan-glitch/keenan-gray-site",
+  baseBranch:"main",
+  repairBranch:"ulab-fix-filmshow-role-002",
+  path:"app/components/FilmshowProject.tsx",
+  targetUrl:"https://www.thiskeenan.com/work/filmshow",
+  verification:Object.freeze({platform:"website",field:"visible_text",expected:"Co-Founder / Creative Director"}),
+  description:"Update one outdated Filmshow role on the owner's public portfolio. Make no speculative edits to independent third-party sources. Publication requires reviewing and merging a draft pull request.",
+  changes:Object.freeze([
+   Object.freeze({from:"<span>Role</span>Founder / Director",to:"<span>Role</span>Co-Founder / Creative Director",count:1})
+  ])
+ }),
  "about-identity-001":Object.freeze({
   id:"about-identity-001",
   subject:"Keenan Gray",
